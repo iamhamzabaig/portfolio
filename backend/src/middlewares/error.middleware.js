@@ -9,14 +9,14 @@ export const errorHandler = (err, _req, res, _next) => {
 
   if (err.name === 'ValidationError') {
     statusCode = 422;
-    details = Object.values(err.errors).map((e) => e.message);
+    details = err.errors ? Object.values(err.errors).map((e) => e.message) : [];
     message = 'Validation failed';
   } else if (err.name === 'CastError') {
     statusCode = 400;
     message = `Invalid ${err.path}: ${err.value}`;
   } else if (err.code === 11000) {
     statusCode = 409;
-    message = `Duplicate value for ${Object.keys(err.keyValue).join(', ')}`;
+    message = `Duplicate value for ${err.keyValue ? Object.keys(err.keyValue).join(', ') : 'field'}`;
   }
 
   if (statusCode === 500 && !(err instanceof ApiError)) {
