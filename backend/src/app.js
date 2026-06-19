@@ -6,6 +6,7 @@ import { corsOptions } from './config/cors.js';
 import { ApiResponse } from './utils/ApiResponse.js';
 import { notFound } from './middlewares/notFound.middleware.js';
 import { errorHandler } from './middlewares/error.middleware.js';
+import { apiRouter } from './routes/index.js';
 
 export const createApp = () => {
   const app = express();
@@ -20,7 +21,7 @@ export const createApp = () => {
     res.status(200).json(new ApiResponse(200, { status: 'ok' }));
   });
 
-  // Feature routers mounted here in later tasks.
+  app.use('/api/v1', apiRouter);
 
   app.use(notFound);
   app.use(errorHandler);
