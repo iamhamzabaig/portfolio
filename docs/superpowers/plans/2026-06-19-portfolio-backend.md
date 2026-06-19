@@ -109,6 +109,9 @@ process.env.CLOUDINARY_API_KEY = 'test';
 process.env.CLOUDINARY_API_SECRET = 'test';
 process.env.ADMIN_EMAIL = 'admin@test.dev';
 process.env.ADMIN_PASSWORD = 'test_password_123';
+// Placeholder so env.js (validated at import) does not throw before beforeAll
+// assigns the real in-memory URI below.
+process.env.MONGO_URI = 'mongodb://127.0.0.1:27017/placeholder';
 
 let mongo;
 
