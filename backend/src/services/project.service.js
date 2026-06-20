@@ -26,7 +26,10 @@ export const updateProject = async (id, data) => {
     await destroyImage(project.coverImage.publicId);
   }
 
-  Object.assign(project, data);
+  const patch = Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== undefined),
+  );
+  Object.assign(project, patch);
   await project.save();
   return project;
 };

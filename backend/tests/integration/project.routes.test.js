@@ -73,4 +73,13 @@ describe('project routes', () => {
     const res = await agent.post('/api/v1/projects').field('description', 'd');
     expect(res.status).toBe(422);
   });
+
+  it('PUT without featured field preserves existing featured: true', async () => {
+    const agent = await loginAgent();
+    const p = await Project.create({ title: 'Featured Project', description: 'desc', featured: true });
+    const res = await agent.put(`/api/v1/projects/${p._id}`).field('title', 'Renamed');
+    expect(res.status).toBe(200);
+    const reloaded = await Project.findById(p._id);
+    expect(reloaded.featured).toBe(true);
+  });
 });

@@ -17,7 +17,7 @@ const base = {
   liveUrl: z.string().url().optional().or(z.literal('')),
   repoUrl: z.string().url().optional().or(z.literal('')),
   featured: z.union([z.boolean(), z.string()]).optional()
-    .transform((v) => v === true || v === 'true'),
+    .transform((v) => (v === undefined ? undefined : v === true || v === 'true')),
   order: z.coerce.number().optional(),
 };
 
