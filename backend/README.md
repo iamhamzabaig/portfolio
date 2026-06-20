@@ -15,7 +15,7 @@ messages, editable profile, Cloudinary image uploads.
 
 - `npm run dev` — watch-mode server
 - `npm start` — production server
-- `npm run seed:admin` — create/verify admin
+- `npm run seed:admin` — create the admin user, or skip if it already exists
 - `npm test` — run the Vitest suite
 
 ## API (base `/api/v1`)

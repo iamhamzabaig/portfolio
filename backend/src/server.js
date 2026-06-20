@@ -14,7 +14,7 @@ const start = async () => {
     app.set('trust proxy', 1);
 
     app.listen(env.PORT, () => {
-      console.log(`API listening on http://localhost:${env.PORT} (${env.NODE_ENV})`);
+      console.log(`API listening on port ${env.PORT} (${env.NODE_ENV})`);
     });
   } catch (err) {
     console.error('Failed to start server:', err.message);

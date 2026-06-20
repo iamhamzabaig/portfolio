@@ -38,6 +38,23 @@ describe('contact routes', () => {
     expect(await ContactMessage.countDocuments()).toBe(0);
   });
 
+  it('lists messages newest first', async () => {
+    const agent = await adminAgent();
+    await ContactMessage.create({
+      name: 'Older', email: 'o@x.com', message: 'older message body',
+      createdAt: new Date('2020-01-01T00:00:00Z'),
+    });
+    await ContactMessage.create({
+      name: 'Newer', email: 'n@x.com', message: 'newer message body',
+      createdAt: new Date('2024-01-01T00:00:00Z'),
+    });
+    const res = await agent.get('/api/v1/contact');
+    expect(res.status).toBe(200);
+    const times = res.body.data.map((d) => new Date(d.createdAt).getTime());
+    expect(times).toEqual([...times].sort((a, b) => b - a)); // non-increasing
+    expect(res.body.data[0].name).toBe('Newer');
+  });
+
   it('public cannot list messages (401)', async () => {
     const res = await supertest(app).get('/api/v1/contact');
     expect(res.status).toBe(401);
