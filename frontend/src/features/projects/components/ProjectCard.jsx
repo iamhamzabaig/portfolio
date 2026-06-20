@@ -1,16 +1,43 @@
 import { ArrowUpRight } from 'lucide-react';
+import { motion, useMotionValue, useSpring } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Chip } from '../../../components/ui/Chip.jsx';
 import { coverGradient, monogram } from '../cover.js';
+
+const tiltSpring = { stiffness: 150, damping: 18 };
 
 export function ProjectCard({ project }) {
   const hasImage = Boolean(project.coverImage?.url);
   const cover = coverGradient(project);
 
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const rotateX = useSpring(tiltX, tiltSpring);
+  const rotateY = useSpring(tiltY, tiltSpring);
+
+  const handleTilt = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const ox = (event.clientX - rect.left) / rect.width - 0.5;
+    const oy = (event.clientY - rect.top) / rect.height - 0.5;
+    tiltX.set(oy * -8);
+    tiltY.set(ox * 8);
+  };
+  const resetTilt = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
+
   return (
+    <motion.div
+      onPointerMove={handleTilt}
+      onPointerLeave={resetTilt}
+      style={{ rotateX, rotateY, transformPerspective: 900, transformStyle: 'preserve-3d' }}
+      whileHover={{ y: -4 }}
+      transition={tiltSpring}
+    >
     <Link
       to={`/projects/${project.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-panel transition hover:border-accent/50 hover:shadow-glow"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-panel transition-colors hover:border-accent/50 hover:shadow-glow"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         {hasImage ? (
@@ -51,5 +78,6 @@ export function ProjectCard({ project }) {
         </div>
       </div>
     </Link>
+    </motion.div>
   );
 }
