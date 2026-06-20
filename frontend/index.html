@@ -1,8 +1,21 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Set theme before first paint: stored choice wins, else system, else dark.
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          document.documentElement.classList.toggle('dark', theme === 'dark');
+          document.documentElement.style.colorScheme = theme;
+        } catch (e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     <meta
       name="description"
       content="Hamza Munawar — Full-Stack JavaScript Engineer building scalable ERP modules, real-time apps, and high-performance frontends in Angular, React, and Node."

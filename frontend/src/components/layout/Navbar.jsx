@@ -1,4 +1,5 @@
 import { Menu } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Link, NavLink } from 'react-router-dom';
 import { Container } from './Container.jsx';
 import { ThemeToggle } from './ThemeToggle.jsx';
@@ -46,12 +47,23 @@ export function Navbar() {
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `rounded-full px-4 py-1.5 text-sm transition ${
-                  isActive ? 'bg-surface text-ink shadow-soft' : 'text-muted hover:text-ink'
+                `relative rounded-full px-4 py-1.5 text-sm transition-colors ${
+                  isActive ? 'text-ink' : 'text-muted hover:text-ink'
                 }`
               }
             >
-              {link.label}
+              {({ isActive }) => (
+                <>
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 rounded-full bg-surface shadow-soft"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <span className="relative z-10">{link.label}</span>
+                </>
+              )}
             </NavLink>
           ))}
         </nav>

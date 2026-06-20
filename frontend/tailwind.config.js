@@ -5,13 +5,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: '#08090d',
-        panel: '#11131a',
-        surface: '#171923',
-        border: '#2a2d38',
-        ink: '#f4f1ea',
-        muted: '#a0a3ad',
-        accent: '#7c6cf2',
+        // Theme-aware tokens — channels defined per theme in styles/index.css
+        // (:root = light, .dark = dark). rgb(var / <alpha>) keeps Tailwind's
+        // /opacity modifiers (bg-accent/10, border-accent/30, …) working.
+        bg: 'rgb(var(--bg) / <alpha-value>)',
+        panel: 'rgb(var(--panel) / <alpha-value>)',
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        muted: 'rgb(var(--muted) / <alpha-value>)',
+        accent: 'rgb(var(--accent) / <alpha-value>)',
         teal: '#34d3c6',
         amber: '#f3b95f',
         danger: '#fb7185'

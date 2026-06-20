@@ -2,9 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme channels (R G B). :root = light, .dark = dark. The no-flash inline
+   script in index.html sets the .dark class before paint. */
 :root {
-  color-scheme: dark;
-  background: #08090d;
+  --bg: 248 247 244; /* warm off-white */
+  --panel: 255 255 255;
+  --surface: 240 238 232;
+  --border: 222 218 209;
+  --ink: 22 20 28; /* near-black ink */
+  --muted: 92 94 104;
+  --accent: 99 84 224; /* slightly deeper violet for AA on light */
+}
+
+.dark {
+  --bg: 8 9 13;
+  --panel: 17 19 26;
+  --surface: 23 25 35;
+  --border: 42 45 56;
+  --ink: 244 241 234; /* cream */
+  --muted: 160 163 173;
+  --accent: 124 108 242;
 }
 
 html {
@@ -13,6 +30,9 @@ html {
 
 body {
   @apply min-h-screen bg-bg text-ink font-sans antialiased;
+  /* Theme tokens cross-fade for any surface not covered by the circular
+     reveal (e.g. images loading in). Kept short so it never feels laggy. */
+  transition: background-color 0.45s ease, color 0.45s ease;
 }
 
 a,
@@ -24,4 +44,35 @@ textarea {
 
 ::selection {
   @apply bg-accent text-white;
+}
+
+/* ── Spatial theme transition ─────────────────────────────────────────────
+   The new theme arrives as a circle expanding from the toggle. We disable the
+   default cross-fade and let the toggle drive a clip-path on the new snapshot. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

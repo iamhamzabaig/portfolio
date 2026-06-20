@@ -1,4 +1,5 @@
 import { ArrowRight, ArrowUpRight, Boxes, Gauge, Radio } from 'lucide-react';
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
 import { Button } from '../../components/ui/Button.jsx';
@@ -16,6 +17,15 @@ const capabilities = [
   { title: 'Performance work', icon: Gauge, text: 'Migrations and profiling that move Lighthouse, shrink bundles, and cut server render times.' },
   { title: 'Real-time & APIs', icon: Radio, text: 'Node/Express services, WebSockets, and GraphQL with JWT auth and role-based access control.' }
 ];
+
+const heroStagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } }
+};
+const heroItem = {
+  hidden: { y: 20, opacity: 0 },
+  show: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 130, damping: 18 } }
+};
 
 function Eyebrow({ index, label, right }) {
   return (
@@ -38,43 +48,85 @@ export default function Home() {
     .filter((project) => project.featured)
     .slice(0, 3);
 
+  // Pointer-reactive depth: the glow trails the cursor, the headline drifts the
+  // opposite way at a smaller magnitude — two planes, so the hero reads as space.
+  const px = useMotionValue(0);
+  const py = useMotionValue(0);
+  const glowX = useSpring(px, { stiffness: 60, damping: 20 });
+  const glowY = useSpring(py, { stiffness: 60, damping: 20 });
+  const headX = useTransform(useSpring(px, { stiffness: 80, damping: 22 }), (v) => v * -0.3);
+  const headY = useTransform(useSpring(py, { stiffness: 80, damping: 22 }), (v) => v * -0.3);
+
+  const handlePointer = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    px.set(((event.clientX - rect.left) / rect.width - 0.5) * 60);
+    py.set(((event.clientY - rect.top) / rect.height - 0.5) * 60);
+  };
+  const resetPointer = () => {
+    px.set(0);
+    py.set(0);
+  };
+
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
+      <section
+        onPointerMove={handlePointer}
+        onPointerLeave={resetPointer}
+        className="relative overflow-hidden border-b border-border"
+      >
         <div className="pointer-events-none absolute inset-0 bg-grid-faint [background-size:26px_26px] opacity-60" />
+        <motion.div
+          aria-hidden="true"
+          style={{ x: glowX, y: glowY }}
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[44rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"
+        />
         <Container className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-20 text-center">
-          <span className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-panel/70 px-4 py-1.5 text-sm text-muted">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            Open to full-stack & frontend roles
-          </span>
+          <motion.div variants={heroStagger} initial="hidden" animate="show" className="flex flex-col items-center">
+            <motion.span
+              variants={heroItem}
+              className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-panel/70 px-4 py-1.5 text-sm text-muted"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              Open to full-stack &amp; frontend roles
+            </motion.span>
 
-          <h1 className="font-display text-[2.6rem] font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-[4.6rem]">
-            {heroThesis.lead}{' '}
-            <span className="text-accent">{heroThesis.accent}</span>
-            <br className="hidden sm:block" /> {heroThesis.tail}
-          </h1>
+            <motion.h1
+              variants={heroItem}
+              style={{ x: headX, y: headY }}
+              className="font-display text-[2.6rem] font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-[4.6rem]"
+            >
+              {heroThesis.lead}{' '}
+              <span className="text-accent">{heroThesis.accent}</span>
+              <br className="hidden sm:block" /> {heroThesis.tail}
+            </motion.h1>
 
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-muted">{profile.headline}</p>
+            <motion.p variants={heroItem} className="mt-7 max-w-2xl text-lg leading-8 text-muted">
+              {profile.headline}
+            </motion.p>
 
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <Button as={Link} to="/projects">
-              View projects
-              <ArrowRight aria-hidden="true" size={17} />
-            </Button>
-            <Button as={Link} to="/contact" variant="outline">
-              Get in touch
-            </Button>
-          </div>
+            <motion.div variants={heroItem} className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <Button as={Link} to="/projects">
+                View projects
+                <ArrowRight aria-hidden="true" size={17} />
+              </Button>
+              <Button as={Link} to="/contact" variant="outline">
+                Get in touch
+              </Button>
+            </motion.div>
 
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-[11px] tracking-eyebrow text-muted">
-            {credentials.map((item, i) => (
-              <span key={item} className="inline-flex items-center gap-3">
-                {i > 0 && <span className="text-accent/60">·</span>}
-                {item}
-              </span>
-            ))}
-          </div>
+            <motion.div
+              variants={heroItem}
+              className="mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-[11px] tracking-eyebrow text-muted"
+            >
+              {credentials.map((item, i) => (
+                <span key={item} className="inline-flex items-center gap-3">
+                  {i > 0 && <span className="text-accent/60">·</span>}
+                  {item}
+                </span>
+              ))}
+            </motion.div>
+          </motion.div>
         </Container>
       </section>
 
