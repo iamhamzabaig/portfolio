@@ -1,0 +1,78 @@
+import { Menu } from 'lucide-react';
+import { Link, NavLink } from 'react-router-dom';
+import { Container } from './Container.jsx';
+import { ThemeToggle } from './ThemeToggle.jsx';
+
+const links = [
+  { to: '/', label: 'Home', end: true },
+  { to: '/projects', label: 'Projects' },
+  { to: '/about', label: 'About' },
+  { to: '/contact', label: 'Contact' }
+];
+
+function HexMark() {
+  return (
+    <span className="inline-flex h-8 w-8 items-center justify-center">
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+        <path
+          d="M12 2.2 20.5 7v10L12 21.8 3.5 17V7L12 2.2Z"
+          fill="rgba(124,108,242,0.18)"
+          stroke="#7c6cf2"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+        <path d="M9 15.5 12 8l3 7.5M10 13.4h4" stroke="#f4f1ea" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
+}
+
+export function Navbar() {
+  return (
+    <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur">
+      <Container className="flex h-16 items-center justify-between gap-4">
+        <Link to="/" className="inline-flex items-center gap-2 lowercase tracking-tight">
+          <HexMark />
+          <span className="font-display text-[15px] font-semibold text-ink">hamza munawar</span>
+        </Link>
+
+        <nav
+          aria-label="Primary"
+          className="hidden items-center gap-1 rounded-full border border-border bg-panel/70 px-1.5 py-1.5 md:flex"
+        >
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              className={({ isActive }) =>
+                `rounded-full px-4 py-1.5 text-sm transition ${
+                  isActive ? 'bg-surface text-ink shadow-soft' : 'text-muted hover:text-ink'
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Link
+            to="/admin"
+            className="hidden rounded-full border border-border bg-ink px-4 py-1.5 text-sm font-semibold text-bg transition hover:bg-white sm:inline-flex"
+          >
+            Admin
+          </Link>
+          <button
+            type="button"
+            aria-label="Open navigation"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted md:hidden"
+          >
+            <Menu aria-hidden="true" size={18} />
+          </button>
+        </div>
+      </Container>
+    </header>
+  );
+}
