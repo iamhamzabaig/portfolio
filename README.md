@@ -47,12 +47,11 @@ Content is built around three things: **Projects** (the portfolio pieces), an ed
 
 <div align="center">
 
-<img src="Screenshot%202026-06-19%20125535.png" width="80%" alt="Portfolio — landing" />
+<em>Add screenshots or a demo GIF here once the UI is deployed.</em>
 
-<br/><br/>
+<br/>
 
-<img src="Screenshot%202026-06-19%20125636.png" width="49%" alt="Projects" />
-<img src="Screenshot%202026-06-19%20125701.png" width="49%" alt="Project detail" />
+<sub>Drop captures in <code>assets/</code> and embed them, e.g. <code>&lt;img src="assets/landing.png" width="80%" /&gt;</code></sub>
 
 </div>
 
