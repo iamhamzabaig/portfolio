@@ -53,7 +53,9 @@ test('anon insert into projects is rejected', async () => {
 });
 
 test('anon update on projects is rejected (no privilege)', async () => {
-  const { data: rows } = await anon.from('projects').select('id').limit(1);
+  const { data: rows, error: selErr } = await anon.from('projects').select('id').limit(1);
+  assert.equal(selErr, null, 'preflight SELECT should succeed for anon');
+  assert.ok(rows?.length >= 1, 'expected at least one seeded project');
   const { error } = await anon
     .from('projects')
     .update({ title: 'Hacked' })
@@ -62,7 +64,9 @@ test('anon update on projects is rejected (no privilege)', async () => {
 });
 
 test('anon delete on projects is rejected (no privilege)', async () => {
-  const { data: rows } = await anon.from('projects').select('id').limit(1);
+  const { data: rows, error: selErr } = await anon.from('projects').select('id').limit(1);
+  assert.equal(selErr, null, 'preflight SELECT should succeed for anon');
+  assert.ok(rows?.length >= 1, 'expected at least one seeded project');
   const { error } = await anon.from('projects').delete().eq('id', rows[0].id);
   assert.notEqual(error, null, 'anon lacks DELETE grant -> permission denied');
 });
@@ -122,9 +126,10 @@ test('admin updated_at trigger touches the row on update', async () => {
 });
 
 test('admin can read contact messages', async () => {
-  await anon
+  const { error: insErr } = await anon
     .from('contact_messages')
     .insert({ name: 'V2', email: 'v2@example.com', message: 'Hi again' });
+  assert.equal(insErr, null, 'anon should be able to submit a contact message');
   const { data, error } = await adminAuthed.from('contact_messages').select('*');
   assert.equal(error, null);
   assert.ok(data.length >= 1, 'admin should read contact messages');
