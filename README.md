@@ -1,61 +1,143 @@
-<div align="center">
-
-# ✦ Portfolio
-
-### A fast, modern personal portfolio — React SPA front, Supabase back.
-
-*Near-black canvas, purple accent, mono labels, oversized display numerals.*
-*Public site for visitors, a private admin for the one person who owns it.*
-
-<br/>
-
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
-[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
-
-</div>
-
----
-
-## Overview
-
-A decoupled personal portfolio in a single monorepo:
-
-- **`frontend/`** — a React + Vite single-page app styled with Tailwind. Public pages for projects, an about/profile section, and a contact form; a gated admin area to manage it all.
-- **`backend/`** — a [Supabase](https://supabase.com) project (PostgreSQL + Row Level Security + Auth + Storage). No server to run or host — the SPA talks to Supabase directly, and **Row Level Security is the security boundary.**
-
-Content is built around three things: **Projects** (the portfolio pieces), an editable **Profile**, and **Contact** messages from visitors. A single admin signs in to write; everyone else gets read-only access — enforced in the database, not just the UI.
-
----
-
-## ✨ Highlights
-
-- 🎨 **Distinct visual identity** — spatial dark theme, purple accent, light/dark toggle.
-- ⚡ **Zero-backend-server architecture** — Supabase Postgres, Auth, and Storage accessed straight from the client.
-- 🔐 **Security in the database** — Row Level Security + least-privilege table grants. Public reads, single-admin writes, visitor messages no one but the admin can read.
-- 🧩 **Feature-sliced frontend** — `auth`, `projects`, `profile`, and `contact` as self-contained features.
-- 🗄️ **Versioned schema** — every table, trigger, policy, and bucket lives in SQL migrations applied by the Supabase CLI.
-- ✅ **Tested access control** — an automated RLS smoke test asserts every permission rule end-to-end.
-- 🚀 **Free-tier friendly** — frontend deploys to Vercel; backend runs on Supabase.
-
----
-
-## 🖼 Preview
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  HEADER  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 <div align="center">
 
-<em>Add screenshots or a demo GIF here once the UI is deployed.</em>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d0d12,100:7c3aed&height=200&section=header&text=Portfolio&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=React%20SPA%20·%20Supabase%20backend&descSize=18&descAlignY=60&animation=fadeIn" width="100%" alt="Portfolio" />
 
-<br/>
+<a href="https://readme-typing-svg.demolab.com">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&pause=1000&color=A855F7&center=true&vCenter=true&width=620&lines=Public+site+%2B+private+admin.;Row+Level+Security+is+the+boundary.;Zero+backend+servers+to+run.;Near-black+canvas%2C+purple+accent." alt="Typing tagline" />
+</a>
 
-<sub>Drop captures in <code>assets/</code> and embed them, e.g. <code>&lt;img src="assets/landing.png" width="80%" /&gt;</code></sub>
+<br/><br/>
+
+<!-- Tech -->
+<a href="#-tech-stack">
+  <img src="https://skillicons.dev/icons?i=react,vite,tailwindcss,supabase,postgres,vercel,vitest&perline=7" alt="Tech stack" />
+</a>
+
+<br/><br/>
+
+<!-- Shields -->
+<img src="https://img.shields.io/github/last-commit/iamhamzabaig/portfolio?style=flat-square&color=7c3aed&labelColor=0d0d12" alt="Last commit" />
+<img src="https://img.shields.io/github/languages/top/iamhamzabaig/portfolio?style=flat-square&color=7c3aed&labelColor=0d0d12" alt="Top language" />
+<img src="https://img.shields.io/github/repo-size/iamhamzabaig/portfolio?style=flat-square&color=7c3aed&labelColor=0d0d12" alt="Repo size" />
+<img src="https://img.shields.io/github/stars/iamhamzabaig/portfolio?style=flat-square&color=7c3aed&labelColor=0d0d12" alt="Stars" />
+<img src="https://img.shields.io/badge/PRs-welcome-7c3aed?style=flat-square&labelColor=0d0d12" alt="PRs welcome" />
+<img src="https://img.shields.io/badge/license-MIT-7c3aed?style=flat-square&labelColor=0d0d12" alt="License MIT" />
+
+<br/><br/>
+
+<!-- Nav -->
+<a href="#-overview">Overview</a> &nbsp;•&nbsp;
+<a href="#-features">Features</a> &nbsp;•&nbsp;
+<a href="#-architecture">Architecture</a> &nbsp;•&nbsp;
+<a href="#-tech-stack">Tech</a> &nbsp;•&nbsp;
+<a href="#-getting-started">Getting Started</a> &nbsp;•&nbsp;
+<a href="#-testing">Testing</a> &nbsp;•&nbsp;
+<a href="#-roadmap">Roadmap</a>
 
 </div>
 
----
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  OVERVIEW  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+
+## 📌 Overview
+
+A personal portfolio built as a **decoupled monorepo** — and a small case study in shipping a real product with **no backend server to maintain**.
+
+| | |
+| --- | --- |
+| 🖥 **`frontend/`** | React + Vite single-page app, Tailwind-styled. Public pages for projects, an about/profile section, and a contact form — plus a gated admin to manage everything. |
+| 🗄 **`backend/`** | A [Supabase](https://supabase.com) project: PostgreSQL + Row Level Security + Auth + Storage. The SPA talks to Supabase directly; **the database itself enforces who can do what.** |
+
+Content revolves around three things — **Projects**, an editable **Profile**, and visitor **Contact** messages. One admin signs in to write; everyone else is read-only, enforced in Postgres rather than trusted to the UI.
+
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  FEATURES  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### 🎨 Distinct visual identity
+Spatial dark theme, purple accent, mono labels and oversized display numerals, with a light/dark toggle.
+
+</td>
+<td width="50%" valign="top">
+
+#### 🔐 Security in the database
+Row Level Security **plus** least-privilege table grants. Public reads, single-admin writes, and visitor messages no one but the admin can read.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+#### ⚡ Zero-backend-server
+Postgres, Auth, and Storage accessed straight from the client through Supabase — nothing to deploy or babysit.
+
+</td>
+<td width="50%" valign="top">
+
+#### 🧩 Feature-sliced frontend
+`auth`, `projects`, `profile`, and `contact` are self-contained slices — easy to reason about and grow.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+#### 🗄 Versioned schema
+Every table, trigger, policy, and storage bucket lives in SQL migrations applied by the Supabase CLI.
+
+</td>
+<td width="50%" valign="top">
+
+#### ✅ Tested access control
+An automated RLS smoke test provisions an admin and asserts the **entire** permission matrix end-to-end.
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ARCHITECTURE  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+
+## 🧭 Architecture
+
+```
+        ┌──────────────────────────────┐
+        │   React SPA   (frontend/)     │   public pages + gated admin
+        │   Vite · Tailwind · Router    │
+        └───────────────┬──────────────┘
+                        │  supabase-js  (HTTPS)
+                        ▼
+        ┌──────────────────────────────┐
+        │   Supabase    (backend/)      │
+        │                               │
+        │   Postgres  →  projects,      │   RLS: public read,
+        │                contact, profile│        admin-only writes
+        │   Auth      →  single admin   │   signups disabled
+        │   Storage   →  project-images │   public read, admin write
+        └──────────────────────────────┘
+```
+
+**Permission model** — enforced by Row Level Security + table grants, not the UI:
+
+| Table | 👤 Anonymous visitor | 🔑 Authenticated admin |
+| --- | :---: | :---: |
+| `projects` | read | read · create · update · delete |
+| `contact_messages` | submit only | read · update · delete |
+| `profile` | read | update |
+
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  TECH  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 ## 🛠 Tech Stack
 
@@ -69,48 +151,20 @@ Content is built around three things: **Projects** (the portfolio pieces), an ed
 | **Testing** | Vitest (frontend) · `node --test` + supabase-js (RLS smoke test) |
 | **Hosting** | Vercel (frontend) · Supabase (backend) |
 
----
+<br/>
 
-## 🧭 Architecture
-
-```
-┌─────────────────────────────┐
-│   React SPA  (frontend/)     │   public pages + gated admin
-│   Vite · Tailwind · Router   │
-└──────────────┬──────────────┘
-               │  supabase-js (HTTPS)
-               ▼
-┌─────────────────────────────┐
-│   Supabase  (backend/)       │
-│                              │
-│   Postgres  → projects,      │   RLS: public read,
-│               contact, profile│        admin-only writes
-│   Auth      → single admin   │   signups disabled
-│   Storage   → project-images │   public read, admin write
-└─────────────────────────────┘
-```
-
-**Permission model (enforced by RLS + table grants):**
-
-| Table | Anonymous visitor | Authenticated admin |
-| --- | --- | --- |
-| `projects` | read | read · create · update · delete |
-| `contact_messages` | submit only | read · update · delete |
-| `profile` | read | update |
-
----
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  STRUCTURE  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 ## 📁 Repository Layout
 
 ```
 .
 ├── frontend/                 # React + Vite SPA
-│   ├── src/
-│   │   ├── features/         # auth · projects · profile · contact
-│   │   ├── pages/            # public/ + admin/
-│   │   ├── components/       # layout + ui
-│   │   └── ...
-│   └── package.json
+│   └── src/
+│       ├── features/         # auth · projects · profile · contact
+│       ├── pages/            # public/ + admin/
+│       ├── components/       # layout + ui
+│       └── ...
 │
 ├── backend/
 │   └── supabase/             # Supabase project
@@ -122,16 +176,18 @@ Content is built around three things: **Projects** (the portfolio pieces), an ed
 └── docs/                     # design specs + implementation plans
 ```
 
----
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  GETTING STARTED  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 ## 🚀 Getting Started
 
-### Prerequisites
+> **Prerequisites:** Node.js **20+** and Docker (Docker only needed to run Supabase locally).
 
-- Node.js **20+**
-- Docker (only for running Supabase locally)
+<details open>
+<summary><b>1 · Backend — Supabase</b></summary>
 
-### 1 — Backend (Supabase)
+<br/>
 
 ```bash
 cd backend
@@ -141,9 +197,15 @@ npm run db:reset        # applies all migrations + seed
 npm run test:rls        # asserts the RLS policies (12 checks)
 ```
 
-`npx supabase status` prints the local API URL and keys. Full guide: [`backend/supabase/README.md`](backend/supabase/README.md).
+`npx supabase status` prints the local API URL and keys.
+Full guide → [`backend/supabase/README.md`](backend/supabase/README.md)
 
-### 2 — Frontend (React)
+</details>
+
+<details>
+<summary><b>2 · Frontend — React</b></summary>
+
+<br/>
 
 ```bash
 cd frontend
@@ -151,53 +213,75 @@ npm install
 npm run dev             # Vite dev server
 ```
 
-Set the Supabase connection in `frontend/.env`:
+Configure the Supabase connection in `frontend/.env`:
 
 ```bash
 VITE_SUPABASE_URL=<your-api-url>
 VITE_SUPABASE_ANON_KEY=<your-anon-key>
 ```
 
-> **Never** put the Supabase service-role key in the frontend.
+> ⚠️ **Never** put the Supabase service-role key in the frontend.
 
-### Creating the admin
+</details>
+
+<details>
+<summary><b>3 · Create the admin</b></summary>
+
+<br/>
 
 Signups are disabled by design. Create the single admin in the Supabase dashboard
 (**Authentication → Users → Add user**) or via the Auth admin API with the service-role key.
 
----
+</details>
+
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  TESTING  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 ## 🧪 Testing
 
 ```bash
-# Frontend component/unit tests
+# Frontend component / unit tests
 cd frontend && npm test
 
 # Backend Row Level Security smoke test (needs Docker)
 cd backend && npm run test:rls
 ```
 
-The RLS suite provisions an admin, then asserts the full permission matrix: anonymous reads succeed, anonymous writes are rejected, visitor messages stay private, and the admin can manage everything.
+The RLS suite provisions an admin, then asserts the full matrix: anonymous reads succeed, anonymous writes are rejected, visitor messages stay private, and the admin can manage everything.
 
----
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  ROADMAP  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 ## 🗺 Roadmap
 
 - [x] Supabase schema, RLS policies, storage, seed
 - [x] Automated RLS smoke test
+- [x] Project README + license
 - [ ] Frontend wired to `supabase-js`
 - [ ] Production deploy (Vercel + hosted Supabase)
 
----
+<br/>
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░  FOOTER  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 
 ## 📄 License
 
 Released under the [MIT License](LICENSE).
 
----
+<br/>
 
 <div align="center">
 
-Built by **Hamza Munawar** · [@iamhamzabaig](https://github.com/iamhamzabaig)
+Built by **Hamza Munawar**
+
+<a href="https://github.com/iamhamzabaig">
+  <img src="https://img.shields.io/badge/GitHub-@iamhamzabaig-7c3aed?style=for-the-badge&logo=github&logoColor=white&labelColor=0d0d12" alt="GitHub" />
+</a>
+
+<br/><br/>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:7c3aed,100:0d0d12&height=120&section=footer" width="100%" alt="" />
 
 </div>
