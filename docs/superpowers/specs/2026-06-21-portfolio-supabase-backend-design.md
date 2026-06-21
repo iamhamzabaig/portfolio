@@ -1,7 +1,7 @@
 # Portfolio Supabase Backend — Design
 
 **Date:** 2026-06-21
-**Status:** Approved (supersedes the Express + Mongoose MERN backend plan at `docs/superpowers/plans/2026-06-19-portfolio-backend.md`)
+**Status:** Approved (supersedes and replaces the earlier Express + Mongoose MERN backend plan, since removed)
 
 ## Goal
 
@@ -137,7 +137,7 @@ Policy expressions:
 
 - Remove MERN debris from `backend/`: `debug-multipart.mjs`, `debug-schema.mjs`, and the stray `node_modules/` (no `package.json` ever existed).
 - A fresh `backend/package.json` is added solely for the RLS test script and its dev dependency (`@supabase/supabase-js`).
-- Mark `docs/superpowers/plans/2026-06-19-portfolio-backend.md` as superseded by this design (note at top; do not delete — kept as history).
+- Remove the obsolete MERN backend plan and design-spec docs (the backend is now Supabase).
 
 ## Testing / verification
 
