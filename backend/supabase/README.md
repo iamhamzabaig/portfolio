@@ -19,9 +19,13 @@ Requires Docker.
 cd backend
 npm install
 npx supabase start      # boots local Postgres/Auth/Storage in Docker
-npm run db:reset        # applies all migrations + seed
-npm run test:rls        # asserts RLS policies
+npm run db:reset        # applies all migrations + seed (WIPES local data)
+npm run test:rls        # asserts RLS policies (also runs db reset)
 ```
+
+> **Warning:** `db:reset` and `test:rls` recreate the local database from
+> scratch — they destroy any data in the local stack. They only touch the
+> local Docker instance, never a hosted project.
 
 `npx supabase status` prints the local API URL, Studio URL, anon key, and
 service-role key.
