@@ -481,10 +481,16 @@ git commit -m "feat(backend): add seed data for profile and sample projects"
 
 NOTE: The test shells out to `supabase` (resolved from `node_modules/.bin` because `node --test` is launched by the `test:rls` npm script, which puts `.bin` on PATH). It runs `supabase start` (idempotent — fast if already up) and `supabase db reset` in a `before` hook, then reads connection keys from `supabase status -o json`. Requires Docker.
 
-RLS semantics this test relies on:
-- A blocked **INSERT** returns an error (row violates RLS policy).
-- A blocked **UPDATE/DELETE** returns no error but affects **0 rows** (the rows are invisible under the USING clause), so `.select()` after the mutation returns `[]`.
-- A blocked **SELECT** returns no error and an empty array.
+Access is enforced at TWO layers: table GRANTs (privilege) then RLS (rows).
+Grants are least-privilege (migration `20260621091500_grants.sql`): anon has only
+SELECT on `projects`/`profile` and INSERT on `contact_messages`. So any anon
+operation it lacks a grant for fails at the **privilege layer** with a
+`permission denied for table` **error** — before RLS is even evaluated. Therefore:
+- anon INSERT/UPDATE/DELETE on `projects` → non-null `error`.
+- anon UPDATE on `profile` → non-null `error`.
+- anon SELECT on `contact_messages` → non-null `error`.
+- anon SELECT on `projects`/`profile` and anon INSERT on `contact_messages` → succeed (grant + RLS `using/with check (true)`).
+- the admin (authenticated) holds every grant its policies need, so its operations succeed.
 
 - [ ] **Step 1: Write `backend/tests/rls.test.mjs`**
 
@@ -543,26 +549,19 @@ test('anon insert into projects is rejected', async () => {
   assert.notEqual(error, null, 'RLS should block anon insert');
 });
 
-test('anon update on projects affects no rows', async () => {
+test('anon update on projects is rejected (no privilege)', async () => {
   const { data: rows } = await anon.from('projects').select('id').limit(1);
-  const { data, error } = await anon
+  const { error } = await anon
     .from('projects')
     .update({ title: 'Hacked' })
-    .eq('id', rows[0].id)
-    .select();
-  assert.equal(error, null);
-  assert.equal(data.length, 0, 'anon update should affect 0 rows under RLS');
+    .eq('id', rows[0].id);
+  assert.notEqual(error, null, 'anon lacks UPDATE grant -> permission denied');
 });
 
-test('anon delete on projects affects no rows', async () => {
+test('anon delete on projects is rejected (no privilege)', async () => {
   const { data: rows } = await anon.from('projects').select('id').limit(1);
-  const { data, error } = await anon
-    .from('projects')
-    .delete()
-    .eq('id', rows[0].id)
-    .select();
-  assert.equal(error, null);
-  assert.equal(data.length, 0, 'anon delete should affect 0 rows under RLS');
+  const { error } = await anon.from('projects').delete().eq('id', rows[0].id);
+  assert.notEqual(error, null, 'anon lacks DELETE grant -> permission denied');
 });
 
 // ---------- anon: contact_messages ----------
@@ -573,10 +572,9 @@ test('anon can insert a contact message', async () => {
   assert.equal(error, null, 'anon should be able to submit a contact message');
 });
 
-test('anon cannot read contact messages', async () => {
-  const { data, error } = await anon.from('contact_messages').select('*');
-  assert.equal(error, null);
-  assert.equal(data.length, 0, 'anon must not read contact messages back');
+test('anon cannot read contact messages (no privilege)', async () => {
+  const { error } = await anon.from('contact_messages').select('*');
+  assert.notEqual(error, null, 'anon lacks SELECT grant on contact_messages');
 });
 
 // ---------- anon: profile ----------
@@ -586,14 +584,12 @@ test('anon can read the profile row', async () => {
   assert.equal(data.length, 1);
 });
 
-test('anon update on profile affects no rows', async () => {
-  const { data, error } = await anon
+test('anon update on profile is rejected (no privilege)', async () => {
+  const { error } = await anon
     .from('profile')
     .update({ headline: 'Hacked' })
-    .eq('id', 1)
-    .select();
-  assert.equal(error, null);
-  assert.equal(data.length, 0, 'anon profile update should affect 0 rows');
+    .eq('id', 1);
+  assert.notEqual(error, null, 'anon lacks UPDATE grant on profile');
 });
 
 // ---------- authenticated admin ----------
