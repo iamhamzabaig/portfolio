@@ -1,0 +1,2 @@
+-- Seed data is added in Task 5. Placeholder so `supabase db reset` finds the
+-- file referenced by [db.seed] sql_paths in config.toml.
