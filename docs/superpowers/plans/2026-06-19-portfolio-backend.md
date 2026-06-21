@@ -1,3 +1,5 @@
+> **SUPERSEDED (2026-06-21):** The backend moved to Supabase. This Express/Mongoose/MongoDB/Cloudinary plan is kept for history only. See `docs/superpowers/plans/2026-06-21-portfolio-supabase-backend.md`.
+
 # Portfolio Backend API Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
