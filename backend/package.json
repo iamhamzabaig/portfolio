@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-backend-supabase",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "supabase": "supabase",
+    "db:reset": "supabase db reset",
+    "test:rls": "node --test tests/rls.test.mjs"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "supabase": "^2.2.1"
+  }
+}
