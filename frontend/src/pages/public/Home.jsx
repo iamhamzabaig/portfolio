@@ -2,6 +2,7 @@ import { ArrowRight, ArrowUpRight, Boxes, Gauge, Radio } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
+import HeroVisual from '../../components/three/HeroVisual.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
@@ -76,11 +77,7 @@ export default function Home() {
         className="relative overflow-hidden border-b border-border"
       >
         <div className="pointer-events-none absolute inset-0 bg-grid-faint [background-size:26px_26px] opacity-60" />
-        <motion.div
-          aria-hidden="true"
-          style={{ x: glowX, y: glowY }}
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[44rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[120px]"
-        />
+        <HeroVisual pointer={{ glowX, glowY }} />
         <Container className="relative flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center py-20 text-center">
           <motion.div variants={heroStagger} initial="hidden" animate="show" className="flex flex-col items-center">
             <motion.span
