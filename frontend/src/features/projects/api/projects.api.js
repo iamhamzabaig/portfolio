@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabaseClient.js';
 const BUCKET = 'project-images';
 
 // DB row (snake_case, flat) -> frontend shape (camelCase, nested cover).
-function toProject(row) {
+export function toProject(row) {
   return {
     _id: row.id,
     title: row.title,
@@ -12,14 +12,16 @@ function toProject(row) {
     content: row.content ?? '',
     tags: row.tags ?? [],
     coverImage: { url: row.cover_image_url ?? '' },
+    video: { url: row.video_url ?? '' },
     liveUrl: row.live_url ?? '',
     repoUrl: row.repo_url ?? '',
     featured: Boolean(row.featured)
   };
 }
 
-// Frontend form values -> DB columns. `cover` is the uploaded-image result or null.
-function toRow(values, cover) {
+// Frontend form values -> DB columns. `cover`/`video` are uploaded-asset
+// results or null.
+export function toRow(values, cover, video) {
   const row = {
     title: values.title,
     description: values.description,
@@ -32,6 +34,10 @@ function toRow(values, cover) {
   if (cover) {
     row.cover_image_url = cover.url;
     row.cover_image_path = cover.path;
+  }
+  if (video) {
+    row.video_url = video.url;
+    row.video_path = video.path;
   }
   return row;
 }
