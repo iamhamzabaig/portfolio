@@ -20,6 +20,21 @@ if (typeof HTMLCanvasElement !== 'undefined') {
   HTMLCanvasElement.prototype.getContext = () => null;
 }
 
+// jsdom has no IntersectionObserver; motion's whileInView (Reveal) constructs one.
+// Stub a no-op so App-level renders don't throw.
+if (typeof window !== 'undefined' && !window.IntersectionObserver) {
+  class IntersectionObserverStub {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
+    }
+  }
+  window.IntersectionObserver = IntersectionObserverStub;
+  globalThis.IntersectionObserver = IntersectionObserverStub;
+}
+
 afterEach(() => {
   cleanup();
 });
