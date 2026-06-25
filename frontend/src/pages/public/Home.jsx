@@ -167,9 +167,7 @@ export default function Home() {
               All projects <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
           </Reveal>
-          <Reveal>
-            {projectsQuery.isLoading && !projectsQuery.data ? <Spinner /> : <ProjectGrid projects={featured} />}
-          </Reveal>
+          {projectsQuery.isLoading && !projectsQuery.data ? <Spinner /> : <ProjectGrid projects={featured} />}
         </Container>
       </section>
 

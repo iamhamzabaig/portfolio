@@ -4,10 +4,14 @@ import { motion } from 'motion/react';
 // as it enters the viewport. Honors reduced motion automatically via the app's
 // <MotionConfig reducedMotion="user"> (transforms drop out, opacity stays).
 
-const riseItem = {
+// Exported so components with their own <motion> root (e.g. ProjectCard) can opt
+// into a <RevealStagger> parent's entrance without an extra wrapper element.
+export const revealRise = {
   hidden: { y: 22, opacity: 0 },
   show: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 130, damping: 18 } }
 };
+
+const riseItem = revealRise;
 
 const staggerParent = {
   hidden: {},

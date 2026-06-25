@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Chip } from '../../../components/ui/Chip.jsx';
+import { revealRise } from '../../../components/ui/Reveal.jsx';
 import { coverGradient, monogram } from '../cover.js';
 
 const tiltSpring = { stiffness: 150, damping: 18 };
@@ -29,6 +30,7 @@ export function ProjectCard({ project }) {
 
   return (
     <motion.div
+      variants={revealRise}
       onPointerMove={handleTilt}
       onPointerLeave={resetTilt}
       style={{ rotateX, rotateY, transformPerspective: 900, transformStyle: 'preserve-3d' }}
