@@ -50,7 +50,15 @@ export default function ProjectDetail() {
               ) : null}
             </div>
           </div>
-          {project.coverImage?.url ? (
+          {project.video?.url ? (
+            <video
+              controls
+              preload="none"
+              src={project.video.url}
+              poster={project.coverImage?.url || undefined}
+              className="aspect-[16/10] w-full rounded-2xl border border-border object-cover"
+            />
+          ) : project.coverImage?.url ? (
             <img
               src={project.coverImage.url}
               alt=""
