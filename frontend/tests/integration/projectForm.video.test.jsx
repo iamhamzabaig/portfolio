@@ -24,7 +24,7 @@ describe('ProjectForm — demo video', () => {
     await user.upload(screen.getByLabelText(/demo video/i), fileOfSize('big.mp4', 'video/mp4', 60 * 1024 * 1024));
     await user.click(screen.getByRole('button', { name: /save project/i }));
 
-    await waitFor(() => expect(screen.getByText(/50 MB/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/50 MB/i));
     expect(onSubmit).not.toHaveBeenCalled();
   });
 });
