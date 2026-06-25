@@ -1,6 +1,7 @@
 import { supabase } from '../../../lib/supabaseClient.js';
 
 const BUCKET = 'project-images';
+const BUCKET_VIDEO = 'project-videos';
 
 // DB row (snake_case, flat) -> frontend shape (camelCase, nested cover).
 export function toProject(row) {
@@ -51,6 +52,15 @@ async function uploadCover(file) {
   return { url: data.publicUrl, path };
 }
 
+async function uploadVideo(file) {
+  const ext = file.name.includes('.') ? file.name.split('.').pop() : 'mp4';
+  const path = `${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from(BUCKET_VIDEO).upload(path, file);
+  if (error) throw error;
+  const { data } = supabase.storage.from(BUCKET_VIDEO).getPublicUrl(path);
+  return { url: data.publicUrl, path };
+}
+
 export async function fetchProjects(params = {}) {
   let query = supabase
     .from('projects')
@@ -70,16 +80,18 @@ export async function fetchProject(slug) {
   return toProject(data);
 }
 
-export async function createProject({ values, file }) {
+export async function createProject({ values, file, videoFile }) {
   const cover = file ? await uploadCover(file) : null;
-  const { data, error } = await supabase.from('projects').insert(toRow(values, cover)).select().single();
+  const video = videoFile ? await uploadVideo(videoFile) : null;
+  const { data, error } = await supabase.from('projects').insert(toRow(values, cover, video)).select().single();
   if (error) throw error;
   return toProject(data);
 }
 
-export async function updateProject({ id, values, file }) {
+export async function updateProject({ id, values, file, videoFile }) {
   const cover = file ? await uploadCover(file) : null;
-  const { data, error } = await supabase.from('projects').update(toRow(values, cover)).eq('id', id).select().single();
+  const video = videoFile ? await uploadVideo(videoFile) : null;
+  const { data, error } = await supabase.from('projects').update(toRow(values, cover, video)).eq('id', id).select().single();
   if (error) throw error;
   return toProject(data);
 }
