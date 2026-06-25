@@ -11,9 +11,13 @@ export default function HeroVisual({ pointer }) {
     return <StaticGlow {...pointer} />;
   }
 
+  // Soft glow sits as a base layer; the wireframe mesh renders on top of it.
   return (
-    <Suspense fallback={<StaticGlow {...pointer} />}>
-      <LazyHeroScene animate={animate} pointer={pointer} />
-    </Suspense>
+    <>
+      <StaticGlow {...pointer} />
+      <Suspense fallback={null}>
+        <LazyHeroScene animate={animate} pointer={pointer} />
+      </Suspense>
+    </>
   );
 }
