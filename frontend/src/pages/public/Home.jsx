@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
 import HeroVisual from '../../components/three/HeroVisual.jsx';
 import { Button } from '../../components/ui/Button.jsx';
+import { CountUp } from '../../components/ui/CountUp.jsx';
+import { Reveal, RevealStagger, RevealItem } from '../../components/ui/Reveal.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
@@ -131,22 +133,25 @@ export default function Home() {
       <section className="border-b border-border py-20">
         <Container>
           <Eyebrow index="01" label="BY THE NUMBERS" right="THREE YEARS, SHIPPED" />
-          <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.slice(0, 4).map((stat) => (
-              <div key={stat.label} className="border-l border-border pl-5">
-                {stat.eyebrow && (
-                  <p className="font-mono text-[11px] tracking-eyebrow text-muted">{stat.eyebrow}</p>
-                )}
-                <p className="mt-4 flex items-start font-display text-6xl font-bold leading-none text-ink lg:text-7xl">
-                  {stat.value}
-                  {stat.suffix && <span className="ml-1 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
-                </p>
-                <p className="mt-5 text-sm font-semibold uppercase tracking-wide text-ink">{stat.label}</p>
-                <p className="mt-1 text-sm leading-6 text-muted">{stat.description}</p>
-                {stat.spark && <Sparkline points={stat.spark} className="mt-5 text-accent" />}
-              </div>
-            ))}
-          </div>
+          <RevealStagger className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.slice(0, 4).map((stat) => {
+              const numeric = Number(stat.value);
+              return (
+                <RevealItem key={stat.label} className="border-l border-border pl-5">
+                  {stat.eyebrow && (
+                    <p className="font-mono text-[11px] tracking-eyebrow text-muted">{stat.eyebrow}</p>
+                  )}
+                  <p className="mt-4 flex items-start font-display text-6xl font-bold leading-none text-ink lg:text-7xl">
+                    {Number.isFinite(numeric) ? <CountUp value={numeric} /> : stat.value}
+                    {stat.suffix && <span className="ml-1 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
+                  </p>
+                  <p className="mt-5 text-sm font-semibold uppercase tracking-wide text-ink">{stat.label}</p>
+                  <p className="mt-1 text-sm leading-6 text-muted">{stat.description}</p>
+                  {stat.spark && <Sparkline points={stat.spark} className="mt-5 text-accent" />}
+                </RevealItem>
+              );
+            })}
+          </RevealStagger>
         </Container>
       </section>
 
@@ -154,15 +159,17 @@ export default function Home() {
       <section className="border-b border-border py-20">
         <Container>
           <Eyebrow index="02" label="SELECTED WORK" right="REAL-TIME · ERP · MARKETING" />
-          <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <Reveal className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <h2 className="max-w-xl font-display text-3xl font-semibold text-ink sm:text-4xl">
               Things I&apos;ve designed, shipped, and measured.
             </h2>
             <Link to="/projects" className="inline-flex items-center gap-2 text-sm text-accent hover:text-ink">
               All projects <ArrowUpRight aria-hidden="true" size={16} />
             </Link>
-          </div>
-          {projectsQuery.isLoading && !projectsQuery.data ? <Spinner /> : <ProjectGrid projects={featured} />}
+          </Reveal>
+          <Reveal>
+            {projectsQuery.isLoading && !projectsQuery.data ? <Spinner /> : <ProjectGrid projects={featured} />}
+          </Reveal>
         </Container>
       </section>
 
@@ -170,20 +177,24 @@ export default function Home() {
       <section className="py-20">
         <Container>
           <Eyebrow index="03" label="HOW I WORK" />
-          <div className="grid gap-5 md:grid-cols-3">
+          <RevealStagger className="grid gap-5 md:grid-cols-3">
             {capabilities.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className="rounded-2xl border border-border bg-panel p-6">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent">
+                <RevealItem
+                  key={item.title}
+                  whileHover={{ y: -4 }}
+                  className="group rounded-2xl border border-border bg-panel p-6 transition-colors duration-300 hover:border-accent/40 hover:shadow-glow"
+                >
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-110">
                     <Icon aria-hidden="true" size={20} />
                   </span>
                   <h3 className="mt-5 font-display text-lg font-semibold text-ink">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted">{item.text}</p>
-                </div>
+                </RevealItem>
               );
             })}
-          </div>
+          </RevealStagger>
         </Container>
       </section>
     </>
