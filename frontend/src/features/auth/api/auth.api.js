@@ -1,16 +1,20 @@
-import { axiosClient } from '../../../api/axiosClient.js';
+import { supabase } from '../../../lib/supabaseClient.js';
 
-export async function loginRequest(credentials) {
-  const response = await axiosClient.post('/auth/login', credentials);
-  return response.data.data.user;
+export async function loginRequest({ email, password }) {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data.user;
 }
 
 export async function logoutRequest() {
-  const response = await axiosClient.post('/auth/logout');
-  return response.data.data;
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+  return true;
 }
 
 export async function fetchMe() {
-  const response = await axiosClient.get('/auth/me');
-  return response.data.data;
+  // No session => treat as logged out rather than throwing.
+  const { data, error } = await supabase.auth.getUser();
+  if (error) return null;
+  return data.user;
 }

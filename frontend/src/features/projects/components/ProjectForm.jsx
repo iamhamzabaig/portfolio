@@ -36,17 +36,21 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
   });
 
   const submit = (values) => {
-    const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('description', values.description);
-    formData.append('content', values.content || '');
-    formData.append('tags', values.tags || '');
-    formData.append('liveUrl', values.liveUrl || '');
-    formData.append('repoUrl', values.repoUrl || '');
-    formData.append('featured', values.featured ? 'true' : 'false');
-    const file = values.coverImage?.[0];
-    if (file) formData.append('coverImage', file);
-    onSubmit(formData);
+    onSubmit({
+      values: {
+        title: values.title,
+        description: values.description,
+        content: values.content || '',
+        tags: (values.tags || '')
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+        liveUrl: values.liveUrl || '',
+        repoUrl: values.repoUrl || '',
+        featured: Boolean(values.featured)
+      },
+      file: values.coverImage?.[0] || null
+    });
   };
 
   return (

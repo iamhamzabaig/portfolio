@@ -1,6 +1,7 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useContext, useEffect, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchMe, loginRequest, logoutRequest } from '../features/auth/api/auth.api.js';
+import { supabase } from '../lib/supabaseClient.js';
 
 const AuthContext = createContext(null);
 
@@ -21,6 +22,17 @@ export function AuthProvider({ children }) {
     mutationFn: logoutRequest,
     onSettled: () => queryClient.setQueryData(['me'], null)
   });
+
+  // Keep ['me'] in sync with Supabase auth (initial session, refresh, sign-out,
+  // changes in another tab).
+  useEffect(() => {
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      queryClient.setQueryData(['me'], session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, [queryClient]);
 
   const value = useMemo(
     () => ({

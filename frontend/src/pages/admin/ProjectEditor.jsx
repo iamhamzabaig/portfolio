@@ -16,9 +16,9 @@ export default function ProjectEditor() {
 
   if (isEditing && projectsQuery.isLoading && !project) return <Spinner />;
 
-  const handleSubmit = (formData) => {
-    const payload = isEditing ? { id, formData } : formData;
-    mutation.mutate(payload, { onSuccess: () => navigate('/admin/projects') });
+  const handleSubmit = (payload) => {
+    const args = isEditing ? { id, ...payload } : payload;
+    mutation.mutate(args, { onSuccess: () => navigate('/admin/projects') });
   };
 
   return (
