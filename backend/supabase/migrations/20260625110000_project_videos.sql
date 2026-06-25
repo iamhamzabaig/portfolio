@@ -14,6 +14,13 @@ values ('project-videos', 'project-videos', true, 52428800,
         array['video/mp4', 'video/webm'])
 on conflict (id) do nothing;
 
+-- Idempotent: drop-then-create so a re-run does not error on existing policies
+-- (mirrors the guarded pattern in 20260625100000_admin_rls.sql).
+drop policy if exists "project-videos public read" on storage.objects;
+drop policy if exists "project-videos admin insert" on storage.objects;
+drop policy if exists "project-videos admin update" on storage.objects;
+drop policy if exists "project-videos admin delete" on storage.objects;
+
 create policy "project-videos public read"
   on storage.objects for select
   to anon, authenticated
