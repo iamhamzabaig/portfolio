@@ -60,6 +60,11 @@ export function ProjectCard({ project }) {
               FEATURED
             </span>
           )}
+          {project.video?.url && (
+            <span className="rounded-full bg-bg/70 px-3 py-1 font-mono text-[10px] tracking-eyebrow text-ink backdrop-blur">
+              ▶ DEMO
+            </span>
+          )}
         </div>
       </div>
 
