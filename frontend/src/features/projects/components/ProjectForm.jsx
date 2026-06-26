@@ -41,6 +41,8 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
   });
 
   const [videoError, setVideoError] = useState('');
+  const [removeVideo, setRemoveVideo] = useState(false);
+  const hasExistingVideo = Boolean(project?.video?.url);
 
   const submit = (values) => {
     const videoFile = values.video?.[0] || null;
@@ -69,7 +71,9 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         featured: Boolean(values.featured)
       },
       file: values.coverImage?.[0] || null,
-      videoFile
+      videoFile,
+      removeVideo,
+      currentVideoPath: project?.video?.path || null
     });
   };
 
@@ -98,8 +102,30 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
           Demo video
         </label>
         <input id="video" type="file" accept="video/mp4,video/webm" className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('video')} />
-        <p className="text-xs text-muted">MP4 or WebM, max 50 MB. Compress before upload.</p>
+        <p className="text-xs text-muted">MP4 or WebM only. Compress before upload.</p>
         {videoError ? <p role="alert" className="text-sm text-danger">{videoError}</p> : null}
+        {hasExistingVideo && !removeVideo ? (
+          <div className="grid gap-2">
+            <video
+              controls
+              preload="none"
+              src={project.video.url}
+              poster={project.coverImage?.url || undefined}
+              className="aspect-video w-full rounded-md border border-border"
+            />
+            <button type="button" onClick={() => setRemoveVideo(true)} className="justify-self-start text-sm text-danger">
+              Remove video
+            </button>
+          </div>
+        ) : null}
+        {hasExistingVideo && removeVideo ? (
+          <p className="text-sm text-muted">
+            Video will be removed on save.{' '}
+            <button type="button" onClick={() => setRemoveVideo(false)} className="text-accent underline">
+              Undo
+            </button>
+          </p>
+        ) : null}
       </div>
       <Button type="submit" disabled={isPending}>
         <Save aria-hidden="true" size={17} />
