@@ -88,11 +88,22 @@ export async function createProject({ values, file, videoFile }) {
   return toProject(data);
 }
 
-export async function updateProject({ id, values, file, videoFile }) {
+export async function updateProject({ id, values, file, videoFile, removeVideo, currentVideoPath }) {
   const cover = file ? await uploadCover(file) : null;
-  const video = videoFile ? await uploadVideo(videoFile) : null;
-  const { data, error } = await supabase.from('projects').update(toRow(values, cover, video)).eq('id', id).select().single();
+  const row = toRow(values, cover, null);
+  if (videoFile) {
+    const video = await uploadVideo(videoFile);
+    row.video_url = video.url;
+    row.video_path = video.path;
+  } else if (removeVideo) {
+    row.video_url = null;
+    row.video_path = null;
+  }
+  const { data, error } = await supabase.from('projects').update(row).eq('id', id).select().single();
   if (error) throw error;
+  if ((videoFile || removeVideo) && currentVideoPath) {
+    await supabase.storage.from(BUCKET_VIDEO).remove([currentVideoPath]).catch(() => {});
+  }
   return toProject(data);
 }
 
