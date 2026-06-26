@@ -33,4 +33,10 @@ describe('projects mappers — video', () => {
     expect(toRow({ title: 'T', description: 'd', isPrivate: true }, null, null).is_private).toBe(true);
     expect(toRow({ title: 'T', description: 'd' }, null, null).is_private).toBe(false);
   });
+
+  it('maps screenshots array, defaulting to []', () => {
+    expect(toProject({ id: '1', title: 'T', slug: 't', description: 'd', screenshots: [{ url: 'u', path: 'p' }] }).screenshots)
+      .toEqual([{ url: 'u', path: 'p' }]);
+    expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).screenshots).toEqual([]);
+  });
 });

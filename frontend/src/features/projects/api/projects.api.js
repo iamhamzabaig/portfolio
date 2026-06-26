@@ -17,7 +17,10 @@ export function toProject(row) {
     liveUrl: row.live_url ?? '',
     repoUrl: row.repo_url ?? '',
     featured: Boolean(row.featured),
-    isPrivate: Boolean(row.is_private)
+    isPrivate: Boolean(row.is_private),
+    screenshots: Array.isArray(row.screenshots)
+      ? row.screenshots.map((s) => ({ url: s.url ?? '', path: s.path ?? '' }))
+      : [],
   };
 }
 
@@ -63,6 +66,25 @@ async function uploadVideo(file) {
   return { url: data.publicUrl, path };
 }
 
+async function uploadScreenshot(file) {
+  const ext = file.name.includes('.') ? file.name.split('.').pop() : 'png';
+  const path = `${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file);
+  if (error) throw error;
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return { url: data.publicUrl, path };
+}
+
+async function resolveScreenshots(existingScreenshots, removeScreenshotPaths, screenshotFiles) {
+  const removeSet = new Set(removeScreenshotPaths || []);
+  const kept = (existingScreenshots || []).filter((s) => !removeSet.has(s.path));
+  const uploaded = [];
+  for (const f of screenshotFiles || []) {
+    uploaded.push(await uploadScreenshot(f));
+  }
+  return [...kept, ...uploaded];
+}
+
 export async function fetchProjects(params = {}) {
   let query = supabase
     .from('projects')
@@ -82,15 +104,18 @@ export async function fetchProject(slug) {
   return toProject(data);
 }
 
-export async function createProject({ values, file, videoFile }) {
+export async function createProject({ values, file, videoFile, screenshotFiles }) {
   const cover = file ? await uploadCover(file) : null;
   const video = videoFile ? await uploadVideo(videoFile) : null;
-  const { data, error } = await supabase.from('projects').insert(toRow(values, cover, video)).select().single();
+  const row = toRow(values, cover, video);
+  const shots = await resolveScreenshots([], [], screenshotFiles);
+  if (shots.length) row.screenshots = shots;
+  const { data, error } = await supabase.from('projects').insert(row).select().single();
   if (error) throw error;
   return toProject(data);
 }
 
-export async function updateProject({ id, values, file, videoFile, removeVideo, currentVideoPath }) {
+export async function updateProject({ id, values, file, videoFile, removeVideo, currentVideoPath, screenshotFiles, removeScreenshotPaths, existingScreenshots }) {
   const cover = file ? await uploadCover(file) : null;
   const row = toRow(values, cover, null);
   if (videoFile) {
@@ -101,10 +126,17 @@ export async function updateProject({ id, values, file, videoFile, removeVideo, 
     row.video_url = null;
     row.video_path = null;
   }
+  const hasScreenshotChange = (screenshotFiles && screenshotFiles.length) || (removeScreenshotPaths && removeScreenshotPaths.length);
+  if (hasScreenshotChange) {
+    row.screenshots = await resolveScreenshots(existingScreenshots, removeScreenshotPaths, screenshotFiles);
+  }
   const { data, error } = await supabase.from('projects').update(row).eq('id', id).select().single();
   if (error) throw error;
   if ((videoFile || removeVideo) && currentVideoPath) {
     await supabase.storage.from(BUCKET_VIDEO).remove([currentVideoPath]).catch(() => {});
+  }
+  if (removeScreenshotPaths && removeScreenshotPaths.length) {
+    await supabase.storage.from(BUCKET).remove(removeScreenshotPaths).catch(() => {});
   }
   return toProject(data);
 }
