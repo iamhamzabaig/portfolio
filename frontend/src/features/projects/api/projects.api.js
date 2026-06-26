@@ -13,7 +13,7 @@ export function toProject(row) {
     content: row.content ?? '',
     tags: row.tags ?? [],
     coverImage: { url: row.cover_image_url ?? '' },
-    video: { url: row.video_url ?? '' },
+    video: { url: row.video_url ?? '', path: row.video_path ?? '' },
     liveUrl: row.live_url ?? '',
     repoUrl: row.repo_url ?? '',
     featured: Boolean(row.featured)

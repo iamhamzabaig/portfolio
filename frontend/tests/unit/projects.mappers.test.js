@@ -20,4 +20,10 @@ describe('projects mappers — video', () => {
     expect(row.video_url).toBe('https://cdn/v.mp4');
     expect(row.video_path).toBe('abc.mp4');
   });
+
+  it('maps video_path to video.path, defaulting to empty string', () => {
+    expect(toProject({ id: '1', title: 'T', slug: 't', description: 'd', video_path: 'abc.mp4' }).video.path)
+      .toBe('abc.mp4');
+    expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).video.path).toBe('');
+  });
 });
