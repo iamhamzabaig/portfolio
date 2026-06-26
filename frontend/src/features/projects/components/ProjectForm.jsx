@@ -9,6 +9,7 @@ import { Textarea } from '../../../components/ui/Textarea.jsx';
 
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const VIDEO_TYPES = ['video/mp4', 'video/webm'];
+const MAX_SCREENSHOTS = 8;
 
 const schema = z.object({
   title: z.string().min(2, 'Title is required'),
@@ -20,7 +21,8 @@ const schema = z.object({
   featured: z.boolean().optional(),
   isPrivate: z.boolean().optional(),
   coverImage: z.any().optional(),
-  video: z.any().optional()
+  video: z.any().optional(),
+  screenshots: z.any().optional()
 });
 
 export function ProjectForm({ project, onSubmit, isPending = false }) {
@@ -45,6 +47,9 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
   const [videoError, setVideoError] = useState('');
   const [removeVideo, setRemoveVideo] = useState(false);
   const hasExistingVideo = Boolean(project?.video?.url);
+  const [removeShotPaths, setRemoveShotPaths] = useState([]);
+  const [shotError, setShotError] = useState('');
+  const existingShots = (project?.screenshots || []).filter((s) => !removeShotPaths.includes(s.path));
 
   const submit = (values) => {
     const videoFile = values.video?.[0] || null;
@@ -59,6 +64,13 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       }
     }
     setVideoError('');
+    const screenshotFiles = Array.from(values.screenshots || []);
+    const keptShots = (project?.screenshots || []).filter((s) => !removeShotPaths.includes(s.path));
+    if (keptShots.length + screenshotFiles.length > MAX_SCREENSHOTS) {
+      setShotError(`Max ${MAX_SCREENSHOTS} screenshots.`);
+      return;
+    }
+    setShotError('');
     onSubmit({
       values: {
         title: values.title,
@@ -76,7 +88,10 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       file: values.coverImage?.[0] || null,
       videoFile,
       removeVideo,
-      currentVideoPath: project?.video?.path || null
+      currentVideoPath: project?.video?.path || null,
+      screenshotFiles,
+      removeScreenshotPaths: removeShotPaths,
+      existingScreenshots: project?.screenshots || []
     });
   };
 
@@ -133,6 +148,31 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
             </button>
           </p>
         ) : null}
+      </div>
+      <div className="grid gap-1.5">
+        <label htmlFor="screenshots" className="font-mono text-xs uppercase text-muted">
+          Screenshots
+        </label>
+        {existingShots.length ? (
+          <div className="flex flex-wrap gap-2">
+            {existingShots.map((shot, i) => (
+              <div key={shot.path} className="relative">
+                <img src={shot.url} alt="" className="h-16 w-24 rounded-md border border-border object-cover" />
+                <button
+                  type="button"
+                  aria-label={`Remove screenshot ${i + 1}`}
+                  onClick={() => setRemoveShotPaths((prev) => [...prev, shot.path])}
+                  className="absolute -right-2 -top-2 grid h-5 w-5 place-items-center rounded-full bg-danger text-xs text-white"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <input id="screenshots" type="file" accept="image/*" multiple className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('screenshots')} />
+        <p className="text-xs text-muted">Up to {MAX_SCREENSHOTS} images.</p>
+        {shotError ? <p role="alert" className="text-sm text-danger">{shotError}</p> : null}
       </div>
       <Button type="submit" disabled={isPending}>
         <Save aria-hidden="true" size={17} />
