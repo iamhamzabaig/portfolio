@@ -17,7 +17,8 @@ export function toProject(row) {
     liveUrl: row.live_url ?? '',
     repoUrl: row.repo_url ?? '',
     featured: Boolean(row.featured),
-    isPrivate: Boolean(row.is_private),
+    isLivePrivate: Boolean(row.live_private),
+    isRepoPrivate: Boolean(row.repo_private),
     screenshots: Array.isArray(row.screenshots)
       ? row.screenshots.map((s) => ({ url: s.url ?? '', path: s.path ?? '' }))
       : [],
@@ -35,7 +36,8 @@ export function toRow(values, cover, video) {
     live_url: values.liveUrl ?? '',
     repo_url: values.repoUrl ?? '',
     featured: Boolean(values.featured),
-    is_private: Boolean(values.isPrivate)
+    live_private: Boolean(values.isLivePrivate),
+    repo_private: Boolean(values.isRepoPrivate)
   };
   if (cover) {
     row.cover_image_url = cover.url;

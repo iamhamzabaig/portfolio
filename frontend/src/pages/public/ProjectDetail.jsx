@@ -36,26 +36,26 @@ export default function ProjectDetail() {
             <h1 className="font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">{project.title}</h1>
             <p className="mt-5 text-lg leading-8 text-muted">{project.description}</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              {project.isPrivate ? (
+              {project.isLivePrivate ? (
                 <p className="inline-flex items-center gap-2 rounded-full border border-border bg-panel px-4 py-2 text-sm text-muted">
-                  <Lock aria-hidden="true" size={15} /> Private — code &amp; demo under NDA
+                  <Lock aria-hidden="true" size={15} /> Live demo under NDA
                 </p>
-              ) : (
-                <>
-                  {project.liveUrl ? (
-                    <Button as="a" href={project.liveUrl} target="_blank" rel="noreferrer">
-                      <ExternalLink aria-hidden="true" size={17} />
-                      Live
-                    </Button>
-                  ) : null}
-                  {project.repoUrl ? (
-                    <Button as="a" href={project.repoUrl} target="_blank" rel="noreferrer" variant="outline">
-                      <Github aria-hidden="true" size={17} />
-                      Source
-                    </Button>
-                  ) : null}
-                </>
-              )}
+              ) : project.liveUrl ? (
+                <Button as="a" href={project.liveUrl} target="_blank" rel="noreferrer">
+                  <ExternalLink aria-hidden="true" size={17} />
+                  Live
+                </Button>
+              ) : null}
+              {project.isRepoPrivate ? (
+                <p className="inline-flex items-center gap-2 rounded-full border border-border bg-panel px-4 py-2 text-sm text-muted">
+                  <Lock aria-hidden="true" size={15} /> Source under NDA
+                </p>
+              ) : project.repoUrl ? (
+                <Button as="a" href={project.repoUrl} target="_blank" rel="noreferrer" variant="outline">
+                  <Github aria-hidden="true" size={17} />
+                  Source
+                </Button>
+              ) : null}
             </div>
           </div>
           <MediaGallery

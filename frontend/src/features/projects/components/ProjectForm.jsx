@@ -19,7 +19,8 @@ const schema = z.object({
   liveUrl: z.string().optional(),
   repoUrl: z.string().optional(),
   featured: z.boolean().optional(),
-  isPrivate: z.boolean().optional(),
+  isLivePrivate: z.boolean().optional(),
+  isRepoPrivate: z.boolean().optional(),
   coverImage: z.any().optional(),
   video: z.any().optional(),
   screenshots: z.any().optional()
@@ -40,7 +41,8 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       liveUrl: project?.liveUrl || '',
       repoUrl: project?.repoUrl || '',
       featured: Boolean(project?.featured),
-      isPrivate: Boolean(project?.isPrivate)
+      isLivePrivate: Boolean(project?.isLivePrivate),
+      isRepoPrivate: Boolean(project?.isRepoPrivate)
     }
   });
 
@@ -83,7 +85,8 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         liveUrl: values.liveUrl || '',
         repoUrl: values.repoUrl || '',
         featured: Boolean(values.featured),
-        isPrivate: Boolean(values.isPrivate)
+        isLivePrivate: Boolean(values.isLivePrivate),
+        isRepoPrivate: Boolean(values.isRepoPrivate)
       },
       file: values.coverImage?.[0] || null,
       videoFile,
@@ -110,8 +113,12 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         Featured project
       </label>
       <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
-        <input type="checkbox" className="h-4 w-4 accent-accent" {...register('isPrivate')} />
-        Private / under NDA
+        <input type="checkbox" className="h-4 w-4 accent-accent" {...register('isLivePrivate')} />
+        Live link private / under NDA
+      </label>
+      <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
+        <input type="checkbox" className="h-4 w-4 accent-accent" {...register('isRepoPrivate')} />
+        Repo private / under NDA
       </label>
       <div className="grid gap-1.5">
         <label htmlFor="coverImage" className="font-mono text-xs uppercase text-muted">

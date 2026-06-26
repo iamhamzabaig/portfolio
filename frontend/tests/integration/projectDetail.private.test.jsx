@@ -16,28 +16,38 @@ vi.mock('../../src/features/projects/api/projects.api.js', () => ({
 const base = {
   _id: '1', title: 'T', slug: 'test', description: 'd', content: '', tags: [],
   coverImage: { url: 'https://cdn/c.jpg' }, video: { url: '', path: '' }, screenshots: [],
-  liveUrl: 'https://live.example', repoUrl: 'https://github.com/x/y'
+  liveUrl: 'https://live.example', repoUrl: 'https://github.com/x/y',
+  isLivePrivate: false, isRepoPrivate: false
 };
 
-describe('ProjectDetail — private flag', () => {
-  it('shows the NDA notice and hides Live/Source when private', async () => {
-    fetchProject.mockResolvedValue({ ...base, isPrivate: true });
-    renderWithProviders(
-      <Routes><Route path="/projects/:slug" element={<ProjectDetail />} /></Routes>,
-      { route: '/projects/test' }
-    );
-    await waitFor(() => expect(screen.getByText(/under NDA/i)).toBeInTheDocument());
+const renderDetail = () =>
+  renderWithProviders(
+    <Routes><Route path="/projects/:slug" element={<ProjectDetail />} /></Routes>,
+    { route: '/projects/test' }
+  );
+
+describe('ProjectDetail — per-link NDA flags', () => {
+  it('live private: shows the Live NDA pill and keeps the Source button', async () => {
+    fetchProject.mockResolvedValue({ ...base, isLivePrivate: true });
+    renderDetail();
+    await waitFor(() => expect(screen.getByText(/live demo under nda/i)).toBeInTheDocument());
     expect(screen.queryByRole('link', { name: /live/i })).toBeNull();
-    expect(screen.queryByRole('link', { name: /source/i })).toBeNull();
+    expect(screen.getByRole('link', { name: /source/i })).toBeInTheDocument();
   });
 
-  it('shows Live/Source when not private', async () => {
-    fetchProject.mockResolvedValue({ ...base, isPrivate: false });
-    renderWithProviders(
-      <Routes><Route path="/projects/:slug" element={<ProjectDetail />} /></Routes>,
-      { route: '/projects/test' }
-    );
+  it('repo private: shows the Source NDA pill and keeps the Live button', async () => {
+    fetchProject.mockResolvedValue({ ...base, isRepoPrivate: true });
+    renderDetail();
+    await waitFor(() => expect(screen.getByText(/source under nda/i)).toBeInTheDocument());
+    expect(screen.queryByRole('link', { name: /source/i })).toBeNull();
+    expect(screen.getByRole('link', { name: /live/i })).toBeInTheDocument();
+  });
+
+  it('neither private: shows both Live and Source buttons, no NDA pill', async () => {
+    fetchProject.mockResolvedValue({ ...base });
+    renderDetail();
     await waitFor(() => expect(screen.getByRole('link', { name: /live/i })).toBeInTheDocument());
-    expect(screen.queryByText(/under NDA/i)).toBeNull();
+    expect(screen.getByRole('link', { name: /source/i })).toBeInTheDocument();
+    expect(screen.queryByText(/under nda/i)).toBeNull();
   });
 });

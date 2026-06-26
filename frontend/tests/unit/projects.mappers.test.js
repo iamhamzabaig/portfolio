@@ -27,11 +27,15 @@ describe('projects mappers — video', () => {
     expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).video.path).toBe('');
   });
 
-  it('maps is_private to isPrivate and writes it back', () => {
-    expect(toProject({ id: '1', title: 'T', slug: 't', description: 'd', is_private: true }).isPrivate).toBe(true);
-    expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).isPrivate).toBe(false);
-    expect(toRow({ title: 'T', description: 'd', isPrivate: true }, null, null).is_private).toBe(true);
-    expect(toRow({ title: 'T', description: 'd' }, null, null).is_private).toBe(false);
+  it('maps live_private/repo_private independently and writes them back', () => {
+    const p = toProject({ id: '1', title: 'T', slug: 't', description: 'd', live_private: true });
+    expect(p.isLivePrivate).toBe(true);
+    expect(p.isRepoPrivate).toBe(false);
+    expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).isLivePrivate).toBe(false);
+    const row = toRow({ title: 'T', description: 'd', isLivePrivate: true, isRepoPrivate: true }, null, null);
+    expect(row.live_private).toBe(true);
+    expect(row.repo_private).toBe(true);
+    expect(toRow({ title: 'T', description: 'd' }, null, null).live_private).toBe(false);
   });
 
   it('maps screenshots array, defaulting to []', () => {
