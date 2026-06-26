@@ -1,4 +1,4 @@
-import { Edit3, Plus, Trash2 } from 'lucide-react';
+import { Edit3, Plus, Trash2, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/Button.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
@@ -26,7 +26,15 @@ export default function ProjectsAdmin() {
             {projects.map((project) => (
               <li key={project._id || project.slug} className="flex items-center justify-between gap-4 p-4">
                 <div>
-                  <p className="font-medium">{project.title}</p>
+                  <p className="flex items-center gap-2 font-medium">
+                    {project.title}
+                    {project.video?.url ? (
+                      <span className="text-accent" title="Has demo video">
+                        <Video aria-hidden="true" size={15} />
+                        <span className="sr-only">Has demo video</span>
+                      </span>
+                    ) : null}
+                  </p>
                   <p className="text-sm text-muted">{project.slug}</p>
                 </div>
                 <div className="flex gap-2">
