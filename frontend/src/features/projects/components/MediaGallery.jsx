@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { VideoPlayer } from './VideoPlayer.jsx';
 import { coverGradient, monogram } from '../cover.js';
@@ -14,10 +15,14 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
   const [index, setIndex] = useState(0);
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [direction, setDirection] = useState(1);
 
   useEffect(() => {
     if (count < 2 || hovered || videoPlaying) return undefined;
-    const timer = setInterval(() => setIndex((i) => (i + 1) % count), 5000);
+    const timer = setInterval(() => {
+      setDirection(1);
+      setIndex((i) => (i + 1) % count);
+    }, 5000);
     return () => clearInterval(timer);
   }, [count, hovered, videoPlaying]);
 
@@ -37,18 +42,28 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
   const current = slides[index];
 
   return (
-    <div className="relative" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      {current.type === 'video' ? (
-        <VideoPlayer src={current.url} poster={coverImage?.url} onPlayingChange={setVideoPlaying} />
-      ) : (
-        <img src={current.url} alt="" className={MEDIA_CLASS} />
-      )}
+    <div className="relative overflow-hidden rounded-2xl" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <motion.div
+        key={index}
+        initial={{ opacity: 0, x: direction * 48 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+      >
+        {current.type === 'video' ? (
+          <VideoPlayer src={current.url} poster={coverImage?.url} onPlayingChange={setVideoPlaying} />
+        ) : (
+          <img src={current.url} alt="" className={MEDIA_CLASS} />
+        )}
+      </motion.div>
       {count > 1 ? (
         <>
           <button
             type="button"
             aria-label="Previous"
-            onClick={() => setIndex((i) => (i - 1 + count) % count)}
+            onClick={() => {
+              setDirection(-1);
+              setIndex((i) => (i - 1 + count) % count);
+            }}
             className="absolute left-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-bg/60 backdrop-blur"
           >
             <ChevronLeft aria-hidden="true" size={18} />
@@ -56,7 +71,10 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
           <button
             type="button"
             aria-label="Next"
-            onClick={() => setIndex((i) => (i + 1) % count)}
+            onClick={() => {
+              setDirection(1);
+              setIndex((i) => (i + 1) % count);
+            }}
             className="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-bg/60 backdrop-blur"
           >
             <ChevronRight aria-hidden="true" size={18} />
@@ -68,8 +86,11 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
                 type="button"
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={i === index}
-                onClick={() => setIndex(i)}
-                className={`h-2 w-2 rounded-full ${i === index ? 'bg-ink' : 'bg-ink/40'}`}
+                onClick={() => {
+                  setDirection(i > index ? 1 : -1);
+                  setIndex(i);
+                }}
+                className={`h-2 w-2 rounded-full transition-colors ${i === index ? 'bg-ink' : 'bg-ink/40'}`}
               />
             ))}
           </div>
