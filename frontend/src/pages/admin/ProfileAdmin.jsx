@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Save } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../../components/ui/Button.jsx';
@@ -6,10 +7,13 @@ import { Textarea } from '../../components/ui/Textarea.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { useProfile, useUpdateProfile } from '../../features/profile/api/profile.queries.js';
 
+const MAX_RESUME_BYTES = 10 * 1024 * 1024;
+
 export default function ProfileAdmin() {
   const profileQuery = useProfile();
   const updateProfile = useUpdateProfile();
   const profile = profileQuery.data;
+  const [resumeError, setResumeError] = useState('');
 
   const { register, handleSubmit } = useForm({
     values: {
@@ -19,14 +23,37 @@ export default function ProfileAdmin() {
       bio: profile?.bio || '',
       email: profile?.email || '',
       phone: profile?.phone || '',
-      location: profile?.location || '',
-      resumeUrl: profile?.resumeUrl || ''
+      location: profile?.location || ''
     }
   });
 
   if (profileQuery.isLoading && !profile) return <Spinner />;
 
-  const submit = (values) => updateProfile.mutate(values);
+  const submit = (values) => {
+    const resumeFile = values.resume?.[0] || null;
+    if (resumeFile) {
+      if (resumeFile.type !== 'application/pdf') {
+        setResumeError('Upload a PDF file.');
+        return;
+      }
+      if (resumeFile.size > MAX_RESUME_BYTES) {
+        setResumeError('PDF must be 10 MB or smaller.');
+        return;
+      }
+    }
+    setResumeError('');
+    updateProfile.mutate({
+      name: values.name,
+      role: values.role,
+      headline: values.headline,
+      bio: values.bio,
+      email: values.email,
+      phone: values.phone,
+      location: values.location,
+      resumeFile,
+      currentResumePath: profile?.resumePath || null
+    });
+  };
 
   return (
     <section className="max-w-2xl">
@@ -41,7 +68,21 @@ export default function ProfileAdmin() {
           <Input id="phone" label="Phone" {...register('phone')} />
         </div>
         <Input id="location" label="Location" {...register('location')} />
-        <Input id="resumeUrl" label="Resume URL" placeholder="https://… link to your résumé PDF" {...register('resumeUrl')} />
+        <div className="grid gap-1.5">
+          <label htmlFor="resume" className="font-mono text-xs uppercase text-muted">
+            Resume (PDF)
+          </label>
+          {profile?.resumeUrl ? (
+            <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="justify-self-start text-sm text-accent underline">
+              View current resume
+            </a>
+          ) : (
+            <p className="text-sm text-muted">No resume uploaded yet.</p>
+          )}
+          <input id="resume" type="file" accept="application/pdf,.pdf" className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('resume')} />
+          <p className="text-xs text-muted">Uploading a new PDF replaces the current one (max 10 MB).</p>
+          {resumeError ? <p role="alert" className="text-sm text-danger">{resumeError}</p> : null}
+        </div>
         <Button type="submit" disabled={updateProfile.isPending}>
           <Save aria-hidden="true" size={17} />
           {updateProfile.isPending ? 'Saving...' : updateProfile.isSuccess ? 'Saved' : 'Save profile'}
