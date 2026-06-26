@@ -18,6 +18,7 @@ const schema = z.object({
   liveUrl: z.string().optional(),
   repoUrl: z.string().optional(),
   featured: z.boolean().optional(),
+  isPrivate: z.boolean().optional(),
   coverImage: z.any().optional(),
   video: z.any().optional()
 });
@@ -36,7 +37,8 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       tags: project?.tags?.join(', ') || '',
       liveUrl: project?.liveUrl || '',
       repoUrl: project?.repoUrl || '',
-      featured: Boolean(project?.featured)
+      featured: Boolean(project?.featured),
+      isPrivate: Boolean(project?.isPrivate)
     }
   });
 
@@ -68,7 +70,8 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
           .filter(Boolean),
         liveUrl: values.liveUrl || '',
         repoUrl: values.repoUrl || '',
-        featured: Boolean(values.featured)
+        featured: Boolean(values.featured),
+        isPrivate: Boolean(values.isPrivate)
       },
       file: values.coverImage?.[0] || null,
       videoFile,
@@ -90,6 +93,10 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
         <input type="checkbox" className="h-4 w-4 accent-accent" {...register('featured')} />
         Featured project
+      </label>
+      <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
+        <input type="checkbox" className="h-4 w-4 accent-accent" {...register('isPrivate')} />
+        Private / under NDA
       </label>
       <div className="grid gap-1.5">
         <label htmlFor="coverImage" className="font-mono text-xs uppercase text-muted">

@@ -26,4 +26,11 @@ describe('projects mappers — video', () => {
       .toBe('abc.mp4');
     expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).video.path).toBe('');
   });
+
+  it('maps is_private to isPrivate and writes it back', () => {
+    expect(toProject({ id: '1', title: 'T', slug: 't', description: 'd', is_private: true }).isPrivate).toBe(true);
+    expect(toProject({ id: '2', title: 'T', slug: 't2', description: 'd' }).isPrivate).toBe(false);
+    expect(toRow({ title: 'T', description: 'd', isPrivate: true }, null, null).is_private).toBe(true);
+    expect(toRow({ title: 'T', description: 'd' }, null, null).is_private).toBe(false);
+  });
 });

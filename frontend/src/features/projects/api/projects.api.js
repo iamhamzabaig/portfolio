@@ -16,7 +16,8 @@ export function toProject(row) {
     video: { url: row.video_url ?? '', path: row.video_path ?? '' },
     liveUrl: row.live_url ?? '',
     repoUrl: row.repo_url ?? '',
-    featured: Boolean(row.featured)
+    featured: Boolean(row.featured),
+    isPrivate: Boolean(row.is_private)
   };
 }
 
@@ -30,7 +31,8 @@ export function toRow(values, cover, video) {
     tags: values.tags ?? [],
     live_url: values.liveUrl ?? '',
     repo_url: values.repoUrl ?? '',
-    featured: Boolean(values.featured)
+    featured: Boolean(values.featured),
+    is_private: Boolean(values.isPrivate)
   };
   if (cover) {
     row.cover_image_url = cover.url;
