@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/Button.jsx';
 import { Chip } from '../../components/ui/Chip.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { useProject } from '../../features/projects/api/projects.queries.js';
-import { coverGradient, monogram } from '../../features/projects/cover.js';
+import { MediaGallery } from '../../features/projects/components/MediaGallery.jsx';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -58,28 +58,12 @@ export default function ProjectDetail() {
               )}
             </div>
           </div>
-          {project.video?.url ? (
-            <video
-              controls
-              preload="none"
-              src={project.video.url}
-              poster={project.coverImage?.url || undefined}
-              className="aspect-[16/10] w-full rounded-2xl border border-border object-cover"
-            />
-          ) : project.coverImage?.url ? (
-            <img
-              src={project.coverImage.url}
-              alt=""
-              className="aspect-[16/10] w-full rounded-2xl border border-border object-cover"
-            />
-          ) : (
-            <div
-              className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-border"
-              style={{ backgroundImage: coverGradient(project) }}
-            >
-              <span className="font-display text-6xl font-bold text-white/90">{monogram(project.title)}</span>
-            </div>
-          )}
+          <MediaGallery
+            video={project.video}
+            screenshots={project.screenshots}
+            coverImage={project.coverImage}
+            title={project.title}
+          />
         </div>
         <div className="mt-12 max-w-3xl text-base leading-8 text-muted">
           <p>{project.content || project.description}</p>
