@@ -23,7 +23,12 @@ export function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-between gap-5 border-t border-border pt-6 text-sm text-muted sm:flex-row">
-          <p>© {new Date().getFullYear()} Hamza Munawar. Built with React, Express &amp; MongoDB.</p>
+          <p>
+            © {new Date().getFullYear()} Hamza Munawar. Built with React &amp; Supabase.{' '}
+            <Link to="/admin/login" className="text-muted/30 transition hover:text-muted">
+              Admin
+            </Link>
+          </p>
           <div className="flex items-center gap-1">
             <a href={`mailto:${email}`} aria-label="Email" className="rounded-full p-2 transition hover:bg-surface hover:text-ink">
               <Mail aria-hidden="true" size={18} />

@@ -1,11 +1,12 @@
-import { FolderKanban, Inbox, LayoutDashboard } from 'lucide-react';
+import { FolderKanban, Inbox, LayoutDashboard, UserRound } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { Container } from '../components/layout/Container.jsx';
 
 const links = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/projects', label: 'Projects', icon: FolderKanban },
-  { to: '/admin/messages', label: 'Messages', icon: Inbox }
+  { to: '/admin/messages', label: 'Messages', icon: Inbox },
+  { to: '/admin/profile', label: 'Profile', icon: UserRound }
 ];
 
 export function AdminLayout() {

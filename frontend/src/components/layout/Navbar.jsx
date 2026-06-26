@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
 import { Menu } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Container } from './Container.jsx';
 import { ThemeToggle } from './ThemeToggle.jsx';
+import { useProfile } from '../../features/profile/api/profile.queries.js';
 
 const links = [
   { to: '/', label: 'Home', end: true },
@@ -29,6 +31,23 @@ function HexMark() {
 }
 
 export function Navbar() {
+  const navigate = useNavigate();
+  const { data: profile } = useProfile();
+  const resumeUrl = profile?.resumeUrl;
+
+  // Secret admin gateway: Ctrl+Shift+A (the Admin link is intentionally not shown
+  // in the public nav). Auth still gates /admin regardless.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        navigate('/admin/login');
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [navigate]);
+
   return (
     <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
@@ -70,12 +89,16 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link
-            to="/admin"
-            className="hidden rounded-full border border-border bg-ink px-4 py-1.5 text-sm font-semibold text-bg transition hover:bg-white sm:inline-flex"
-          >
-            Admin
-          </Link>
+          {resumeUrl ? (
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="hidden rounded-full border border-border bg-ink px-4 py-1.5 text-sm font-semibold text-bg transition hover:bg-white sm:inline-flex"
+            >
+              Resume
+            </a>
+          ) : null}
           <button
             type="button"
             aria-label="Open navigation"

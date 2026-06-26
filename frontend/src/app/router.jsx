@@ -5,6 +5,7 @@ import { PublicLayout } from '../layouts/PublicLayout.jsx';
 import Dashboard from '../pages/admin/Dashboard.jsx';
 import Login from '../pages/admin/Login.jsx';
 import Messages from '../pages/admin/Messages.jsx';
+import ProfileAdmin from '../pages/admin/ProfileAdmin.jsx';
 import ProjectEditor from '../pages/admin/ProjectEditor.jsx';
 import ProjectsAdmin from '../pages/admin/ProjectsAdmin.jsx';
 import About from '../pages/public/About.jsx';
@@ -39,6 +40,7 @@ export function AppRoutes() {
         <Route path="/admin/projects/new" element={<ProjectEditor />} />
         <Route path="/admin/projects/:id" element={<ProjectEditor />} />
         <Route path="/admin/messages" element={<Messages />} />
+        <Route path="/admin/profile" element={<ProfileAdmin />} />
       </Route>
     </Routes>
   );
