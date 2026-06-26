@@ -102,7 +102,7 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
           Demo video
         </label>
         <input id="video" type="file" accept="video/mp4,video/webm" className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('video')} />
-        <p className="text-xs text-muted">MP4 or WebM only. Compress before upload.</p>
+        <p className="text-xs text-muted">MP4 or WebM, max 50 MB. Compress before upload.</p>
         {videoError ? <p role="alert" className="text-sm text-danger">{videoError}</p> : null}
         {hasExistingVideo && !removeVideo ? (
           <div className="grid gap-2">
