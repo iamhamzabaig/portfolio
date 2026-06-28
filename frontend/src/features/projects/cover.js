@@ -10,13 +10,15 @@ const gradients = [
 
 const hash = (s) => s.split('').reduce((acc, ch) => (acc * 31 + ch.charCodeAt(0)) >>> 0, 7);
 
-export const coverGradient = (project) =>
+export const coverGradient = (project = {}) =>
   gradients[hash(project.slug || project.title || '') % gradients.length];
 
-export const monogram = (title = '') =>
-  title
+// Null-safe: DB rows may carry a null/empty title. String(... ?? '') keeps a
+// null from reaching .split() (a default param only catches `undefined`).
+export const monogram = (title) =>
+  String(title ?? '')
     .split(' ')
     .slice(0, 2)
-    .map((w) => w[0])
+    .map((w) => w[0] || '')
     .join('')
-    .toUpperCase();
+    .toUpperCase() || '?';

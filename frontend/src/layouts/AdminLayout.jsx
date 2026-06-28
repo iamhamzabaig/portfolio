@@ -1,6 +1,7 @@
 import { FolderKanban, Inbox, LayoutDashboard, UserRound } from 'lucide-react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Container } from '../components/layout/Container.jsx';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary.jsx';
 
 const links = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -10,6 +11,7 @@ const links = [
 ];
 
 export function AdminLayout() {
+  const location = useLocation();
   return (
     <div className="min-h-screen bg-bg">
       <header className="border-b border-border bg-panel">
@@ -41,7 +43,9 @@ export function AdminLayout() {
             })}
           </nav>
         </aside>
-        <Outlet />
+        <ErrorBoundary key={location.pathname}>
+          <Outlet />
+        </ErrorBoundary>
       </Container>
     </div>
   );
