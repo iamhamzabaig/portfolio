@@ -17,6 +17,7 @@ export function toProject(row) {
     liveUrl: row.live_url ?? '',
     repoUrl: row.repo_url ?? '',
     featured: Boolean(row.featured),
+    sortOrder: row.sort_order ?? 0,
     isLivePrivate: Boolean(row.live_private),
     isRepoPrivate: Boolean(row.repo_private),
     screenshots: Array.isArray(row.screenshots)
@@ -36,6 +37,7 @@ export function toRow(values, cover, video) {
     live_url: values.liveUrl ?? '',
     repo_url: values.repoUrl ?? '',
     featured: Boolean(values.featured),
+    sort_order: Number(values.sortOrder) || 0,
     live_private: Boolean(values.isLivePrivate),
     repo_private: Boolean(values.isRepoPrivate)
   };

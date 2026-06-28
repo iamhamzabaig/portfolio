@@ -19,6 +19,7 @@ const schema = z.object({
   tags: z.string().optional(),
   liveUrl: z.string().optional(),
   repoUrl: z.string().optional(),
+  sortOrder: z.coerce.number().int().min(0).optional(),
   featured: z.boolean().optional(),
   isLivePrivate: z.boolean().optional(),
   isRepoPrivate: z.boolean().optional(),
@@ -41,6 +42,7 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       tags: project?.tags?.join(', ') || '',
       liveUrl: project?.liveUrl || '',
       repoUrl: project?.repoUrl || '',
+      sortOrder: project?.sortOrder ?? 0,
       featured: Boolean(project?.featured),
       isLivePrivate: Boolean(project?.isLivePrivate),
       isRepoPrivate: Boolean(project?.isRepoPrivate)
@@ -91,6 +93,7 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
           .filter(Boolean),
         liveUrl: values.liveUrl || '',
         repoUrl: values.repoUrl || '',
+        sortOrder: Number(values.sortOrder) || 0,
         featured: Boolean(values.featured),
         isLivePrivate: Boolean(values.isLivePrivate),
         isRepoPrivate: Boolean(values.isRepoPrivate)
@@ -111,6 +114,15 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       <Textarea id="description" label="Description" error={errors.description?.message} {...register('description')} />
       <Textarea id="content" label="Long-form content" {...register('content')} />
       <Input id="tags" label="Tags" placeholder="React, Express, MongoDB" {...register('tags')} />
+      <Input
+        id="sortOrder"
+        type="number"
+        min="0"
+        label="Order"
+        placeholder="1"
+        error={errors.sortOrder?.message}
+        {...register('sortOrder')}
+      />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input id="liveUrl" label="Live URL" {...register('liveUrl')} />
         <Input id="repoUrl" label="Repo URL" {...register('repoUrl')} />
