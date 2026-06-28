@@ -42,7 +42,11 @@ export default function Projects() {
           />
         </div>
       </Reveal>
-      {projectsQuery.isLoading && !projectsQuery.data ? <Spinner /> : <ProjectGrid projects={filtered} />}
+      {projectsQuery.isLoading && !projectsQuery.data ? (
+        <Spinner label="Loading projects" />
+      ) : (
+        <ProjectGrid projects={filtered} />
+      )}
     </Container>
   );
 }
