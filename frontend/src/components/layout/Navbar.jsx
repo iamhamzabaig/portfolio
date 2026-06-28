@@ -24,7 +24,19 @@ function HexMark() {
           strokeWidth="1.4"
           strokeLinejoin="round"
         />
-        <path d="M9 15.5 12 8l3 7.5M10 13.4h4" stroke="#f4f1ea" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+        <text
+          x="12"
+          y="12"
+          className="font-display"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize="7.2"
+          fontWeight="700"
+          letterSpacing="-0.4"
+          fill="#f4f1ea"
+        >
+          HM
+        </text>
       </svg>
     </span>
   );
