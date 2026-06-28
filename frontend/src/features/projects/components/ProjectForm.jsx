@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { Button } from '../../../components/ui/Button.jsx';
 import { Input } from '../../../components/ui/Input.jsx';
 import { Textarea } from '../../../components/ui/Textarea.jsx';
+import { captureVideoFrame } from '../captureVideoFrame.js';
 
 const MAX_VIDEO_BYTES = 50 * 1024 * 1024;
 const VIDEO_TYPES = ['video/mp4', 'video/webm'];
@@ -53,7 +54,7 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
   const [shotError, setShotError] = useState('');
   const existingShots = (project?.screenshots || []).filter((s) => !removeShotPaths.includes(s.path));
 
-  const submit = (values) => {
+  const submit = async (values) => {
     const videoFile = values.video?.[0] || null;
     if (videoFile) {
       if (!VIDEO_TYPES.includes(videoFile.type)) {
@@ -73,6 +74,12 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
       return;
     }
     setShotError('');
+    // No cover (uploaded or existing) but a new video is? Derive a cover from a
+    // video frame. Best-effort: on failure fall back to gradient/monogram.
+    let coverFile = values.coverImage?.[0] || null;
+    if (!coverFile && videoFile && !project?.coverImage?.url) {
+      coverFile = await captureVideoFrame(videoFile).catch(() => null);
+    }
     onSubmit({
       values: {
         title: values.title,
@@ -88,7 +95,7 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         isLivePrivate: Boolean(values.isLivePrivate),
         isRepoPrivate: Boolean(values.isRepoPrivate)
       },
-      file: values.coverImage?.[0] || null,
+      file: coverFile,
       videoFile,
       removeVideo,
       currentVideoPath: project?.video?.path || null,
