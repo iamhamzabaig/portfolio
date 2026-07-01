@@ -27,7 +27,9 @@ describe('UI primitives', () => {
   it('renders input label and error', () => {
     render(<Input id="email" label="Email" error="Required" />);
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toHaveTextContent('Required');
+    // HeroUI renders the error in a data-slot="error-message" node (no role="alert");
+    // it is associated to the input via aria-describedby. Assert the text is shown.
+    expect(screen.getByText('Required')).toBeInTheDocument();
   });
 
   it('renders a spinner status', () => {
