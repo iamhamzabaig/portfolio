@@ -46,6 +46,30 @@ textarea {
   @apply bg-accent text-white;
 }
 
+/* ── Modern surface kit (HeroUI lean-modern) ─────────────────────────────── */
+@layer components {
+  .glass {
+    @apply border border-border/60 bg-panel/60 backdrop-blur-xl;
+  }
+  .soft-card {
+    @apply rounded-2xl border border-border bg-panel shadow-soft;
+  }
+  .gradient-primary {
+    background-image: linear-gradient(135deg, rgb(var(--accent)) 0%, #8b5cf6 100%);
+  }
+  .tap-target {
+    @apply min-h-11 min-w-11;
+  }
+}
+
+/* Safe-area insets for the mobile app shell. */
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
 /* ── Spatial theme transition ─────────────────────────────────────────────
    The new theme arrives as a circle expanding from the toggle. We disable the
    default cross-fade and let the toggle drive a clip-path on the new snapshot. */
