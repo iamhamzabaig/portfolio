@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../src/components/ui/Button.jsx';
+import { Card } from '../../src/components/ui/Card.jsx';
 import { Chip } from '../../src/components/ui/Chip.jsx';
 import { Input } from '../../src/components/ui/Input.jsx';
 import { Spinner } from '../../src/components/ui/Spinner.jsx';
@@ -40,5 +41,15 @@ describe('UI primitives', () => {
   it('renders a chip', () => {
     render(<Chip>React</Chip>);
     expect(screen.getByText('React')).toBeInTheDocument();
+  });
+
+  it('Card renders children', () => {
+    renderWithProviders(<Card><span>inside</span></Card>);
+    expect(screen.getByText('inside')).toBeInTheDocument();
+  });
+
+  it('Spinner exposes a status role with label', () => {
+    renderWithProviders(<Spinner label="Loading projects" />);
+    expect(screen.getByRole('status', { name: 'Loading projects' })).toBeInTheDocument();
   });
 });
