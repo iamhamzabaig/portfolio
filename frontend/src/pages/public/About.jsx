@@ -67,7 +67,7 @@ export default function About() {
         <SectionLabel index="02" label="STACK & COMPETENCIES" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {fallbackSkills.map((col) => (
-            <div key={col.group} className="rounded-2xl border border-border bg-panel p-5">
+            <div key={col.group} className="soft-card p-5">
               <h3 className="font-mono text-xs tracking-eyebrow text-muted">{col.group}</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {col.items.map((item) => (

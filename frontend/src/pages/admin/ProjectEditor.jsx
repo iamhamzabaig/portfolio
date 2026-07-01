@@ -23,7 +23,7 @@ export default function ProjectEditor() {
 
   return (
     <section className="max-w-3xl">
-      <h1 className="mb-6 text-3xl font-semibold">{isEditing ? 'Edit project' : 'New project'}</h1>
+      <h1 className="mb-6 font-display text-3xl font-bold text-ink">{isEditing ? 'Edit project' : 'New project'}</h1>
       <Card className="p-5">
         <ProjectForm project={project} onSubmit={handleSubmit} isPending={mutation.isPending} />
       </Card>

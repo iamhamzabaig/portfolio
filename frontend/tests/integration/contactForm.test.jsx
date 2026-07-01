@@ -18,4 +18,13 @@ describe('ContactForm', () => {
 
     await waitFor(() => expect(screen.getByText(/message sent/i)).toBeInTheDocument());
   });
+
+  it('surfaces a success confirmation after submit', async () => {
+    const { user } = renderWithProviders(<ContactForm />);
+    await user.type(screen.getByLabelText(/name/i), 'Jane');
+    await user.type(screen.getByLabelText(/email/i), 'jane@example.com');
+    await user.type(screen.getByLabelText(/message/i), 'Hello there, this is a test.');
+    await user.click(screen.getByRole('button', { name: /send message/i }));
+    expect(await screen.findByText(/message sent/i)).toBeInTheDocument();
+  });
 });

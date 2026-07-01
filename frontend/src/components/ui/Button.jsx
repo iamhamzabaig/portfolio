@@ -1,16 +1,25 @@
-const variants = {
-  primary: 'border-accent bg-accent text-white hover:bg-[#6d5fed]',
-  outline: 'border-border bg-transparent text-ink hover:border-accent hover:text-white',
-  ghost: 'border-transparent bg-transparent text-muted hover:bg-surface hover:text-ink',
-  danger: 'border-danger bg-danger text-white hover:bg-[#f43f5e]'
+import { Button as HeroButton } from '@heroui/react';
+
+const variantProps = {
+  primary: { color: 'primary', variant: 'solid', className: 'gradient-primary text-white shadow-glow' },
+  outline: { variant: 'bordered', className: 'border-border text-ink data-[hover=true]:border-primary' },
+  ghost: { variant: 'light', className: 'text-muted data-[hover=true]:text-ink' },
+  danger: { color: 'danger', variant: 'solid', className: 'text-white' }
 };
 
-export function Button({ as: Component = 'button', variant = 'primary', className = '', type, ...props }) {
-  const buttonType = Component === 'button' ? type || 'button' : type;
+export function Button({ as, variant = 'primary', className = '', type, ...props }) {
+  const v = variantProps[variant] ?? variantProps.primary;
   return (
-    <Component
-      type={buttonType}
-      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-full border px-5 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
+    <HeroButton
+      as={as}
+      // When rendered as an anchor/Link, keep link semantics (HeroUI defaults to
+      // role="button"). All `as` usages in this app navigate, so link is correct.
+      role={as ? 'link' : undefined}
+      type={as ? type : type || 'button'}
+      radius="full"
+      className={`font-semibold ${v.className} ${className}`}
+      color={v.color}
+      variant={v.variant}
       {...props}
     />
   );

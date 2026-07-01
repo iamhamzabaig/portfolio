@@ -57,7 +57,7 @@ export default function ProfileAdmin() {
 
   return (
     <section className="max-w-2xl">
-      <h1 className="mb-6 text-3xl font-semibold">Profile</h1>
+      <h1 className="mb-6 font-display text-3xl font-bold text-ink">Profile</h1>
       <form className="grid gap-4" onSubmit={handleSubmit(submit)}>
         <Input id="name" label="Name" {...register('name')} />
         <Input id="role" label="Role" {...register('role')} />
@@ -83,10 +83,12 @@ export default function ProfileAdmin() {
           <p className="text-xs text-muted">Uploading a new PDF replaces the current one (max 10 MB).</p>
           {resumeError ? <p role="alert" className="text-sm text-danger">{resumeError}</p> : null}
         </div>
-        <Button type="submit" disabled={updateProfile.isPending}>
-          <Save aria-hidden="true" size={17} />
-          {updateProfile.isPending ? 'Saving...' : updateProfile.isSuccess ? 'Saved' : 'Save profile'}
-        </Button>
+        <div className="glass sticky bottom-2 z-10 mt-2 flex justify-end rounded-xl px-3 py-3">
+          <Button type="submit" disabled={updateProfile.isPending}>
+            <Save aria-hidden="true" size={17} />
+            {updateProfile.isPending ? 'Saving...' : updateProfile.isSuccess ? 'Saved' : 'Save profile'}
+          </Button>
+        </div>
       </form>
     </section>
   );

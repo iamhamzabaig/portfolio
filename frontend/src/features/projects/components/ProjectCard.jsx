@@ -39,7 +39,7 @@ export function ProjectCard({ project }) {
     >
     <Link
       to={`/projects/${project.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-panel transition-colors hover:border-accent/50 hover:shadow-glow"
+      className="group flex flex-col overflow-hidden soft-card transition-colors hover:border-accent/50 hover:shadow-glow"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         {hasImage ? (
