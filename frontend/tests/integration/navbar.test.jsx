@@ -17,4 +17,16 @@ describe('Navbar', () => {
     );
     expect(screen.queryByRole('link', { name: /^admin$/i })).toBeNull();
   });
+
+  it('renders the desktop nav links', () => {
+    renderWithProviders(<ThemeProvider><Navbar /></ThemeProvider>);
+    ['Home', 'Projects', 'About', 'Contact'].forEach((label) =>
+      expect(screen.getByRole('link', { name: new RegExp(`^${label}$`, 'i') })).toBeInTheDocument()
+    );
+  });
+
+  it('no longer renders a hamburger menu button (tab bar owns mobile nav)', () => {
+    renderWithProviders(<ThemeProvider><Navbar /></ThemeProvider>);
+    expect(screen.queryByRole('button', { name: /open navigation/i })).not.toBeInTheDocument();
+  });
 });

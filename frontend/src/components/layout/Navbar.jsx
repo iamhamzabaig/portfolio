@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { motion } from 'motion/react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Container } from './Container.jsx';
 import { ThemeToggle } from './ThemeToggle.jsx';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
@@ -44,15 +43,8 @@ function HexMark() {
 
 export function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [open, setOpen] = useState(false);
   const { data: profile } = useProfile();
   const resumeUrl = profile?.resumeUrl;
-
-  // Close the mobile menu on route change.
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
 
   // Secret admin gateway: Ctrl+Shift+A (the Admin link is intentionally not shown
   // in the public nav). Auth still gates /admin regardless.
@@ -68,7 +60,7 @@ export function Navbar() {
   }, [navigate]);
 
   return (
-    <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur">
+    <header className="glass pt-safe sticky top-0 z-40">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link to="/" className="inline-flex items-center gap-2 lowercase tracking-tight">
           <HexMark />
@@ -113,66 +105,13 @@ export function Navbar() {
               href={resumeUrl}
               target="_blank"
               rel="noreferrer"
-              className="hidden rounded-full border border-border bg-ink px-4 py-1.5 text-sm font-semibold text-bg transition hover:bg-white sm:inline-flex"
+              className="rounded-full border border-border bg-ink px-4 py-1.5 text-sm font-semibold text-bg transition hover:bg-white"
             >
               Resume
             </a>
           ) : null}
-          <button
-            type="button"
-            aria-label={open ? 'Close navigation' : 'Open navigation'}
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted md:hidden"
-          >
-            {open ? <X aria-hidden="true" size={18} /> : <Menu aria-hidden="true" size={18} />}
-          </button>
         </div>
       </Container>
-
-      <AnimatePresence>
-        {open && (
-          <motion.nav
-            id="mobile-nav"
-            aria-label="Mobile"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-border bg-bg/95 backdrop-blur md:hidden"
-          >
-            <Container className="flex flex-col gap-1 py-3">
-              {links.map((link) => (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  end={link.end}
-                  onClick={() => setOpen(false)}
-                  className={({ isActive }) =>
-                    `rounded-xl px-4 py-2.5 text-sm transition-colors ${
-                      isActive ? 'bg-surface text-ink' : 'text-muted hover:text-ink'
-                    }`
-                  }
-                >
-                  {link.label}
-                </NavLink>
-              ))}
-              {resumeUrl ? (
-                <a
-                  href={resumeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => setOpen(false)}
-                  className="mt-1 rounded-xl border border-border bg-ink px-4 py-2.5 text-center text-sm font-semibold text-bg transition hover:bg-white sm:hidden"
-                >
-                  Resume
-                </a>
-              ) : null}
-            </Container>
-          </motion.nav>
-        )}
-      </AnimatePresence>
     </header>
   );
 }
