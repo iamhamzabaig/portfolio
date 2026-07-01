@@ -1,14 +1,27 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { Link } from 'react-router-dom';
 import { Button } from '../../src/components/ui/Button.jsx';
 import { Chip } from '../../src/components/ui/Chip.jsx';
 import { Input } from '../../src/components/ui/Input.jsx';
 import { Spinner } from '../../src/components/ui/Spinner.jsx';
+import { renderWithProviders } from '../../src/test/renderWithProviders.jsx';
 
 describe('UI primitives', () => {
   it('renders a button', () => {
     render(<Button>Click</Button>);
     expect(screen.getByRole('button', { name: 'Click' })).toBeInTheDocument();
+  });
+
+  it('Button renders as a link when as={Link}', () => {
+    renderWithProviders(<Button as={Link} to="/projects">Go</Button>);
+    const link = screen.getByRole('link', { name: 'Go' });
+    expect(link).toHaveAttribute('href', '/projects');
+  });
+
+  it('Button submit type works', () => {
+    renderWithProviders(<Button type="submit">Save</Button>);
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveAttribute('type', 'submit');
   });
 
   it('renders input label and error', () => {
