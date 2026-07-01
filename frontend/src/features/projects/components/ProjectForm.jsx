@@ -200,10 +200,13 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         <p className="text-xs text-muted">Up to {MAX_SCREENSHOTS} images.</p>
         {shotError ? <p role="alert" className="text-sm text-danger">{shotError}</p> : null}
       </div>
-      <Button type="submit" disabled={isPending}>
-        <Save aria-hidden="true" size={17} />
-        {isPending ? 'Saving...' : 'Save project'}
-      </Button>
+      {/* Sticky save bar keeps the primary action reachable in long forms. */}
+      <div className="glass sticky bottom-2 z-10 mt-2 flex justify-end rounded-xl px-3 py-3">
+        <Button type="submit" disabled={isPending}>
+          <Save aria-hidden="true" size={17} />
+          {isPending ? 'Saving...' : 'Save project'}
+        </Button>
+      </div>
     </form>
   );
 }
