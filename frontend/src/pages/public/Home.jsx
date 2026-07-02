@@ -7,7 +7,7 @@ import { Button } from '../../components/ui/Button.jsx';
 import { CountUp } from '../../components/ui/CountUp.jsx';
 import { Reveal, RevealStagger, RevealItem } from '../../components/ui/Reveal.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
-import { Skeleton } from '../../components/ui/Skeleton.jsx';
+import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
@@ -168,11 +168,7 @@ export default function Home() {
             </Link>
           </Reveal>
           {projectsQuery.isLoading && !projectsQuery.data ? (
-            <div data-testid="featured-skeleton" className="grid gap-5 md:grid-cols-3">
-              {[0, 1, 2].map((i) => (
-                <Skeleton key={i} className="h-64 w-full" />
-              ))}
-            </div>
+            <Spinner label="Loading projects" />
           ) : (
             <ProjectGrid projects={featured} />
           )}
@@ -190,7 +186,7 @@ export default function Home() {
                 <RevealItem
                   key={item.title}
                   whileHover={{ y: -4 }}
-                  className="group soft-card p-6 transition-colors duration-300 hover:border-accent/40 hover:shadow-glow"
+                  className="group rounded-2xl border border-border bg-panel p-6 transition-colors duration-300 hover:border-accent/40 hover:shadow-glow"
                 >
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-110">
                     <Icon aria-hidden="true" size={20} />

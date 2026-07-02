@@ -1,9 +1,3 @@
-import { Card as HeroCard } from '@heroui/react';
-
 export function Card({ children, className = '' }) {
-  return (
-    <HeroCard shadow="none" radius="lg" className={`soft-card ${className}`}>
-      {children}
-    </HeroCard>
-  );
+  return <div className={`rounded-2xl border border-border bg-panel shadow-soft ${className}`}>{children}</div>;
 }

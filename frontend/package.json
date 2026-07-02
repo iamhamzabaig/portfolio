@@ -11,13 +11,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@heroui/react": "^2.8.10",
     "@hookform/resolvers": "^3.9.1",
     "@react-three/drei": "^9.114",
     "@react-three/fiber": "^8.17",
     "@supabase/supabase-js": "^2.45.0",
     "@tanstack/react-query": "^5.62.0",
-    "framer-motion": "^12.42.2",
     "lucide-react": "^0.468.0",
     "motion": "^12.40.0",
     "react": "^18.3.1",

@@ -14,13 +14,13 @@ export default function ProjectsAdmin() {
   return (
     <section>
       <div className="mb-6 flex items-center justify-between gap-4">
-        <h1 className="font-display text-3xl font-bold text-ink">Projects</h1>
+        <h1 className="text-3xl font-semibold">Projects</h1>
         <Button as={Link} to="/admin/projects/new">
           <Plus aria-hidden="true" size={17} />
           New
         </Button>
       </div>
-      <div className="soft-card overflow-hidden">
+      <div className="overflow-hidden rounded-lg border border-border bg-panel">
         {projects.length ? (
           <ul className="divide-y divide-border">
             {projects.map((project) => (

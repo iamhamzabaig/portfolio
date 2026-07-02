@@ -17,7 +17,7 @@ export default function Login() {
     <Container className="grid min-h-screen place-items-center py-10">
       <Card className="w-full max-w-md p-6">
         <p className="font-mono text-xs uppercase text-accent">Admin</p>
-        <h1 className="mt-2 font-display text-3xl font-bold text-ink">Admin sign in</h1>
+        <h1 className="mt-2 text-3xl font-semibold">Admin sign in</h1>
         <p className="mt-2 text-sm text-muted">Use the seeded admin account from the backend.</p>
         <div className="mt-6">
           <LoginForm onSubmit={handleSubmit} isPending={isLoggingIn} error={loginError} />

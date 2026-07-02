@@ -1,20 +1,24 @@
 import { forwardRef } from 'react';
-import { Input as HeroInput } from '@heroui/react';
 
 export const Input = forwardRef(function Input({ id, label, error, className = '', ...props }, ref) {
   return (
-    <HeroInput
-      id={id}
-      ref={ref}
-      label={label}
-      labelPlacement="outside"
-      variant="bordered"
-      radius="lg"
-      isInvalid={Boolean(error)}
-      errorMessage={error}
-      classNames={{ errorMessage: 'text-danger', inputWrapper: 'bg-panel border-border' }}
-      className={className}
-      {...props}
-    />
+    <div className="grid gap-1.5">
+      {label ? (
+        <label htmlFor={id} className="font-mono text-xs uppercase text-muted">
+          {label}
+        </label>
+      ) : null}
+      <input
+        id={id}
+        ref={ref}
+        className={`min-h-11 rounded-md border border-border bg-panel px-3 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-accent ${className}`}
+        {...props}
+      />
+      {error ? (
+        <p role="alert" className="text-xs text-danger">
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 });

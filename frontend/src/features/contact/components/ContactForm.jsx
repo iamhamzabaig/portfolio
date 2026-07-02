@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addToast } from '@heroui/react';
 import { Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -28,7 +27,6 @@ export function ContactForm() {
 
   const onSubmit = async (values) => {
     await mutation.mutateAsync(values);
-    addToast({ title: 'Message sent', description: 'Thanks — I will reply soon.', color: 'success' });
     reset();
   };
 

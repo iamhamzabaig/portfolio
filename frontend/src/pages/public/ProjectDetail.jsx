@@ -69,24 +69,6 @@ export default function ProjectDetail() {
           <p>{project.content || project.description}</p>
         </div>
       </Container>
-
-      {/* Sticky mobile action bar. Sits above the bottom tab bar (bottom-16) and
-          only surfaces links that are public — the NDA flags are respected. Short
-          labels ("Demo"/"Repo") avoid colliding with the inline Live/Source links. */}
-      {(!project.isLivePrivate && project.liveUrl) || (!project.isRepoPrivate && project.repoUrl) ? (
-        <div className="glass pb-safe fixed inset-x-0 bottom-16 z-30 flex gap-2 p-3 md:hidden">
-          {!project.isLivePrivate && project.liveUrl ? (
-            <Button as="a" href={project.liveUrl} target="_blank" rel="noreferrer" className="flex-1">
-              <ExternalLink aria-hidden="true" size={16} /> Demo
-            </Button>
-          ) : null}
-          {!project.isRepoPrivate && project.repoUrl ? (
-            <Button as="a" href={project.repoUrl} target="_blank" rel="noreferrer" variant="outline" className="flex-1">
-              <Github aria-hidden="true" size={16} /> Repo
-            </Button>
-          ) : null}
-        </div>
-      ) : null}
     </article>
   );
 }

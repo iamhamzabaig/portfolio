@@ -28,11 +28,6 @@ export function Lightbox({ images, index, onClose, onIndex }) {
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
     >
-      {/* Drag-handle affordance — reads as a slide-up sheet on mobile. */}
-      <span
-        aria-hidden="true"
-        className="absolute left-1/2 top-3 h-1.5 w-10 -translate-x-1/2 rounded-full bg-white/40 sm:hidden"
-      />
       <button
         type="button"
         aria-label="Close"
