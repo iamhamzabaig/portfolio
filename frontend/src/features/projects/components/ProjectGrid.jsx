@@ -1,13 +1,13 @@
 import { RevealStagger } from '../../../components/ui/Reveal.jsx';
-import { ProjectCard } from './ProjectCard.jsx';
+import { ProjectFeature } from './ProjectFeature.jsx';
 
 export function ProjectGrid({ projects }) {
   if (!projects?.length) return <p className="text-muted">No projects are published yet.</p>;
 
   return (
-    <RevealStagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => (
-        <ProjectCard key={project._id || project.slug} project={project} />
+    <RevealStagger className="flex flex-col gap-16 sm:gap-20 lg:gap-24">
+      {projects.map((project, i) => (
+        <ProjectFeature key={project._id || project.slug} project={project} index={i} />
       ))}
     </RevealStagger>
   );
