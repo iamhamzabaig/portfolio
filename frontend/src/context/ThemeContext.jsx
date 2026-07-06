@@ -4,7 +4,7 @@ import { flushSync } from 'react-dom';
 const ThemeContext = createContext(null);
 
 const getInitialTheme = () => {
-  if (typeof document === 'undefined') return 'dark';
+  if (typeof document === 'undefined') return 'light';
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 };
 

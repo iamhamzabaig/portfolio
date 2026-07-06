@@ -14,7 +14,9 @@ export function ProjectCard({ project }) {
     <motion.div variants={revealRise}>
       <Link
         to={`/projects/${project.slug}`}
-        className="group flex h-full flex-col overflow-hidden rounded-3xl bg-panel shadow-soft ring-1 ring-border/70 transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift"
+        className={`group flex h-full flex-col overflow-hidden rounded-3xl bg-panel shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
+          project.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
+        }`}
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-surface">
           {hasImage ? (
@@ -34,8 +36,8 @@ export function ProjectCard({ project }) {
           )}
           <div className="absolute left-4 top-4 flex gap-2">
             {project.featured && (
-              <span className="rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-ink backdrop-blur">
-                FEATURED
+              <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-white shadow-sm">
+                Featured
               </span>
             )}
             {project.video?.url && (

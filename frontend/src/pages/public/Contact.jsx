@@ -25,30 +25,30 @@ export default function Contact() {
 
           <div data-fade className="mt-10 grid gap-3 text-[15px]">
             <a href={`mailto:${email}`} className="inline-flex items-center gap-3 text-muted transition hover:text-ink">
-              <Mail aria-hidden="true" size={18} className="text-accent" /> {email}
+              <Mail aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {email}
             </a>
             <a href={`tel:${phone.replace(/\s|-/g, '')}`} className="inline-flex items-center gap-3 text-muted transition hover:text-ink">
-              <Phone aria-hidden="true" size={18} className="text-accent" /> {phone}
+              <Phone aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {phone}
             </a>
             <p className="inline-flex items-center gap-3 text-muted">
-              <MapPin aria-hidden="true" size={18} className="text-accent" /> {location}
+              <MapPin aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {location}
             </p>
           </div>
 
-          <div data-fade className="mt-8 flex items-center gap-2">
+          <div data-fade className="mt-8 -ml-2 flex items-center gap-1">
             <a
               href={github}
               aria-label="GitHub"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-surface text-muted transition hover:text-ink"
+              className="p-2 text-muted transition-colors hover:text-ink"
             >
-              <Github aria-hidden="true" size={18} />
+              <Github aria-hidden="true" size={20} strokeWidth={1.5} />
             </a>
             <a
               href={linkedin}
               aria-label="LinkedIn"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-surface text-muted transition hover:text-ink"
+              className="p-2 text-muted transition-colors hover:text-ink"
             >
-              <Linkedin aria-hidden="true" size={18} />
+              <Linkedin aria-hidden="true" size={20} strokeWidth={1.5} />
             </a>
           </div>
         </RevealScope>

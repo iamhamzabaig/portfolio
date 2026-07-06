@@ -5,15 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
-      // Set theme before first paint: stored choice wins, else system, else dark.
+      // Set theme before first paint: a stored choice wins, otherwise default to
+      // light (white). System preference is intentionally ignored so first-time
+      // visitors always land on the light theme.
       (function () {
         try {
-          var stored = localStorage.getItem('theme');
-          var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          var theme = localStorage.getItem('theme') || 'light';
           document.documentElement.classList.toggle('dark', theme === 'dark');
           document.documentElement.style.colorScheme = theme;
         } catch (e) {
-          document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'light';
         }
       })();
     </script>
@@ -21,14 +22,8 @@
       name="description"
       content="Hamza Munawar — Full-Stack JavaScript Engineer building scalable ERP modules, real-time apps, and high-performance frontends in Angular, React, and Node."
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Inter is the fallback for non-Apple devices; Apple devices render real SF
-         Pro via the -apple-system stack in tailwind.config.js. -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Inter Variable is self-hosted via @fontsource-variable/inter (imported in
+         main.jsx) — no external font CDN needed. -->
     <title>Hamza Munawar — Full-Stack JavaScript Engineer</title>
   </head>
   <body>

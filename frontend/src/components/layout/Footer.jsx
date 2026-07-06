@@ -40,14 +40,14 @@ export function Footer() {
           </nav>
 
           <div className="flex items-center gap-1">
-            <a href={`mailto:${email}`} aria-label="Email" className="rounded-full p-2 text-muted transition hover:bg-border/50 hover:text-ink">
-              <Mail aria-hidden="true" size={18} />
+            <a href={`mailto:${email}`} aria-label="Email" className="p-2 text-muted transition-colors hover:text-ink">
+              <Mail aria-hidden="true" size={18} strokeWidth={1.5} />
             </a>
-            <a href={github} aria-label="GitHub" className="rounded-full p-2 text-muted transition hover:bg-border/50 hover:text-ink">
-              <Github aria-hidden="true" size={18} />
+            <a href={github} aria-label="GitHub" className="p-2 text-muted transition-colors hover:text-ink">
+              <Github aria-hidden="true" size={18} strokeWidth={1.5} />
             </a>
-            <a href={linkedin} aria-label="LinkedIn" className="rounded-full p-2 text-muted transition hover:bg-border/50 hover:text-ink">
-              <Linkedin aria-hidden="true" size={18} />
+            <a href={linkedin} aria-label="LinkedIn" className="p-2 text-muted transition-colors hover:text-ink">
+              <Linkedin aria-hidden="true" size={18} strokeWidth={1.5} />
             </a>
           </div>
         </div>

@@ -177,32 +177,32 @@ export default function Home() {
               Three years, measured in outcomes.
             </h2>
           </RevealScope>
-          <RevealStagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.slice(0, 4).map((stat) => {
+          {/* Divided number bar — no cards. Hairline rules separate the figures:
+              vertical between columns, horizontal between the stacked rows, all
+              collapsing to a single row on large screens. */}
+          <RevealStagger className="grid grid-cols-2 lg:grid-cols-4">
+            {stats.slice(0, 4).map((stat, i) => {
               const numeric = Number(stat.value);
+              // Per-cell divider borders, recomputed at the lg breakpoint where the
+              // 2×2 grid becomes a single 1×4 row.
+              const dividers = [
+                '',
+                'border-l border-border',
+                'border-t border-border lg:border-t-0 lg:border-l',
+                'border-l border-t border-border lg:border-t-0'
+              ][i];
               return (
-                <RevealItem
-                  key={stat.label}
-                  className="group flex flex-col rounded-3xl bg-panel p-7 shadow-soft ring-1 ring-border/70 transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift"
-                >
-                  {/* Caption + trend sit on one line, KPI-card style: the label
-                      anchors left, the sparkline reads as a mini trend at right. */}
-                  <div className="flex items-start justify-between gap-3">
-                    {stat.eyebrow && (
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.07em] text-muted">{stat.eyebrow}</p>
-                    )}
-                    {stat.spark && (
-                      <Sparkline points={stat.spark} className="mt-0.5 shrink-0 text-accent/90" />
-                    )}
-                  </div>
-
-                  <p className="mt-6 flex items-start font-display text-6xl font-semibold leading-none tracking-tight text-ink">
+                <RevealItem key={stat.label} className={`flex flex-col items-center px-6 py-8 text-center ${dividers}`}>
+                  {stat.eyebrow && (
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.07em] text-muted">{stat.eyebrow}</p>
+                  )}
+                  <p className="mt-3 flex items-start justify-center font-display text-fluid-stat font-semibold text-ink">
                     {Number.isFinite(numeric) ? <CountUp value={numeric} /> : stat.value}
                     {stat.suffix && <span className="ml-0.5 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
                   </p>
-
-                  <p className="mt-5 text-[15px] font-semibold text-ink">{stat.label}</p>
-                  <p className="mt-1 text-[14px] leading-6 text-muted">{stat.description}</p>
+                  <p className="mt-4 text-[15px] font-semibold text-ink">{stat.label}</p>
+                  <p className="mt-1 text-[13px] leading-6 text-muted">{stat.description}</p>
+                  {stat.spark && <Sparkline points={stat.spark} className="mx-auto mt-4 text-accent/80" />}
                 </RevealItem>
               );
             })}
@@ -258,13 +258,12 @@ export default function Home() {
                     item.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
                   }`}
                 >
-                  <span
-                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-500 ease-apple group-hover:scale-110 ${
-                      item.featured ? 'bg-accent text-white' : 'bg-accent/10 text-accent'
-                    }`}
-                  >
-                    <Icon aria-hidden="true" size={22} />
-                  </span>
+                  <Icon
+                    aria-hidden="true"
+                    size={28}
+                    strokeWidth={1.5}
+                    className="text-accent transition-transform duration-500 ease-apple group-hover:scale-110"
+                  />
                   <div className="mt-6 flex items-center gap-2">
                     <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{item.title}</h3>
                     {item.featured && (
