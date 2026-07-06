@@ -31,10 +31,10 @@ export function LoginForm({ onSubmit, isPending = false, error }) {
         error={errors.password?.message}
         {...register('password')}
       />
-      {error ? <p className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">Unable to sign in.</p> : null}
-      <Button type="submit" disabled={isPending}>
-        <LogIn aria-hidden="true" size={17} />
-        {isPending ? 'Signing in...' : 'Sign in'}
+      {error ? <p className="rounded-control border border-danger/40 bg-danger/10 px-3 py-2 text-body-sm text-danger">Unable to sign in.</p> : null}
+      <Button type="submit" loading={isPending}>
+        {!isPending && <LogIn aria-hidden="true" size={17} />}
+        {isPending ? 'Signing in…' : 'Sign in'}
       </Button>
     </form>
   );

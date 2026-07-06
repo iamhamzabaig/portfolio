@@ -57,7 +57,7 @@ export default function ProfileAdmin() {
 
   return (
     <section className="max-w-2xl">
-      <h1 className="mb-6 text-3xl font-semibold">Profile</h1>
+      <h1 className="mb-6 font-display text-3xl font-semibold tracking-tight text-ink">Profile</h1>
       <form className="grid gap-4" onSubmit={handleSubmit(submit)}>
         <Input id="name" label="Name" {...register('name')} />
         <Input id="role" label="Role" {...register('role')} />
@@ -69,23 +69,23 @@ export default function ProfileAdmin() {
         </div>
         <Input id="location" label="Location" {...register('location')} />
         <div className="grid gap-1.5">
-          <label htmlFor="resume" className="font-mono text-xs uppercase text-muted">
+          <label htmlFor="resume" className="text-caption font-medium text-muted">
             Resume (PDF)
           </label>
           {profile?.resumeUrl ? (
-            <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="justify-self-start text-sm text-accent underline">
+            <a href={profile.resumeUrl} target="_blank" rel="noreferrer" className="justify-self-start text-body-sm text-accent underline">
               View current resume
             </a>
           ) : (
-            <p className="text-sm text-muted">No resume uploaded yet.</p>
+            <p className="text-body-sm text-muted">No resume uploaded yet.</p>
           )}
-          <input id="resume" type="file" accept="application/pdf,.pdf" className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('resume')} />
-          <p className="text-xs text-muted">Uploading a new PDF replaces the current one (max 10 MB).</p>
-          {resumeError ? <p role="alert" className="text-sm text-danger">{resumeError}</p> : null}
+          <input id="resume" type="file" accept="application/pdf,.pdf" className="rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted" {...register('resume')} />
+          <p className="text-caption text-muted">Uploading a new PDF replaces the current one (max 10 MB).</p>
+          {resumeError ? <p role="alert" className="text-body-sm text-danger">{resumeError}</p> : null}
         </div>
-        <Button type="submit" disabled={updateProfile.isPending}>
-          <Save aria-hidden="true" size={17} />
-          {updateProfile.isPending ? 'Saving...' : updateProfile.isSuccess ? 'Saved' : 'Save profile'}
+        <Button type="submit" loading={updateProfile.isPending}>
+          {!updateProfile.isPending && <Save aria-hidden="true" size={17} />}
+          {updateProfile.isPending ? 'Saving…' : updateProfile.isSuccess ? 'Saved' : 'Save profile'}
         </Button>
       </form>
     </section>

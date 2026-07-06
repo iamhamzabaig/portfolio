@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Eyebrow } from './Eyebrow.jsx';
 
 // App-level safety net. Without this, any render-time throw (e.g. a malformed
 // project row) unmounts the whole React tree and the user sees a blank page.
@@ -28,7 +29,7 @@ export class ErrorBoundary extends Component {
 
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-6 text-center">
-        <p className="text-[15px] font-semibold text-accent">Something broke</p>
+        <Eyebrow>Something broke</Eyebrow>
         <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           This page hit an error.
         </h1>
@@ -44,13 +45,13 @@ export class ErrorBoundary extends Component {
           <button
             type="button"
             onClick={this.handleReset}
-            className="rounded-full bg-accent px-6 py-2.5 text-[15px] font-medium text-white transition hover:brightness-110"
+            className="rounded-full bg-accent px-6 py-2.5 text-body-sm font-medium text-white transition hover:brightness-110"
           >
             Try again
           </button>
           <a
             href="/"
-            className="rounded-full bg-surface px-6 py-2.5 text-[15px] font-medium text-ink transition hover:bg-border/60"
+            className="rounded-full bg-surface px-6 py-2.5 text-body-sm font-medium text-ink transition hover:bg-border/60"
           >
             Go home
           </a>

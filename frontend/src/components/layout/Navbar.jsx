@@ -87,7 +87,7 @@ export function Navbar() {
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `relative px-3.5 py-2 text-[13px] transition-colors duration-200 ${
+                `relative px-3.5 py-2 text-caption transition-colors duration-200 ${
                   isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'
                 }`
               }
@@ -115,7 +115,7 @@ export function Navbar() {
               href={resumeUrl}
               target="_blank"
               rel="noreferrer"
-              className="hidden rounded-full bg-accent px-4 py-1.5 text-[13px] font-medium text-white transition duration-300 ease-apple hover:brightness-110 sm:inline-flex"
+              className="hidden min-h-9 items-center rounded-full bg-accent px-4 py-2 text-caption font-medium text-white transition duration-300 ease-apple hover:brightness-110 active:scale-[0.97] sm:inline-flex"
             >
               Resume
             </a>
@@ -126,7 +126,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink/70 transition hover:bg-surface md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink/70 transition duration-300 ease-apple hover:bg-surface active:scale-[0.92] md:hidden"
           >
             {open ? <X aria-hidden="true" size={18} /> : <Menu aria-hidden="true" size={18} />}
           </button>
@@ -152,7 +152,7 @@ export function Navbar() {
                   end={link.end}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `rounded-2xl px-4 py-3 text-[15px] transition-colors ${
+                    `rounded-2xl px-4 py-3 text-body-sm transition-colors ${
                       isActive ? 'bg-surface text-ink' : 'text-ink/70 hover:bg-surface hover:text-ink'
                     }`
                   }
@@ -166,7 +166,7 @@ export function Navbar() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setOpen(false)}
-                  className="mt-1 rounded-full bg-accent px-4 py-3 text-center text-[15px] font-medium text-white transition hover:brightness-110 sm:hidden"
+                  className="mt-1 rounded-full bg-accent px-4 py-3 text-center text-body-sm font-medium text-white transition duration-300 ease-apple hover:brightness-110 active:scale-[0.97] sm:hidden"
                 >
                   Resume
                 </a>

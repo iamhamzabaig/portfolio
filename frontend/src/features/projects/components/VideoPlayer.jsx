@@ -31,7 +31,7 @@ export function VideoPlayer({ src, poster, onPlayingChange }) {
       onPlay={() => onPlayingChange?.(true)}
       onPause={() => onPlayingChange?.(false)}
       onEnded={() => onPlayingChange?.(false)}
-      className="aspect-[16/10] w-full rounded-2xl border border-border object-cover"
+      className="aspect-[16/10] w-full rounded-media border border-border object-cover"
     />
   );
 }

@@ -14,6 +14,7 @@ import Home from '../pages/public/Home.jsx';
 import NotFound from '../pages/public/NotFound.jsx';
 import ProjectDetail from '../pages/public/ProjectDetail.jsx';
 import Projects from '../pages/public/Projects.jsx';
+import Styleguide from '../pages/public/Styleguide.jsx';
 
 export function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ export function AppRoutes() {
         <Route path="/projects/:slug" element={<ProjectDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/styleguide" element={<Styleguide />} />
         <Route path="*" element={<NotFound />} />
       </Route>
 

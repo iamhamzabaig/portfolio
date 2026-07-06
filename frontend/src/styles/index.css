@@ -16,6 +16,11 @@
   --ink: 29 29 31; /* #1d1d1f */
   --muted: 110 110 115; /* #6e6e73 — secondary text */
   --accent: 0 102 204; /* #0066cc — link blue (AA on white) */
+  --on-accent: 255 255 255; /* text/icons on an accent fill */
+  --success: 40 167 69; /* #28a745 — darkened for AA on white */
+  --danger: 209 42 33; /* #d12a21 — darkened for AA on white */
+  --warning: 176 104 0; /* #b06800 — darkened for AA on white */
+  --info: 0 102 204; /* #0066cc */
 }
 
 .dark {
@@ -26,6 +31,11 @@
   --ink: 245 245 247; /* #f5f5f7 */
   --muted: 134 134 139; /* #86868b */
   --accent: 41 151 255; /* #2997ff — link blue (AA on black) */
+  --on-accent: 255 255 255; /* text/icons on an accent fill */
+  --success: 48 209 88; /* #30d158 — Apple green, brightened for black */
+  --danger: 255 105 97; /* #ff6961 — softened red, AA on black */
+  --warning: 255 159 10; /* #ff9f0a — Apple orange */
+  --info: 41 151 255; /* #2997ff */
 }
 
 html {
@@ -59,6 +69,17 @@ textarea {
 
 ::selection {
   @apply bg-accent/90 text-white;
+}
+
+/* System-wide keyboard focus. One accent ring for every interactive element that
+   isn't a text field (inputs/textarea keep their own focus:shadow-glow). Only
+   shows for keyboard users (:focus-visible), follows each element's own radius
+   (rounded-[inherit]), and never appears on mouse click. */
+@layer base {
+  :where(a, button, [role='button'], summary, [tabindex]:not([tabindex='-1'])):focus-visible {
+    @apply outline-none ring-2 ring-accent/60 ring-offset-2 ring-offset-bg;
+    border-radius: inherit;
+  }
 }
 
 /* Anchored scroll targets clear the sticky nav. */

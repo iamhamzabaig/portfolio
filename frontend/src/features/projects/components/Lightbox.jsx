@@ -48,7 +48,7 @@ export function Lightbox({ images, index, onClose, onIndex }) {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
+        className="max-h-[85vh] max-w-[90vw] rounded-media object-contain"
       />
 
       {count > 1 ? (

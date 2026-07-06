@@ -1,6 +1,7 @@
 import { Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { Container } from '../../components/layout/Container.jsx';
 import { Card } from '../../components/ui/Card.jsx';
+import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { ContactForm } from '../../features/contact/components/ContactForm.jsx';
 import { fallbackProfile } from '../../utils/fallbackData.js';
@@ -14,16 +15,16 @@ export default function Contact() {
     <Container className="py-20 sm:py-24">
       <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
         <RevealScope immediate>
-          <p data-fade className="text-[15px] font-semibold text-accent">Contact</p>
+          <Eyebrow data-fade>Contact</Eyebrow>
           <h1 data-split className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
             Let&apos;s build
             <br /> something.
           </h1>
-          <p data-split className="mt-6 text-lg leading-8 text-muted">
+          <p data-split className="mt-6 text-body-lg text-muted">
             Tell me what you&apos;re building, what exists today, and your timeline. I reply within a day.
           </p>
 
-          <div data-fade className="mt-10 grid gap-3 text-[15px]">
+          <div data-fade className="mt-10 grid gap-3 text-body-sm">
             <a href={`mailto:${email}`} className="inline-flex items-center gap-3 text-muted transition hover:text-ink">
               <Mail aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {email}
             </a>
@@ -35,18 +36,18 @@ export default function Contact() {
             </p>
           </div>
 
-          <div data-fade className="mt-8 -ml-2 flex items-center gap-1">
+          <div data-fade className="mt-8 -ml-2.5 flex items-center gap-1">
             <a
               href={github}
               aria-label="GitHub"
-              className="p-2 text-muted transition-colors hover:text-ink"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-ink"
             >
               <Github aria-hidden="true" size={20} strokeWidth={1.5} />
             </a>
             <a
               href={linkedin}
               aria-label="LinkedIn"
-              className="p-2 text-muted transition-colors hover:text-ink"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-ink"
             >
               <Linkedin aria-hidden="true" size={20} strokeWidth={1.5} />
             </a>

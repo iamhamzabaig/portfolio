@@ -1,0 +1,26 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="#2997ff" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#2997ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Canvas -->
+  <rect width="1200" height="630" fill="#000000" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <!-- Brand mark -->
+  <rect x="80" y="70" width="56" height="56" rx="14" fill="#f5f5f7" />
+  <g transform="translate(80,70) scale(2.333)" stroke="#0a0a0a" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M9.5 8L6 12L9.5 16M14.5 8L18 12L14.5 16" />
+  </g>
+  <text x="152" y="108" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="600" fill="#f5f5f7">Hamza Munawar</text>
+
+  <!-- Headline -->
+  <text x="78" y="330" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="86" font-weight="700" letter-spacing="-3" fill="#f5f5f7">I build software that</text>
+  <text x="78" y="438" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="86" font-weight="700" letter-spacing="-3" fill="#2997ff">scales.</text>
+
+  <!-- Sub -->
+  <text x="80" y="556" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="500" fill="#86868b">Full-Stack JavaScript Engineer &#183; Angular &#183; React &#183; Node</text>
+</svg>

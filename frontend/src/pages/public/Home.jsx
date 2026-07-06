@@ -3,8 +3,10 @@ import { Activity, ArrowRight, Cloud, Code2, Gauge, Server, Sparkles } from 'luc
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
+import { Badge } from '../../components/ui/Badge.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { CountUp } from '../../components/ui/CountUp.jsx';
+import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { RevealStagger, RevealItem } from '../../components/ui/Reveal.jsx';
 import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
@@ -64,16 +66,6 @@ const services = [
   }
 ];
 
-// Small blue section eyebrow, Apple's quiet colored label above a headline.
-// Spreads props so a RevealScope parent can tag it with data-fade.
-function Eyebrow({ children, ...props }) {
-  return (
-    <p className="text-[15px] font-semibold text-accent" {...props}>
-      {children}
-    </p>
-  );
-}
-
 export default function Home() {
   const profileQuery = useProfile();
   const projectsQuery = useProjects({ featured: true });
@@ -131,16 +123,16 @@ export default function Home() {
           <motion.div style={heroScrub} className="flex flex-col items-center">
           <RevealScope immediate deps={[profile.headline]} className="flex flex-col items-center">
             {/* Role eyebrow — answers "what kind of engineer" before the headline. */}
-            <p data-fade className="mb-4 text-[15px] font-semibold tracking-eyebrow text-accent sm:mb-5">
+            <Eyebrow data-fade className="mb-4 sm:mb-5">
               {profile.role}
-            </p>
+            </Eyebrow>
             {/* Static anchor headline — no reveal or pointer drift, so it reads as
                 a solid, confident statement while the surrounding lines animate. */}
             <h1 className="font-display text-fluid-hero font-semibold text-ink">
               I build software that <span className="text-accent">scales.</span>
             </h1>
 
-            <p data-split className="mt-7 max-w-2xl text-lg leading-8 text-muted sm:text-xl">{profile.headline}</p>
+            <p data-split className="mt-7 max-w-2xl text-body-lg text-muted sm:text-xl">{profile.headline}</p>
 
             <div data-fade className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
               <Button as={Link} to="/projects">
@@ -149,13 +141,13 @@ export default function Home() {
               </Button>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-1 text-[17px] font-medium text-accent hover:underline underline-offset-4"
+                className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
               >
                 Get in touch <span aria-hidden="true">›</span>
               </Link>
             </div>
 
-            <div data-fade className="mt-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[13px] text-muted">
+            <div data-fade className="mt-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-caption text-muted">
               {trustPoints.map((item, i) => (
                 <span key={item} className="inline-flex items-center gap-3">
                   {i > 0 && <span aria-hidden="true" className="text-border">·</span>}
@@ -177,10 +169,10 @@ export default function Home() {
               Three years, measured in outcomes.
             </h2>
           </RevealScope>
-          {/* Divided number bar — no cards. Hairline rules separate the figures:
-              vertical between columns, horizontal between the stacked rows, all
-              collapsing to a single row on large screens. */}
-          <RevealStagger className="grid grid-cols-2 lg:grid-cols-4">
+          {/* Number bar — a rounded panel holding the figures, with hairline rules
+              separating them: vertical between columns, horizontal between the
+              stacked rows, all collapsing to a single row on large screens. */}
+          <RevealStagger className="grid grid-cols-2 overflow-hidden rounded-card border border-border bg-panel shadow-soft lg:grid-cols-4">
             {stats.slice(0, 4).map((stat, i) => {
               const numeric = Number(stat.value);
               // Per-cell divider borders, recomputed at the lg breakpoint where the
@@ -200,8 +192,8 @@ export default function Home() {
                     {Number.isFinite(numeric) ? <CountUp value={numeric} /> : stat.value}
                     {stat.suffix && <span className="ml-0.5 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
                   </p>
-                  <p className="mt-4 text-[15px] font-semibold text-ink">{stat.label}</p>
-                  <p className="mt-1 text-[13px] leading-6 text-muted">{stat.description}</p>
+                  <p className="mt-4 text-body-sm font-semibold text-ink">{stat.label}</p>
+                  <p className="mt-1 text-caption text-muted">{stat.description}</p>
                   {stat.spark && <Sparkline points={stat.spark} className="mx-auto mt-4 text-accent/80" />}
                 </RevealItem>
               );
@@ -223,7 +215,7 @@ export default function Home() {
             <Link
               data-fade
               to="/projects"
-              className="inline-flex items-center gap-1 text-[17px] font-medium text-accent hover:underline underline-offset-4"
+              className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
             >
               All projects <span aria-hidden="true">›</span>
             </Link>
@@ -244,7 +236,7 @@ export default function Home() {
             <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
               What I can build for you.
             </h2>
-            <p data-split className="mt-4 text-lg leading-8 text-muted">
+            <p data-split className="mt-4 text-body-lg text-muted">
               End-to-end product engineering — from the frontend and APIs to performance, real-time, and AI.
             </p>
           </RevealScope>
@@ -254,7 +246,7 @@ export default function Home() {
               return (
                 <RevealItem
                   key={item.title}
-                  className={`group flex flex-col rounded-3xl bg-panel p-8 shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
+                  className={`group flex flex-col rounded-card bg-panel p-8 shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
                     item.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
                   }`}
                 >
@@ -267,20 +259,15 @@ export default function Home() {
                   <div className="mt-6 flex items-center gap-2">
                     <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{item.title}</h3>
                     {item.featured && (
-                      <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-accent">
+                      <Badge tone="accent" size="xs">
                         New
-                      </span>
+                      </Badge>
                     )}
                   </div>
-                  <p className="mt-2 text-[15px] leading-7 text-muted">{item.text}</p>
+                  <p className="mt-2 text-body-sm text-muted">{item.text}</p>
                   <div className="mt-5 flex flex-wrap gap-2 pt-1">
                     {item.tools.map((tool) => (
-                      <span
-                        key={tool}
-                        className="rounded-full bg-surface px-2.5 py-1 text-[12px] font-medium text-muted ring-1 ring-border/50"
-                      >
-                        {tool}
-                      </span>
+                      <Badge key={tool}>{tool}</Badge>
                     ))}
                   </div>
                 </RevealItem>
@@ -298,7 +285,7 @@ export default function Home() {
               Let&apos;s build something
               <br className="hidden sm:block" /> <span className="text-accent">great together.</span>
             </h2>
-            <p data-split className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted">
+            <p data-split className="mx-auto mt-6 max-w-xl text-body-lg text-muted">
               Tell me what you&apos;re building and where it stands today. I reply within a day.
             </p>
             <div data-fade className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
@@ -308,7 +295,7 @@ export default function Home() {
               </Button>
               <Link
                 to="/about"
-                className="inline-flex items-center gap-1 text-[17px] font-medium text-accent hover:underline underline-offset-4"
+                className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
               >
                 More about me <span aria-hidden="true">›</span>
               </Link>

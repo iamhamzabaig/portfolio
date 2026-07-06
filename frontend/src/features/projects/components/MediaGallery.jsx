@@ -5,7 +5,7 @@ import { VideoPlayer } from './VideoPlayer.jsx';
 import { Lightbox } from './Lightbox.jsx';
 import { coverGradient, monogram } from '../cover.js';
 
-const MEDIA_CLASS = 'aspect-[16/10] w-full rounded-2xl border border-border object-cover';
+const MEDIA_CLASS = 'aspect-[16/10] w-full rounded-media border border-border object-cover';
 
 export function MediaGallery({ video, screenshots = [], coverImage, title }) {
   const slides = [];
@@ -36,7 +36,7 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
       <img src={coverImage.url} alt="" className={MEDIA_CLASS} />
     ) : (
       <div
-        className="flex aspect-[16/10] w-full items-center justify-center rounded-2xl border border-border"
+        className="flex aspect-[16/10] w-full items-center justify-center rounded-media border border-border"
         style={{ backgroundImage: coverGradient({ title }) }}
       >
         <span className="font-display text-6xl font-bold text-white/90">{monogram(title)}</span>
@@ -49,7 +49,7 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
   return (
     <div>
       <div
-        className="group relative overflow-hidden rounded-2xl"
+        className="group relative overflow-hidden rounded-media"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >

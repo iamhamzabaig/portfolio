@@ -17,7 +17,7 @@ export default function ProjectDetail() {
     return (
       <Container className="py-32 text-center">
         <h1 className="font-display text-4xl font-semibold tracking-tight text-ink">Project not found</h1>
-        <Link to="/projects" className="mt-5 inline-block text-[17px] font-medium text-accent hover:underline underline-offset-4">
+        <Link to="/projects" className="mt-5 inline-block text-body font-medium text-accent hover:underline underline-offset-4">
           Back to projects ›
         </Link>
       </Container>
@@ -30,7 +30,7 @@ export default function ProjectDetail() {
       <Container className="py-16 text-center sm:py-20">
         <Link
           to="/projects"
-          className="inline-flex items-center gap-1.5 text-[13px] font-medium text-muted transition hover:text-ink"
+          className="inline-flex items-center gap-1.5 text-caption font-medium text-muted transition hover:text-ink"
         >
           <ArrowLeft aria-hidden="true" size={15} /> All projects
         </Link>
@@ -43,14 +43,14 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        <h1 className="mx-auto mt-6 max-w-3xl font-display text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+        <h1 className="mx-auto mt-6 max-w-3xl font-display text-fluid-h1 font-semibold text-ink">
           {project.title}
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">{project.description}</p>
+        <p className="mx-auto mt-6 max-w-2xl text-body-lg text-muted sm:text-xl">{project.description}</p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           {project.isLivePrivate ? (
-            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-[15px] text-muted">
+            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-body-sm text-muted">
               <Lock aria-hidden="true" size={15} /> Live demo under NDA
             </p>
           ) : project.liveUrl ? (
@@ -60,7 +60,7 @@ export default function ProjectDetail() {
             </Button>
           ) : null}
           {project.isRepoPrivate ? (
-            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-[15px] text-muted">
+            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-body-sm text-muted">
               <Lock aria-hidden="true" size={15} /> Source under NDA
             </p>
           ) : project.repoUrl ? (
@@ -86,7 +86,7 @@ export default function ProjectDetail() {
 
       {/* Readable write-up column. */}
       <Container className="py-20 sm:py-24">
-        <div className="mx-auto max-w-2xl text-lg leading-8 text-muted">
+        <div className="mx-auto max-w-2xl text-body-lg text-muted">
           <p>{project.content || project.description}</p>
         </div>
       </Container>

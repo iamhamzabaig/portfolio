@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Container } from '../../components/layout/Container.jsx';
+import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
@@ -32,11 +33,11 @@ export default function Projects() {
   return (
     <Container className="py-20 sm:py-24">
       <RevealScope immediate className="mx-auto max-w-2xl text-center">
-        <p data-fade className="text-[15px] font-semibold text-accent">Projects</p>
+        <Eyebrow data-fade>Projects</Eyebrow>
         <h1 data-split className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           Selected work
         </h1>
-        <p data-split className="mt-5 text-lg leading-8 text-muted">
+        <p data-split className="mt-5 text-body-lg text-muted">
           Real-time platforms, enterprise ERP, and high-performance frontends across React, Angular, Vue, and Node.
         </p>
       </RevealScope>
@@ -55,7 +56,7 @@ export default function Projects() {
               type="button"
               onClick={() => setActive(tag)}
               aria-pressed={isActive}
-              className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition duration-300 ease-apple ${
+              className={`inline-flex min-h-11 items-center rounded-full px-4 py-2 text-caption font-medium transition duration-300 ease-apple active:scale-[0.97] ${
                 isActive
                   ? 'bg-ink text-bg'
                   : 'bg-surface text-muted ring-1 ring-border/60 hover:text-ink'

@@ -127,31 +127,31 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         <Input id="liveUrl" label="Live URL" {...register('liveUrl')} />
         <Input id="repoUrl" label="Repo URL" {...register('repoUrl')} />
       </div>
-      <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
+      <label className="flex items-center gap-2 rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted">
         <input type="checkbox" className="h-4 w-4 accent-accent" {...register('featured')} />
         Featured project
       </label>
-      <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
+      <label className="flex items-center gap-2 rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted">
         <input type="checkbox" className="h-4 w-4 accent-accent" {...register('isLivePrivate')} />
         Live link private / under NDA
       </label>
-      <label className="flex items-center gap-2 rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted">
+      <label className="flex items-center gap-2 rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted">
         <input type="checkbox" className="h-4 w-4 accent-accent" {...register('isRepoPrivate')} />
         Repo private / under NDA
       </label>
       <div className="grid gap-1.5">
-        <label htmlFor="coverImage" className="font-mono text-xs uppercase text-muted">
+        <label htmlFor="coverImage" className="text-caption font-medium text-muted">
           Cover image
         </label>
-        <input id="coverImage" type="file" accept="image/*" className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('coverImage')} />
+        <input id="coverImage" type="file" accept="image/*" className="rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted" {...register('coverImage')} />
       </div>
       <div className="grid gap-1.5">
-        <label htmlFor="video" className="font-mono text-xs uppercase text-muted">
+        <label htmlFor="video" className="text-caption font-medium text-muted">
           Demo video
         </label>
-        <input id="video" type="file" accept="video/mp4,video/webm" className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('video')} />
-        <p className="text-xs text-muted">MP4 or WebM, max 50 MB. Compress before upload.</p>
-        {videoError ? <p role="alert" className="text-sm text-danger">{videoError}</p> : null}
+        <input id="video" type="file" accept="video/mp4,video/webm" className="rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted" {...register('video')} />
+        <p className="text-caption text-muted">MP4 or WebM, max 50 MB. Compress before upload.</p>
+        {videoError ? <p role="alert" className="text-body-sm text-danger">{videoError}</p> : null}
         {hasExistingVideo && !removeVideo ? (
           <div className="grid gap-2">
             <video
@@ -159,15 +159,15 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
               preload="none"
               src={project.video.url}
               poster={project.coverImage?.url || undefined}
-              className="aspect-video w-full rounded-md border border-border"
+              className="aspect-video w-full rounded-media border border-border"
             />
-            <button type="button" onClick={() => setRemoveVideo(true)} className="justify-self-start text-sm text-danger">
+            <button type="button" onClick={() => setRemoveVideo(true)} className="justify-self-start text-body-sm text-danger">
               Remove video
             </button>
           </div>
         ) : null}
         {hasExistingVideo && removeVideo ? (
-          <p className="text-sm text-muted">
+          <p className="text-body-sm text-muted">
             Video will be removed on save.{' '}
             <button type="button" onClick={() => setRemoveVideo(false)} className="text-accent underline">
               Undo
@@ -176,19 +176,19 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
         ) : null}
       </div>
       <div className="grid gap-1.5">
-        <label htmlFor="screenshots" className="font-mono text-xs uppercase text-muted">
+        <label htmlFor="screenshots" className="text-caption font-medium text-muted">
           Screenshots
         </label>
         {existingShots.length ? (
           <div className="flex flex-wrap gap-2">
             {existingShots.map((shot, i) => (
               <div key={shot.path} className="relative">
-                <img src={shot.url} alt="" className="h-16 w-24 rounded-md border border-border object-cover" />
+                <img src={shot.url} alt="" className="h-16 w-24 rounded-control border border-border object-cover" />
                 <button
                   type="button"
                   aria-label={`Remove screenshot ${i + 1}`}
                   onClick={() => setRemoveShotPaths((prev) => [...prev, shot.path])}
-                  className="absolute -right-2 -top-2 grid h-5 w-5 place-items-center rounded-full bg-danger text-xs text-white"
+                  className="absolute -right-2 -top-2 grid h-5 w-5 place-items-center rounded-full bg-danger text-xs text-on-accent"
                 >
                   ✕
                 </button>
@@ -196,13 +196,13 @@ export function ProjectForm({ project, onSubmit, isPending = false }) {
             ))}
           </div>
         ) : null}
-        <input id="screenshots" type="file" accept="image/*" multiple className="rounded-md border border-border bg-panel px-3 py-3 text-sm text-muted" {...register('screenshots')} />
-        <p className="text-xs text-muted">Up to {MAX_SCREENSHOTS} images.</p>
-        {shotError ? <p role="alert" className="text-sm text-danger">{shotError}</p> : null}
+        <input id="screenshots" type="file" accept="image/*" multiple className="rounded-control border border-border bg-panel px-3 py-3 text-body-sm text-muted" {...register('screenshots')} />
+        <p className="text-caption text-muted">Up to {MAX_SCREENSHOTS} images.</p>
+        {shotError ? <p role="alert" className="text-body-sm text-danger">{shotError}</p> : null}
       </div>
-      <Button type="submit" disabled={isPending}>
-        <Save aria-hidden="true" size={17} />
-        {isPending ? 'Saving...' : 'Save project'}
+      <Button type="submit" loading={isPending}>
+        {!isPending && <Save aria-hidden="true" size={17} />}
+        {isPending ? 'Saving…' : 'Save project'}
       </Button>
     </form>
   );

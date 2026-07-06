@@ -1,5 +1,6 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Badge } from '../../../components/ui/Badge.jsx';
 import { RevealItem } from '../../../components/ui/Reveal.jsx';
 import { coverGradient, monogram } from '../cover.js';
 
@@ -18,7 +19,7 @@ export function ProjectFeature({ project, index = 0 }) {
       <Link
         to={to}
         aria-label={project.title}
-        className={`group relative order-1 block overflow-hidden rounded-lg bg-surface shadow-soft transition duration-500 ease-apple hover:shadow-lift ${
+        className={`group relative order-1 block overflow-hidden rounded-media bg-surface shadow-soft transition duration-500 ease-apple hover:shadow-lift ${
           reversed ? 'lg:order-2' : 'lg:order-1'
         }`}
       >
@@ -40,14 +41,14 @@ export function ProjectFeature({ project, index = 0 }) {
           )}
           <div className="absolute left-4 top-4 flex gap-2">
             {project.featured && (
-              <span className="rounded-full bg-white/70 px-3 py-1 text-[11px] font-semibold tracking-[0.01em] text-accent backdrop-blur-md">
+              <Badge tone="onMedia" size="xs" className="text-accent">
                 Featured
-              </span>
+              </Badge>
             )}
             {project.video?.url && (
-              <span className="rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-ink backdrop-blur">
-                ▶ DEMO
-              </span>
+              <Badge tone="onMedia" size="xs">
+                <Play aria-hidden="true" size={10} fill="currentColor" /> Demo
+              </Badge>
             )}
           </div>
         </div>
@@ -60,22 +61,17 @@ export function ProjectFeature({ project, index = 0 }) {
             {project.title}
           </h3>
         </Link>
-        <p className="mt-4 max-w-xl text-lg leading-8 text-muted">{project.description}</p>
+        <p className="mt-4 max-w-xl text-body-lg text-muted">{project.description}</p>
         {project.tags?.length > 0 && (
           <div className="mt-5 flex flex-wrap gap-2">
             {project.tags.slice(0, 5).map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-surface px-2.5 py-1 text-[12px] font-medium text-muted ring-1 ring-border/50"
-              >
-                {tag}
-              </span>
+              <Badge key={tag}>{tag}</Badge>
             ))}
           </div>
         )}
         <Link
           to={to}
-          className="group/link mt-6 inline-flex items-center gap-1.5 text-[15px] font-medium text-accent"
+          className="group/link mt-6 inline-flex items-center gap-1.5 text-body-sm font-medium text-accent"
         >
           Learn more
           <ArrowRight

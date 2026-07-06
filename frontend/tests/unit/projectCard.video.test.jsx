@@ -9,14 +9,14 @@ const renderCard = (project) =>
   render(<MemoryRouter><ProjectCard project={project} /></MemoryRouter>);
 
 describe('ProjectCard — demo badge', () => {
-  it('shows a DEMO badge when the project has a video', () => {
+  it('shows a demo badge when the project has a video', () => {
     renderCard({ ...base, video: { url: 'https://cdn/v.mp4' } });
-    expect(screen.getByText(/DEMO/)).toBeInTheDocument();
+    expect(screen.getByText(/demo/i)).toBeInTheDocument();
   });
 
-  it('does not show a DEMO badge without a video, and never renders a <video>', () => {
+  it('does not show a demo badge without a video, and never renders a <video>', () => {
     const { container } = renderCard({ ...base, video: { url: '' } });
-    expect(screen.queryByText(/DEMO/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/demo/i)).not.toBeInTheDocument();
     expect(container.querySelector('video')).toBeNull();
   });
 });

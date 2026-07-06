@@ -1,6 +1,7 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { Badge } from '../../../components/ui/Badge.jsx';
 import { revealRise } from '../../../components/ui/Reveal.jsx';
 import { coverGradient, monogram } from '../cover.js';
 
@@ -14,7 +15,7 @@ export function ProjectCard({ project }) {
     <motion.div variants={revealRise}>
       <Link
         to={`/projects/${project.slug}`}
-        className={`group flex h-full flex-col overflow-hidden rounded-3xl bg-panel shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
+        className={`group flex h-full flex-col overflow-hidden rounded-card bg-panel shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
           project.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
         }`}
       >
@@ -36,14 +37,14 @@ export function ProjectCard({ project }) {
           )}
           <div className="absolute left-4 top-4 flex gap-2">
             {project.featured && (
-              <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-white shadow-sm">
+              <Badge tone="solid" size="xs">
                 Featured
-              </span>
+              </Badge>
             )}
             {project.video?.url && (
-              <span className="rounded-full bg-white/85 px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] text-ink backdrop-blur">
-                ▶ DEMO
-              </span>
+              <Badge tone="onMedia" size="xs">
+                <Play aria-hidden="true" size={10} fill="currentColor" /> Demo
+              </Badge>
             )}
           </div>
         </div>
@@ -52,8 +53,8 @@ export function ProjectCard({ project }) {
           <h3 className="font-display text-xl font-semibold leading-tight tracking-tight text-ink">
             {project.title}
           </h3>
-          <p className="line-clamp-2 text-[15px] leading-6 text-muted">{project.description}</p>
-          <div className="mt-auto flex items-center gap-1.5 pt-2 text-[15px] font-medium text-accent">
+          <p className="line-clamp-2 text-body-sm text-muted">{project.description}</p>
+          <div className="mt-auto flex items-center gap-1.5 pt-2 text-body-sm font-medium text-accent">
             Learn more
             <ArrowRight
               aria-hidden="true"

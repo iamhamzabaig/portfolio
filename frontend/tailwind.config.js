@@ -15,11 +15,13 @@ export default {
         ink: 'rgb(var(--ink) / <alpha-value>)',
         muted: 'rgb(var(--muted) / <alpha-value>)',
         accent: 'rgb(var(--accent) / <alpha-value>)',
-        success: '#34c759', // Apple green
-        danger: '#ff3b30', // Apple red
-        // Retained for the (out-of-scope) admin surfaces that still reference them.
-        teal: '#34d3c6',
-        amber: '#f3b95f'
+        'on-accent': 'rgb(var(--on-accent) / <alpha-value>)', // text/icon on an accent fill
+        // Semantic status roles — channel-based like the theme tokens, so they shift
+        // between light/dark and support the /alpha modifier (bg-success/10, …).
+        success: 'rgb(var(--success) / <alpha-value>)', // Apple green
+        danger: 'rgb(var(--danger) / <alpha-value>)', // Apple red
+        warning: 'rgb(var(--warning) / <alpha-value>)', // Apple orange
+        info: 'rgb(var(--info) / <alpha-value>)' // Apple blue
       },
       fontFamily: {
         // Self-hosted Inter Variable is the primary typeface (loaded in main.jsx);
@@ -50,22 +52,38 @@ export default {
       // carries its own line-height and negative tracking that tightens as the
       // size grows, so headings stay consistent wherever they're used.
       fontSize: {
-        'fluid-hero': ['clamp(3.25rem, 2.4rem + 3.4vw, 5.5rem)', { lineHeight: '1.03', letterSpacing: '-0.03em' }],
-        'fluid-h1': ['clamp(3rem, 2.7rem + 1.15vw, 3.75rem)', { lineHeight: '1.05', letterSpacing: '-0.025em' }],
-        'fluid-cta': ['clamp(2.25rem, 1.7rem + 2.25vw, 3.75rem)', { lineHeight: '1.05', letterSpacing: '-0.025em' }],
-        'fluid-h2': ['clamp(2.25rem, 1.95rem + 1.15vw, 3rem)', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
-        'fluid-stat': ['clamp(3.25rem, 2.8rem + 1.9vw, 4.5rem)', { lineHeight: '1', letterSpacing: '-0.02em' }],
-        'fluid-h3': ['clamp(1.5rem, 1.35rem + 0.6vw, 1.875rem)', { lineHeight: '1.15', letterSpacing: '-0.015em' }]
+        'fluid-hero': ['clamp(2.5rem, 1.95rem + 2.2vw, 4rem)', { lineHeight: '1.05', letterSpacing: '-0.03em' }],
+        'fluid-h1': ['clamp(2.25rem, 2rem + 0.9vw, 3rem)', { lineHeight: '1.08', letterSpacing: '-0.025em' }],
+        'fluid-cta': ['clamp(2rem, 1.6rem + 1.6vw, 3rem)', { lineHeight: '1.08', letterSpacing: '-0.025em' }],
+        'fluid-h2': ['clamp(1.75rem, 1.55rem + 0.85vw, 2.375rem)', { lineHeight: '1.12', letterSpacing: '-0.02em' }],
+        'fluid-stat': ['clamp(2.5rem, 2.15rem + 1.4vw, 3.5rem)', { lineHeight: '1', letterSpacing: '-0.02em' }],
+        'fluid-h3': ['clamp(1.375rem, 1.25rem + 0.45vw, 1.625rem)', { lineHeight: '1.2', letterSpacing: '-0.015em' }],
+        // Body & UI scale — the tier below headlines. Every role that was being set
+        // with one-off arbitrary px (text-[15px], text-[13px], …) now has a named
+        // token with a paired line-height, so the same role reads the same size
+        // everywhere. Pair with text-muted/text-ink for color; these carry size only.
+        'body-lg': ['1.125rem', { lineHeight: '1.7' }], // 18px — lead paragraphs, intros
+        body: ['1.0625rem', { lineHeight: '1.65' }], // 17px — standard prose
+        'body-sm': ['0.9375rem', { lineHeight: '1.6' }], // 15px — controls, card copy, secondary
+        caption: ['0.8125rem', { lineHeight: '1.5' }], // 13px — labels, meta, footnotes
+        micro: ['0.6875rem', { lineHeight: '1.4', letterSpacing: '0.06em' }], // 11px — uppercase eyebrows/tags
+        eyebrow: ['0.9375rem', { lineHeight: '1.4', letterSpacing: '0.01em' }] // 15px — colored section label
       },
+      // Radius roles — a semantic name per surface type so corners stay consistent
+      // regardless of which element renders them. Physical Tailwind steps (lg/xl/2xl…)
+      // remain available; these name the *intent*.
       borderRadius: {
-        '4xl': '1.75rem',
-        '5xl': '2.25rem'
+        control: '0.375rem', // inputs, small controls
+        card: '0.5rem', // cards, panels, feature tiles
+        media: '0.5rem' // images, video, large thumbnails — match cards
       },
       boxShadow: {
-        // Apple's shadows are diffuse and low-contrast — they hint at elevation
-        // rather than announce it.
+        // Elevation ladder — Apple's shadows are diffuse and low-contrast; they hint
+        // at elevation rather than announce it. glow (focus) → soft (resting card) →
+        // lift (hover/pulled-forward) → overlay (modals, toasts, popovers).
         soft: '0 4px 24px rgba(0, 0, 0, 0.06)',
         lift: '0 18px 48px rgba(0, 0, 0, 0.12)',
+        overlay: '0 24px 64px rgba(0, 0, 0, 0.18)',
         glow: '0 0 0 4px rgb(var(--accent) / 0.15)'
       },
       transitionTimingFunction: {
