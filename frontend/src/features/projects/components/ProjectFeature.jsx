@@ -18,9 +18,9 @@ export function ProjectFeature({ project, index = 0 }) {
       <Link
         to={to}
         aria-label={project.title}
-        className={`group relative order-1 block overflow-hidden rounded-xl bg-surface shadow-soft transition duration-500 ease-apple hover:shadow-lift ${
+        className={`group relative order-1 block overflow-hidden rounded-lg bg-surface shadow-soft transition duration-500 ease-apple hover:shadow-lift ${
           reversed ? 'lg:order-2' : 'lg:order-1'
-        } ${project.featured ? 'ring-2 ring-accent/40' : ''}`}
+        }`}
       >
         <div className="relative aspect-[16/10] overflow-hidden">
           {hasImage ? (
@@ -40,7 +40,7 @@ export function ProjectFeature({ project, index = 0 }) {
           )}
           <div className="absolute left-4 top-4 flex gap-2">
             {project.featured && (
-              <span className="rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-white shadow-sm">
+              <span className="rounded-full bg-white/70 px-3 py-1 text-[11px] font-semibold tracking-[0.01em] text-accent backdrop-blur-md">
                 Featured
               </span>
             )}

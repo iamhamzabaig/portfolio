@@ -13,7 +13,7 @@ export function Button({ as: Component = 'button', variant = 'primary', classNam
   return (
     <Component
       type={buttonType}
-      className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border px-6 text-[15px] font-medium leading-none transition duration-300 ease-apple disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border px-6 text-[15px] font-medium leading-none transition duration-300 ease-apple active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 ${variants[variant]} ${className}`}
       {...props}
     />
   );

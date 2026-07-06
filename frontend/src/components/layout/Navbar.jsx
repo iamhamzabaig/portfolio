@@ -18,7 +18,7 @@ const links = [
 function Monogram() {
   return (
     <span className="inline-flex h-6 w-6 items-center justify-center rounded-[7px] bg-ink text-bg">
-      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
         <path
           d="M9.5 8L6 12L9.5 16M14.5 8L18 12L14.5 16"
           stroke="currentColor"
