@@ -20,7 +20,7 @@ export function ProjectFeature({ project, index = 0 }) {
         aria-label={project.title}
         className={`group relative order-1 block overflow-hidden rounded-xl bg-surface shadow-soft transition duration-500 ease-apple hover:shadow-lift ${
           reversed ? 'lg:order-2' : 'lg:order-1'
-        } ${project.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'}`}
+        } ${project.featured ? 'ring-2 ring-accent/40' : ''}`}
       >
         <div className="relative aspect-[16/10] overflow-hidden">
           {hasImage ? (
