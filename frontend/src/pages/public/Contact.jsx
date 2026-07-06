@@ -1,6 +1,7 @@
 import { Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { Container } from '../../components/layout/Container.jsx';
 import { Card } from '../../components/ui/Card.jsx';
+import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { ContactForm } from '../../features/contact/components/ContactForm.jsx';
 import { fallbackProfile } from '../../utils/fallbackData.js';
 
@@ -12,17 +13,17 @@ export default function Contact() {
   return (
     <Container className="py-20 sm:py-24">
       <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-        <div>
-          <p className="text-[15px] font-semibold text-accent">Contact</p>
-          <h1 className="mt-3 font-display text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+        <RevealScope immediate>
+          <p data-fade className="text-[15px] font-semibold text-accent">Contact</p>
+          <h1 data-split className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
             Let&apos;s build
             <br /> something.
           </h1>
-          <p className="mt-6 text-lg leading-8 text-muted">
+          <p data-split className="mt-6 text-lg leading-8 text-muted">
             Tell me what you&apos;re building, what exists today, and your timeline. I reply within a day.
           </p>
 
-          <div className="mt-10 grid gap-3 text-[15px]">
+          <div data-fade className="mt-10 grid gap-3 text-[15px]">
             <a href={`mailto:${email}`} className="inline-flex items-center gap-3 text-muted transition hover:text-ink">
               <Mail aria-hidden="true" size={18} className="text-accent" /> {email}
             </a>
@@ -34,7 +35,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="mt-8 flex items-center gap-2">
+          <div data-fade className="mt-8 flex items-center gap-2">
             <a
               href={github}
               aria-label="GitHub"
@@ -50,7 +51,7 @@ export default function Contact() {
               <Linkedin aria-hidden="true" size={18} />
             </a>
           </div>
-        </div>
+        </RevealScope>
 
         <Card className="p-8">
           <ContactForm />

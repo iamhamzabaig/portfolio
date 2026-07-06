@@ -1,10 +1,12 @@
-import { ArrowRight, Boxes, Gauge, Radio } from 'lucide-react';
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { useRef } from 'react';
+import { Activity, ArrowRight, Cloud, Code2, Gauge, Server, Sparkles } from 'lucide-react';
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { CountUp } from '../../components/ui/CountUp.jsx';
-import { Reveal, RevealStagger, RevealItem } from '../../components/ui/Reveal.jsx';
+import { RevealStagger, RevealItem } from '../../components/ui/Reveal.jsx';
+import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
@@ -12,29 +14,64 @@ import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
 import { fallbackProjects, fallbackProfile } from '../../utils/fallbackData.js';
 
-const credentials = ['Islamabad, PK', 'Angular · React · Node', 'Nx monorepo', 'Since 2022'];
+// Trust strip under the hero CTAs — proof over soft facts (what/where/how long).
+const trustPoints = [
+  '3+ years shipping',
+  'Enterprise ERP & real-time',
+  'Angular · React · Node',
+  'Currently @ Code Agrius'
+];
 
-const capabilities = [
+// Services offered — the client-facing menu. The AI card is flagged `featured`
+// so it reads as the differentiator, not an afterthought.
+const services = [
   {
-    title: 'Enterprise frontends',
-    icon: Boxes,
-    text: 'Angular & React systems in Nx monorepos — signals, standalone APIs, and typed component libraries built to scale.'
+    title: 'Web & App Development',
+    icon: Code2,
+    text: 'Production frontends in Angular, React, and Next.js — typed component libraries, design systems, and Nx monorepos built to scale.',
+    tools: ['Angular', 'React', 'Next.js', 'TypeScript']
   },
   {
-    title: 'Performance work',
+    title: 'Backend & APIs',
+    icon: Server,
+    text: 'REST, GraphQL, and WebSocket services on Node/Express with JWT auth, RBAC, and clean, documented contracts.',
+    tools: ['Node', 'Express', 'GraphQL', 'PostgreSQL']
+  },
+  {
+    title: 'AI Integration',
+    icon: Sparkles,
+    text: 'LLM-powered features that ship: chatbots, RAG pipelines, semantic search, and workflow automation wired to the Claude and OpenAI APIs.',
+    tools: ['Claude API', 'OpenAI', 'RAG', 'Embeddings'],
+    featured: true
+  },
+  {
+    title: 'Performance Engineering',
     icon: Gauge,
-    text: 'Migrations and profiling that move Lighthouse, shrink bundles, and cut server render times measurably.'
+    text: 'Lighthouse gains, smaller bundles, and faster SSR — profiling and migrations that turn slow apps into measurable wins.',
+    tools: ['Lighthouse', 'SSR', 'Profiling', 'Core Web Vitals']
   },
   {
-    title: 'Real-time & APIs',
-    icon: Radio,
-    text: 'Node/Express services, WebSockets, and GraphQL with JWT auth and role-based access control.'
+    title: 'Real-time Systems',
+    icon: Activity,
+    text: 'Live dashboards and event-driven UIs with Socket.io and optimistic updates that stay snappy under load.',
+    tools: ['Socket.io', 'WebSockets', 'RxJS', 'ECharts']
+  },
+  {
+    title: 'Cloud & Deployment',
+    icon: Cloud,
+    text: 'CI/CD, containerized deploys, and edge hosting — from first commit to production, automated and observable.',
+    tools: ['Vercel', 'Docker', 'CI/CD', 'Supabase']
   }
 ];
 
 // Small blue section eyebrow, Apple's quiet colored label above a headline.
-function Eyebrow({ children }) {
-  return <p className="text-[15px] font-semibold text-accent">{children}</p>;
+// Spreads props so a RevealScope parent can tag it with data-fade.
+function Eyebrow({ children, ...props }) {
+  return (
+    <p className="text-[15px] font-semibold text-accent" {...props}>
+      {children}
+    </p>
+  );
 }
 
 export default function Home() {
@@ -52,8 +89,6 @@ export default function Home() {
   const py = useMotionValue(0);
   const glowX = useSpring(px, { stiffness: 50, damping: 20 });
   const glowY = useSpring(py, { stiffness: 50, damping: 20 });
-  const headX = useTransform(useSpring(px, { stiffness: 70, damping: 22 }), (v) => v * -0.18);
-  const headY = useTransform(useSpring(py, { stiffness: 70, damping: 22 }), (v) => v * -0.18);
 
   const handlePointer = (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -65,37 +100,49 @@ export default function Home() {
     py.set(0);
   };
 
+  // Scroll-scrubbed hero exit — Apple ties motion to scroll position rather than
+  // firing it once. As the hero scrolls away, its content drifts up, recedes,
+  // and fades. Disabled under reduced-motion (style falls back to static).
+  const heroRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
+  const heroScrub = reduceMotion ? undefined : { opacity: heroOpacity, y: heroY, scale: heroScale };
+
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
       <section
+        ref={heroRef}
         onPointerMove={handlePointer}
         onPointerLeave={resetPointer}
         className="relative overflow-hidden"
       >
-        {/* Ambient blue wash — Apple's soft, single-focal glow behind the type. */}
+        {/* Ambient wash — kept faint and single-focal so the drama comes from the
+            type, not the glow. Apple's heroes are near-bare canvases. */}
         <motion.div
           aria-hidden="true"
           style={{ x: glowX, y: glowY }}
-          className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/20 blur-[130px]"
+          className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-[40rem] w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/[0.08] blur-[120px]"
         />
         <Container className="relative flex min-h-[calc(100vh-3rem)] flex-col items-center justify-center py-24 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center"
-          >
-            <motion.h1
-              style={{ x: headX, y: headY }}
-              className="font-display text-[3.25rem] font-semibold leading-[1.03] tracking-[-0.03em] text-ink sm:text-7xl lg:text-[5.5rem]"
-            >
-              Build. Ship. <span className="text-accent">Scale.</span>
-            </motion.h1>
+          <motion.div style={heroScrub} className="flex flex-col items-center">
+          <RevealScope immediate deps={[profile.headline]} className="flex flex-col items-center">
+            {/* Role eyebrow — answers "what kind of engineer" before the headline. */}
+            <p data-fade className="mb-4 text-[15px] font-semibold tracking-eyebrow text-accent sm:mb-5">
+              {profile.role}
+            </p>
+            {/* Static anchor headline — no reveal or pointer drift, so it reads as
+                a solid, confident statement while the surrounding lines animate. */}
+            <h1 className="font-display text-fluid-hero font-semibold text-ink">
+              I build software that <span className="text-accent">scales.</span>
+            </h1>
 
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-muted sm:text-xl">{profile.headline}</p>
+            <p data-split className="mt-7 max-w-2xl text-lg leading-8 text-muted sm:text-xl">{profile.headline}</p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <div data-fade className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
               <Button as={Link} to="/projects">
                 View work
                 <ArrowRight aria-hidden="true" size={16} />
@@ -108,14 +155,15 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[13px] text-muted">
-              {credentials.map((item, i) => (
+            <div data-fade className="mt-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[13px] text-muted">
+              {trustPoints.map((item, i) => (
                 <span key={item} className="inline-flex items-center gap-3">
                   {i > 0 && <span aria-hidden="true" className="text-border">·</span>}
                   {item}
                 </span>
               ))}
             </div>
+          </RevealScope>
           </motion.div>
         </Container>
       </section>
@@ -123,27 +171,38 @@ export default function Home() {
       {/* ── By the numbers ─────────────────────────────────────────────── */}
       <section className="bg-surface py-24 sm:py-28">
         <Container>
-          <Reveal className="mx-auto mb-16 max-w-2xl text-center">
-            <Eyebrow>By the numbers</Eyebrow>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+          <RevealScope className="mx-auto mb-16 max-w-2xl text-center">
+            <Eyebrow data-fade>By the numbers</Eyebrow>
+            <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
               Three years, measured in outcomes.
             </h2>
-          </Reveal>
-          <RevealStagger className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+          </RevealScope>
+          <RevealStagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {stats.slice(0, 4).map((stat) => {
               const numeric = Number(stat.value);
               return (
-                <RevealItem key={stat.label} className="text-center">
-                  {stat.eyebrow && (
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-muted">{stat.eyebrow}</p>
-                  )}
-                  <p className="mt-4 flex items-start justify-center font-display text-6xl font-semibold leading-none tracking-tight text-ink lg:text-7xl">
+                <RevealItem
+                  key={stat.label}
+                  className="group flex flex-col rounded-3xl bg-panel p-7 shadow-soft ring-1 ring-border/70 transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift"
+                >
+                  {/* Caption + trend sit on one line, KPI-card style: the label
+                      anchors left, the sparkline reads as a mini trend at right. */}
+                  <div className="flex items-start justify-between gap-3">
+                    {stat.eyebrow && (
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.07em] text-muted">{stat.eyebrow}</p>
+                    )}
+                    {stat.spark && (
+                      <Sparkline points={stat.spark} className="mt-0.5 shrink-0 text-accent/90" />
+                    )}
+                  </div>
+
+                  <p className="mt-6 flex items-start font-display text-6xl font-semibold leading-none tracking-tight text-ink">
                     {Number.isFinite(numeric) ? <CountUp value={numeric} /> : stat.value}
-                    {stat.suffix && <span className="ml-1 mt-1 text-3xl font-semibold text-accent">{stat.suffix}</span>}
+                    {stat.suffix && <span className="ml-0.5 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
                   </p>
+
                   <p className="mt-5 text-[15px] font-semibold text-ink">{stat.label}</p>
                   <p className="mt-1 text-[14px] leading-6 text-muted">{stat.description}</p>
-                  {stat.spark && <Sparkline points={stat.spark} className="mx-auto mt-5 text-accent" />}
                 </RevealItem>
               );
             })}
@@ -154,20 +213,21 @@ export default function Home() {
       {/* ── Selected work ──────────────────────────────────────────────── */}
       <section className="py-24 sm:py-28">
         <Container>
-          <Reveal className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <RevealScope className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <Eyebrow>Selected work</Eyebrow>
-              <h2 className="mt-3 max-w-xl font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+              <Eyebrow data-fade>Selected work</Eyebrow>
+              <h2 data-split className="mt-3 max-w-xl font-display text-fluid-h2 font-semibold text-ink">
                 Designed, shipped, and measured.
               </h2>
             </div>
             <Link
+              data-fade
               to="/projects"
               className="inline-flex items-center gap-1 text-[17px] font-medium text-accent hover:underline underline-offset-4"
             >
               All projects <span aria-hidden="true">›</span>
             </Link>
-          </Reveal>
+          </RevealScope>
           {projectsQuery.isLoading && !projectsQuery.data ? (
             <Spinner label="Loading projects" />
           ) : (
@@ -176,28 +236,54 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* ── How I work ─────────────────────────────────────────────────── */}
+      {/* ── Services ───────────────────────────────────────────────────── */}
       <section className="bg-surface py-24 sm:py-28">
         <Container>
-          <Reveal className="mx-auto mb-16 max-w-2xl text-center">
-            <Eyebrow>How I work</Eyebrow>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-              Built to scale, tuned for speed.
+          <RevealScope className="mx-auto mb-16 max-w-2xl text-center">
+            <Eyebrow data-fade>Services</Eyebrow>
+            <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
+              What I can build for you.
             </h2>
-          </Reveal>
-          <RevealStagger className="grid gap-6 md:grid-cols-3">
-            {capabilities.map((item) => {
+            <p data-split className="mt-4 text-lg leading-8 text-muted">
+              End-to-end product engineering — from the frontend and APIs to performance, real-time, and AI.
+            </p>
+          </RevealScope>
+          <RevealStagger className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((item) => {
               const Icon = item.icon;
               return (
                 <RevealItem
                   key={item.title}
-                  className="group rounded-3xl bg-panel p-8 shadow-soft ring-1 ring-border/70 transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift"
+                  className={`group flex flex-col rounded-3xl bg-panel p-8 shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
+                    item.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
+                  }`}
                 >
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent transition-transform duration-500 ease-apple group-hover:scale-110">
+                  <span
+                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-500 ease-apple group-hover:scale-110 ${
+                      item.featured ? 'bg-accent text-white' : 'bg-accent/10 text-accent'
+                    }`}
+                  >
                     <Icon aria-hidden="true" size={22} />
                   </span>
-                  <h3 className="mt-6 font-display text-xl font-semibold tracking-tight text-ink">{item.title}</h3>
+                  <div className="mt-6 flex items-center gap-2">
+                    <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{item.title}</h3>
+                    {item.featured && (
+                      <span className="rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-accent">
+                        New
+                      </span>
+                    )}
+                  </div>
                   <p className="mt-2 text-[15px] leading-7 text-muted">{item.text}</p>
+                  <div className="mt-5 flex flex-wrap gap-2 pt-1">
+                    {item.tools.map((tool) => (
+                      <span
+                        key={tool}
+                        className="rounded-full bg-surface px-2.5 py-1 text-[12px] font-medium text-muted ring-1 ring-border/50"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
                 </RevealItem>
               );
             })}
@@ -208,15 +294,15 @@ export default function Home() {
       {/* ── Closing CTA ────────────────────────────────────────────────── */}
       <section className="py-28 sm:py-36">
         <Container>
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <h2 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+          <RevealScope className="mx-auto max-w-3xl text-center">
+            <h2 data-split className="font-display text-fluid-cta font-semibold text-ink">
               Let&apos;s build something
               <br className="hidden sm:block" /> <span className="text-accent">great together.</span>
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted">
+            <p data-split className="mx-auto mt-6 max-w-xl text-lg leading-8 text-muted">
               Tell me what you&apos;re building and where it stands today. I reply within a day.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <div data-fade className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
               <Button as={Link} to="/contact">
                 Start a conversation
                 <ArrowRight aria-hidden="true" size={16} />
@@ -228,7 +314,7 @@ export default function Home() {
                 More about me <span aria-hidden="true">›</span>
               </Link>
             </div>
-          </Reveal>
+          </RevealScope>
         </Container>
       </section>
     </>

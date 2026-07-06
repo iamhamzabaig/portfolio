@@ -42,9 +42,12 @@ body {
   transition: background-color 0.45s ease, color 0.45s ease;
 }
 
-/* Apple headlines are set tight and heavy. */
-.font-display {
-  letter-spacing: -0.015em;
+/* Apple headlines are set tight and heavy. Kept in @layer base so the fluid
+   type ramp's per-size tracking (a utility) overrides this default where used. */
+@layer base {
+  .font-display {
+    letter-spacing: -0.015em;
+  }
 }
 
 a,

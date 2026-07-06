@@ -1,49 +1,73 @@
-import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Container } from '../../components/layout/Container.jsx';
-import { Input } from '../../components/ui/Input.jsx';
-import { Reveal } from '../../components/ui/Reveal.jsx';
+import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { fallbackProjects } from '../../utils/fallbackData.js';
 
+const ALL = 'All';
+
 export default function Projects() {
-  const [query, setQuery] = useState('');
+  const [active, setActive] = useState(ALL);
   const projectsQuery = useProjects();
   const projects = projectsQuery.data?.length ? projectsQuery.data : fallbackProjects;
+
+  // Filter pills, derived from the projects' own tags (most-used first) so they
+  // stay in sync as work is added from the admin — no hardcoded categories.
+  const filters = useMemo(() => {
+    const counts = new Map();
+    projects.forEach((project) => (project.tags || []).forEach((tag) => counts.set(tag, (counts.get(tag) || 0) + 1)));
+    const ordered = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([tag]) => tag);
+    return [ALL, ...ordered];
+  }, [projects]);
+
   const filtered = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return projects;
-    return projects.filter((project) =>
-      [project.title, project.description, ...(project.tags || [])].join(' ').toLowerCase().includes(needle)
-    );
-  }, [projects, query]);
+    if (active === ALL) return projects;
+    return projects.filter((project) => (project.tags || []).includes(active));
+  }, [projects, active]);
 
   return (
     <Container className="py-20 sm:py-24">
-      <Reveal className="mx-auto max-w-2xl text-center">
-        <p className="text-[15px] font-semibold text-accent">Projects</p>
-        <h1 className="mt-3 font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">
+      <RevealScope immediate className="mx-auto max-w-2xl text-center">
+        <p data-fade className="text-[15px] font-semibold text-accent">Projects</p>
+        <h1 data-split className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           Selected work
         </h1>
-        <p className="mt-5 text-lg leading-8 text-muted">
+        <p data-split className="mt-5 text-lg leading-8 text-muted">
           Real-time platforms, enterprise ERP, and high-performance frontends across React, Angular, Vue, and Node.
         </p>
-        <div className="relative mx-auto mt-8 max-w-md">
-          <Search aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={18} />
-          <Input
-            id="project-search"
-            aria-label="Search projects"
-            placeholder="Search projects"
-            className="pl-11 text-center"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-        </div>
-      </Reveal>
+      </RevealScope>
 
-      <div className="mt-16">
+      {/* Tag filter pills — replace free-text search. Single-select; "All" resets. */}
+      <div
+        role="group"
+        aria-label="Filter projects by technology"
+        className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-2"
+      >
+        {filters.map((tag) => {
+          const isActive = tag === active;
+          return (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => setActive(tag)}
+              aria-pressed={isActive}
+              className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition duration-300 ease-apple ${
+                isActive
+                  ? 'bg-ink text-bg'
+                  : 'bg-surface text-muted ring-1 ring-border/60 hover:text-ink'
+              }`}
+            >
+              {tag}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-12">
         {projectsQuery.isLoading && !projectsQuery.data ? (
           <Spinner label="Loading projects" />
         ) : (

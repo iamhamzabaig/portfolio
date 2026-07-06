@@ -7,6 +7,7 @@ import App from './app/App.jsx';
 import { createQueryClient } from './app/queryClient.js';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
+import '@fontsource-variable/inter';
 import './styles/index.css';
 
 const queryClient = createQueryClient();

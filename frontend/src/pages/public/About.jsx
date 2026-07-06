@@ -1,5 +1,6 @@
 import { Container } from '../../components/layout/Container.jsx';
 import { Chip } from '../../components/ui/Chip.jsx';
+import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
 import {
   fallbackProfile,
@@ -10,11 +11,11 @@ import {
 
 function SectionLabel({ index, label }) {
   return (
-    <div className="mb-10 flex items-baseline gap-4">
-      <span className="text-[15px] font-semibold text-accent">{index}</span>
-      <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{label}</h2>
+    <RevealScope className="mb-10 flex items-baseline gap-4">
+      <span data-fade className="text-[15px] font-semibold text-accent">{index}</span>
+      <h2 data-split className="font-display text-fluid-h3 font-semibold text-ink">{label}</h2>
       <span className="h-px flex-1 translate-y-[-2px] bg-border" />
-    </div>
+    </RevealScope>
   );
 }
 
@@ -25,16 +26,16 @@ export default function About() {
   return (
     <Container className="py-20 sm:py-24">
       {/* Intro */}
-      <div className="max-w-3xl">
-        <p className="text-[15px] font-semibold text-accent">About</p>
-        <h1 className="mt-3 font-display text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+      <RevealScope immediate deps={[profile.name, profile.bio]} className="max-w-3xl">
+        <p data-fade className="text-[15px] font-semibold text-accent">About</p>
+        <h1 data-split className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           {profile.name}
         </h1>
-        <p className="mt-4 text-[17px] text-muted">
+        <p data-fade className="mt-4 text-[17px] text-muted">
           {fallbackProfile.role} · {fallbackProfile.location}
         </p>
-        <p className="mt-8 text-xl leading-9 text-muted">{profile.bio || fallbackProfile.bio}</p>
-      </div>
+        <p data-split className="mt-8 text-xl leading-9 text-muted">{profile.bio || fallbackProfile.bio}</p>
+      </RevealScope>
 
       {/* Experience */}
       <section className="mt-24">
