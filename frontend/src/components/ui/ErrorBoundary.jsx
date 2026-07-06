@@ -28,8 +28,8 @@ export class ErrorBoundary extends Component {
 
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-6 text-center">
-        <p className="font-mono text-xs tracking-eyebrow text-accent">SOMETHING BROKE</p>
-        <h1 className="mt-4 font-display text-3xl font-bold text-ink sm:text-4xl">
+        <p className="text-[15px] font-semibold text-accent">Something broke</p>
+        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           This page hit an error.
         </h1>
         <p className="mt-3 text-muted">
@@ -44,13 +44,13 @@ export class ErrorBoundary extends Component {
           <button
             type="button"
             onClick={this.handleReset}
-            className="rounded-full border border-accent bg-accent px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#6d5fed]"
+            className="rounded-full bg-accent px-6 py-2.5 text-[15px] font-medium text-white transition hover:brightness-110"
           >
             Try again
           </button>
           <a
             href="/"
-            className="rounded-full border border-border bg-transparent px-5 py-2 text-sm font-semibold text-ink transition hover:border-accent hover:text-white"
+            className="rounded-full bg-surface px-6 py-2.5 text-[15px] font-medium text-ink transition hover:bg-border/60"
           >
             Go home
           </a>

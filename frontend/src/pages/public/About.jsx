@@ -10,9 +10,10 @@ import {
 
 function SectionLabel({ index, label }) {
   return (
-    <div className="mb-8 flex items-center gap-5">
-      <span className="font-mono text-xs tracking-eyebrow text-accent">{index} · {label}</span>
-      <span className="h-px flex-1 bg-border" />
+    <div className="mb-10 flex items-baseline gap-4">
+      <span className="text-[15px] font-semibold text-accent">{index}</span>
+      <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{label}</h2>
+      <span className="h-px flex-1 translate-y-[-2px] bg-border" />
     </div>
   );
 }
@@ -22,37 +23,39 @@ export default function About() {
   const profile = profileQuery.data || fallbackProfile;
 
   return (
-    <Container className="py-16">
+    <Container className="py-20 sm:py-24">
       {/* Intro */}
       <div className="max-w-3xl">
-        <p className="font-mono text-xs tracking-eyebrow text-accent">ABOUT</p>
-        <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
+        <p className="text-[15px] font-semibold text-accent">About</p>
+        <h1 className="mt-3 font-display text-5xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl">
           {profile.name}
         </h1>
-        <p className="mt-2 font-mono text-sm text-muted">{fallbackProfile.role} · {fallbackProfile.location}</p>
-        <p className="mt-6 text-lg leading-8 text-muted">{profile.bio || fallbackProfile.bio}</p>
+        <p className="mt-4 text-[17px] text-muted">
+          {fallbackProfile.role} · {fallbackProfile.location}
+        </p>
+        <p className="mt-8 text-xl leading-9 text-muted">{profile.bio || fallbackProfile.bio}</p>
       </div>
 
       {/* Experience */}
-      <section className="mt-20">
-        <SectionLabel index="01" label="EXPERIENCE" />
-        <div className="space-y-px">
+      <section className="mt-24">
+        <SectionLabel index="01" label="Experience" />
+        <div>
           {fallbackExperience.map((job) => (
             <article
               key={job.company}
-              className="grid gap-4 border-t border-border py-8 md:grid-cols-[0.9fr_1.6fr]"
+              className="grid gap-5 border-t border-border py-9 md:grid-cols-[0.9fr_1.6fr]"
             >
               <div>
-                <h2 className="font-display text-xl font-semibold text-ink">{job.company}</h2>
-                <p className="mt-1 text-sm text-accent">{job.role}</p>
-                <p className="mt-2 font-mono text-xs tracking-eyebrow text-muted">
+                <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{job.company}</h3>
+                <p className="mt-1 text-[15px] text-accent">{job.role}</p>
+                <p className="mt-2 text-[13px] text-muted">
                   {job.period} · {job.location}
                 </p>
               </div>
               <ul className="space-y-3">
                 {job.points.map((point) => (
-                  <li key={point} className="flex gap-3 text-sm leading-6 text-muted">
-                    <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/70" />
+                  <li key={point} className="flex gap-3 text-[15px] leading-7 text-muted">
+                    <span aria-hidden="true" className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                     {point}
                   </li>
                 ))}
@@ -63,15 +66,17 @@ export default function About() {
       </section>
 
       {/* Skills */}
-      <section className="mt-20">
-        <SectionLabel index="02" label="STACK & COMPETENCIES" />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mt-24">
+        <SectionLabel index="02" label="Stack & competencies" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {fallbackSkills.map((col) => (
-            <div key={col.group} className="rounded-2xl border border-border bg-panel p-5">
-              <h3 className="font-mono text-xs tracking-eyebrow text-muted">{col.group}</h3>
+            <div key={col.group} className="rounded-3xl bg-surface p-6">
+              <h3 className="text-[13px] font-semibold uppercase tracking-[0.08em] text-muted">{col.group}</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {col.items.map((item) => (
-                  <Chip key={item}>{item}</Chip>
+                  <Chip key={item} className="bg-panel">
+                    {item}
+                  </Chip>
                 ))}
               </div>
             </div>
@@ -80,19 +85,19 @@ export default function About() {
       </section>
 
       {/* Education */}
-      <section className="mt-20">
-        <SectionLabel index="03" label="EDUCATION & CERTS" />
-        <div className="space-y-px">
+      <section className="mt-24">
+        <SectionLabel index="03" label="Education & certifications" />
+        <div>
           {fallbackEducation.map((item) => (
             <div
               key={item.title}
-              className="flex flex-col gap-1 border-t border-border py-5 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-1 border-t border-border py-6 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <p className="font-display text-base font-semibold text-ink">{item.title}</p>
-                <p className="text-sm text-muted">{item.org}</p>
+                <p className="font-display text-[17px] font-semibold tracking-tight text-ink">{item.title}</p>
+                <p className="text-[15px] text-muted">{item.org}</p>
               </div>
-              <p className="font-mono text-xs tracking-eyebrow text-muted">{item.period}</p>
+              <p className="text-[13px] text-muted">{item.period}</p>
             </div>
           ))}
         </div>

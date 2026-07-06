@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import { Container } from './Container.jsx';
 import { fallbackProfile } from '../../utils/fallbackData.js';
 
-const credentials = ['ISLAMABAD, PK', 'FULL-STACK JS', 'ANGULAR · REACT · NODE', '3+ YEARS', 'OPEN TO WORK'];
+const nav = [
+  { to: '/', label: 'Home' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/about', label: 'About' },
+  { to: '/contact', label: 'Contact' }
+];
 
 export function Footer() {
   const { socials, email } = fallbackProfile;
@@ -11,38 +16,50 @@ export function Footer() {
   const linkedin = socials.find((s) => s.platform === 'LinkedIn')?.url || 'https://linkedin.com/in/iamhamzabaig-in';
 
   return (
-    <footer className="border-t border-border">
-      <Container className="py-10">
-        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-[11px] tracking-eyebrow text-muted">
-          {credentials.map((item, i) => (
-            <span key={item} className="inline-flex items-center gap-3">
-              {i > 0 && <span className="text-accent/60">·</span>}
-              {item}
-            </span>
-          ))}
+    <footer className="bg-surface">
+      <Container className="py-12">
+        <div className="flex flex-col gap-8 border-b border-border pb-8 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-sm">
+            <p className="font-display text-[15px] font-semibold tracking-tight text-ink">Hamza Munawar</p>
+            <p className="mt-2 text-[13px] leading-6 text-muted">
+              Full-Stack JavaScript Engineer building scalable ERP modules, real-time apps, and
+              high-performance frontends.
+            </p>
+          </div>
+
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-8 gap-y-2">
+            {nav.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="text-[13px] text-muted transition-colors hover:text-ink"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-1">
+            <a href={`mailto:${email}`} aria-label="Email" className="rounded-full p-2 text-muted transition hover:bg-border/50 hover:text-ink">
+              <Mail aria-hidden="true" size={18} />
+            </a>
+            <a href={github} aria-label="GitHub" className="rounded-full p-2 text-muted transition hover:bg-border/50 hover:text-ink">
+              <Github aria-hidden="true" size={18} />
+            </a>
+            <a href={linkedin} aria-label="LinkedIn" className="rounded-full p-2 text-muted transition hover:bg-border/50 hover:text-ink">
+              <Linkedin aria-hidden="true" size={18} />
+            </a>
+          </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-center justify-between gap-5 border-t border-border pt-6 text-sm text-muted sm:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 text-[12px] text-muted sm:flex-row">
           <p>
-            © {new Date().getFullYear()} Hamza Munawar. Built with React &amp; Supabase.{' '}
-            <Link to="/admin/login" className="text-muted/30 transition hover:text-muted">
+            Copyright © {new Date().getFullYear()} Hamza Munawar. Built with React &amp; Supabase.{' '}
+            <Link to="/admin/login" className="text-muted/40 transition hover:text-muted">
               Admin
             </Link>
           </p>
-          <div className="flex items-center gap-1">
-            <a href={`mailto:${email}`} aria-label="Email" className="rounded-full p-2 transition hover:bg-surface hover:text-ink">
-              <Mail aria-hidden="true" size={18} />
-            </a>
-            <a href={github} aria-label="GitHub" className="rounded-full p-2 transition hover:bg-surface hover:text-ink">
-              <Github aria-hidden="true" size={18} />
-            </a>
-            <a href={linkedin} aria-label="LinkedIn" className="rounded-full p-2 transition hover:bg-surface hover:text-ink">
-              <Linkedin aria-hidden="true" size={18} />
-            </a>
-            <Link to="/contact" className="ml-2 rounded-full border border-border px-3 py-1.5 text-xs transition hover:border-accent hover:text-ink">
-              Get in touch
-            </Link>
-          </div>
+          <p>Islamabad, Pakistan · Open to full-stack &amp; frontend roles</p>
         </div>
       </Container>
     </footer>

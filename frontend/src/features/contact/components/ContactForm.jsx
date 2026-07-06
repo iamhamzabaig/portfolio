@@ -37,8 +37,8 @@ export function ContactForm() {
         <Input id="email" label="Email" type="email" error={errors.email?.message} {...register('email')} />
       </div>
       <Textarea id="message" label="Message" error={errors.message?.message} {...register('message')} />
-      {mutation.isSuccess ? <p className="rounded-md border border-teal/40 bg-teal/10 px-3 py-2 text-sm text-teal">Message sent.</p> : null}
-      {mutation.isError ? <p className="rounded-md border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">Message could not be sent yet.</p> : null}
+      {mutation.isSuccess ? <p className="rounded-2xl bg-success/10 px-4 py-2.5 text-[14px] font-medium text-success">Message sent.</p> : null}
+      {mutation.isError ? <p className="rounded-2xl bg-danger/10 px-4 py-2.5 text-[14px] font-medium text-danger">Message could not be sent yet.</p> : null}
       <Button type="submit" disabled={mutation.isPending}>
         <Send aria-hidden="true" size={17} />
         {mutation.isPending ? 'Sending...' : 'Send message'}

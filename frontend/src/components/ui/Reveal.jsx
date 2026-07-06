@@ -1,21 +1,24 @@
 import { motion } from 'motion/react';
 
 // Scroll-reveal primitives shared across sections. Content rises + fades in once
-// as it enters the viewport. Honors reduced motion automatically via the app's
-// <MotionConfig reducedMotion="user"> (transforms drop out, opacity stays).
+// as it enters the viewport, on Apple's signature ease (a soft deceleration).
+// Honors reduced motion automatically via the app's <MotionConfig
+// reducedMotion="user"> (transforms drop out, opacity stays).
+
+const appleEase = [0.16, 1, 0.3, 1];
 
 // Exported so components with their own <motion> root (e.g. ProjectCard) can opt
 // into a <RevealStagger> parent's entrance without an extra wrapper element.
 export const revealRise = {
-  hidden: { y: 22, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 130, damping: 18 } }
+  hidden: { y: 28, opacity: 0 },
+  show: { y: 0, opacity: 1, transition: { duration: 0.7, ease: appleEase } }
 };
 
 const riseItem = revealRise;
 
 const staggerParent = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.04 } }
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } }
 };
 
 const viewport = { once: true, margin: '-80px' };

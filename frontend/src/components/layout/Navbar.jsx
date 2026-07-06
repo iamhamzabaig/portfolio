@@ -13,30 +13,19 @@ const links = [
   { to: '/contact', label: 'Contact' }
 ];
 
-function HexMark() {
+// Minimal Apple-style mark: a clean "< >" code glyph inside a softly-rounded
+// app-icon tile. Monochrome, scales crisply.
+function Monogram() {
   return (
-    <span className="inline-flex h-8 w-8 items-center justify-center">
-      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+    <span className="inline-flex h-6 w-6 items-center justify-center rounded-[7px] bg-ink text-bg">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
         <path
-          d="M12 2.2 20.5 7v10L12 21.8 3.5 17V7L12 2.2Z"
-          fill="rgba(124,108,242,0.18)"
-          stroke="#7c6cf2"
-          strokeWidth="1.4"
+          d="M9.5 8L6 12L9.5 16M14.5 8L18 12L14.5 16"
+          stroke="currentColor"
+          strokeWidth="2.1"
+          strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <text
-          x="12"
-          y="12"
-          className="font-display"
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize="7.2"
-          fontWeight="700"
-          letterSpacing="-0.4"
-          fill="#f4f1ea"
-        >
-          HM
-        </text>
       </svg>
     </span>
   );
@@ -46,6 +35,7 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { data: profile } = useProfile();
   const resumeUrl = profile?.resumeUrl;
 
@@ -53,6 +43,15 @@ export function Navbar() {
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+
+  // The nav hairline + frost deepen once the page scrolls, so it floats cleanly
+  // over the hero at the top — Apple's global-nav behavior.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Secret admin gateway: Ctrl+Shift+A (the Admin link is intentionally not shown
   // in the public nav). Auth still gates /admin regardless.
@@ -68,38 +67,41 @@ export function Navbar() {
   }, [navigate]);
 
   return (
-    <header className="sticky top-0 z-40 bg-bg/80 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="inline-flex items-center gap-2 lowercase tracking-tight">
-          <HexMark />
-          <span className="font-display text-[15px] font-semibold text-ink">hamza munawar</span>
+    <header
+      className={`sticky top-0 z-40 transition-colors duration-300 ease-apple ${
+        scrolled
+          ? 'border-b border-border bg-bg/80 backdrop-blur-xl backdrop-saturate-150'
+          : 'border-b border-transparent bg-bg/60 backdrop-blur-xl backdrop-saturate-150'
+      }`}
+    >
+      <Container className="flex h-12 items-center justify-between gap-4">
+        <Link to="/" className="inline-flex items-center gap-2">
+          <Monogram />
+          <span className="font-display text-[14px] font-semibold tracking-tight text-ink">Hamza Munawar</span>
         </Link>
 
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-1 rounded-full border border-border bg-panel/70 px-1.5 py-1.5 md:flex"
-        >
+        <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `relative rounded-full px-4 py-1.5 text-sm transition-colors ${
-                  isActive ? 'text-ink' : 'text-muted hover:text-ink'
+                `relative px-3.5 py-2 text-[13px] transition-colors duration-200 ${
+                  isActive ? 'text-ink' : 'text-ink/60 hover:text-ink'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
+                  <span className="relative z-10">{link.label}</span>
                   {isActive && (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-surface shadow-soft"
+                      className="absolute inset-x-3.5 -bottom-px h-px rounded-full bg-ink"
                       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
                     />
                   )}
-                  <span className="relative z-10">{link.label}</span>
                 </>
               )}
             </NavLink>
@@ -113,7 +115,7 @@ export function Navbar() {
               href={resumeUrl}
               target="_blank"
               rel="noreferrer"
-              className="hidden rounded-full border border-border bg-ink px-4 py-1.5 text-sm font-semibold text-bg transition hover:bg-white sm:inline-flex"
+              className="hidden rounded-full bg-accent px-4 py-1.5 text-[13px] font-medium text-white transition duration-300 ease-apple hover:brightness-110 sm:inline-flex"
             >
               Resume
             </a>
@@ -124,7 +126,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink/70 transition hover:bg-surface md:hidden"
           >
             {open ? <X aria-hidden="true" size={18} /> : <Menu aria-hidden="true" size={18} />}
           </button>
@@ -139,8 +141,8 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-border bg-bg/95 backdrop-blur md:hidden"
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden border-t border-border bg-bg/95 backdrop-blur-xl md:hidden"
           >
             <Container className="flex flex-col gap-1 py-3">
               {links.map((link) => (
@@ -150,8 +152,8 @@ export function Navbar() {
                   end={link.end}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `rounded-xl px-4 py-2.5 text-sm transition-colors ${
-                      isActive ? 'bg-surface text-ink' : 'text-muted hover:text-ink'
+                    `rounded-2xl px-4 py-3 text-[15px] transition-colors ${
+                      isActive ? 'bg-surface text-ink' : 'text-ink/70 hover:bg-surface hover:text-ink'
                     }`
                   }
                 >
@@ -164,7 +166,7 @@ export function Navbar() {
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => setOpen(false)}
-                  className="mt-1 rounded-xl border border-border bg-ink px-4 py-2.5 text-center text-sm font-semibold text-bg transition hover:bg-white sm:hidden"
+                  className="mt-1 rounded-full bg-accent px-4 py-3 text-center text-[15px] font-medium text-white transition hover:brightness-110 sm:hidden"
                 >
                   Resume
                 </a>

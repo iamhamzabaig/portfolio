@@ -15,7 +15,7 @@ export function ThemeToggle() {
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} theme`}
       whileTap={{ scale: 0.88 }}
       transition={spring}
-      className="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-ink"
+      className="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full text-ink/70 transition-colors hover:bg-surface hover:text-ink"
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

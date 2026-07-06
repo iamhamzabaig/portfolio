@@ -15,25 +15,50 @@ export default {
         ink: 'rgb(var(--ink) / <alpha-value>)',
         muted: 'rgb(var(--muted) / <alpha-value>)',
         accent: 'rgb(var(--accent) / <alpha-value>)',
+        success: '#34c759', // Apple green
+        danger: '#ff3b30', // Apple red
+        // Retained for the (out-of-scope) admin surfaces that still reference them.
         teal: '#34d3c6',
-        amber: '#f3b95f',
-        danger: '#fb7185'
+        amber: '#f3b95f'
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-        display: ['"Space Grotesk"', 'Inter', 'system-ui', 'sans-serif']
+        // Apple's own system stack renders SF Pro on Apple hardware; Inter is the
+        // near-identical fallback everywhere else.
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Text"',
+          'Inter',
+          'system-ui',
+          'sans-serif'
+        ],
+        display: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          'Inter',
+          'system-ui',
+          'sans-serif'
+        ],
+        mono: ['ui-monospace', 'SFMono-Regular', '"SF Mono"', 'Menlo', 'monospace']
       },
       letterSpacing: {
-        eyebrow: '0.22em'
+        eyebrow: '0.02em'
+      },
+      borderRadius: {
+        '4xl': '1.75rem',
+        '5xl': '2.25rem'
       },
       boxShadow: {
-        soft: '0 20px 70px rgba(0, 0, 0, 0.28)',
-        glow: '0 0 0 1px rgba(124, 108, 242, 0.25), 0 24px 80px rgba(124, 108, 242, 0.12)'
+        // Apple's shadows are diffuse and low-contrast — they hint at elevation
+        // rather than announce it.
+        soft: '0 4px 24px rgba(0, 0, 0, 0.06)',
+        lift: '0 18px 48px rgba(0, 0, 0, 0.12)',
+        glow: '0 0 0 4px rgb(var(--accent) / 0.15)'
       },
-      backgroundImage: {
-        'grid-faint':
-          'radial-gradient(circle at 1px 1px, rgba(124,108,242,0.10) 1px, transparent 0)'
+      transitionTimingFunction: {
+        // Apple's signature ease — a soft, confident deceleration.
+        apple: 'cubic-bezier(0.16, 1, 0.3, 1)'
       }
     }
   },

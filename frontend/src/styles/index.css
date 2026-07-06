@@ -3,25 +3,29 @@
 @tailwind utilities;
 
 /* Theme channels (R G B). :root = light, .dark = dark. The no-flash inline
-   script in index.html sets the .dark class before paint. */
+   script in index.html sets the .dark class before paint.
+
+   Palette follows Apple's system colors:
+   light — white canvas, #f5f5f7 section bands, #1d1d1f ink, #0066cc links.
+   dark  — pure black canvas, #f5f5f7 ink, #2997ff links. */
 :root {
-  --bg: 248 247 244; /* warm off-white */
-  --panel: 255 255 255;
-  --surface: 240 238 232;
-  --border: 222 218 209;
-  --ink: 22 20 28; /* near-black ink */
-  --muted: 92 94 104;
-  --accent: 99 84 224; /* slightly deeper violet for AA on light */
+  --bg: 255 255 255; /* pure white */
+  --panel: 255 255 255; /* cards on white */
+  --surface: 245 245 247; /* #f5f5f7 — Apple section gray */
+  --border: 210 210 214; /* #d2d2d6 — hairline */
+  --ink: 29 29 31; /* #1d1d1f */
+  --muted: 110 110 115; /* #6e6e73 — secondary text */
+  --accent: 0 102 204; /* #0066cc — link blue (AA on white) */
 }
 
 .dark {
-  --bg: 8 9 13;
-  --panel: 17 19 26;
-  --surface: 23 25 35;
-  --border: 42 45 56;
-  --ink: 244 241 234; /* cream */
-  --muted: 160 163 173;
-  --accent: 124 108 242;
+  --bg: 0 0 0; /* true black */
+  --panel: 22 22 24; /* #161618 — cards */
+  --surface: 29 29 31; /* #1d1d1f — section bands */
+  --border: 56 56 58; /* #38383a — hairline */
+  --ink: 245 245 247; /* #f5f5f7 */
+  --muted: 134 134 139; /* #86868b */
+  --accent: 41 151 255; /* #2997ff — link blue (AA on black) */
 }
 
 html {
@@ -30,9 +34,17 @@ html {
 
 body {
   @apply min-h-screen bg-bg text-ink font-sans antialiased;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern', 'liga', 'cv11';
   /* Theme tokens cross-fade for any surface not covered by the circular
      reveal (e.g. images loading in). Kept short so it never feels laggy. */
   transition: background-color 0.45s ease, color 0.45s ease;
+}
+
+/* Apple headlines are set tight and heavy. */
+.font-display {
+  letter-spacing: -0.015em;
 }
 
 a,
@@ -43,7 +55,12 @@ textarea {
 }
 
 ::selection {
-  @apply bg-accent text-white;
+  @apply bg-accent/90 text-white;
+}
+
+/* Anchored scroll targets clear the sticky nav. */
+:target {
+  scroll-margin-top: 6rem;
 }
 
 /* ── Spatial theme transition ─────────────────────────────────────────────
