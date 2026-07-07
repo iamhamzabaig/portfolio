@@ -3,6 +3,8 @@ import { Activity, ArrowRight, Cloud, Code2, Gauge, Server, Sparkles } from 'luc
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
+import HeroSystemGraph from '../../components/hero/HeroSystemGraph.jsx';
+import { ArchitectureDiagram } from '../../components/home/ArchitectureDiagram.jsx';
 import { Badge } from '../../components/ui/Badge.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { CountUp } from '../../components/ui/CountUp.jsx';
@@ -119,6 +121,9 @@ export default function Home() {
           style={{ x: glowX, y: glowY }}
           className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-[40rem] w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/[0.08] blur-[120px]"
         />
+        {/* Engineered backdrop — thin network graph with data pulses, drifting
+            with the cursor a plane behind the headline. */}
+        <HeroSystemGraph pointer={{ glowX, glowY }} />
         <Container className="relative flex min-h-[calc(100vh-3rem)] flex-col items-center justify-center py-24 text-center">
           <motion.div style={heroScrub} className="flex flex-col items-center">
           <RevealScope immediate deps={[profile.headline]} className="flex flex-col items-center">
@@ -201,6 +206,9 @@ export default function Home() {
           </RevealStagger>
         </Container>
       </section>
+
+      {/* ── How I engineer ─────────────────────────────────────────────── */}
+      <ArchitectureDiagram />
 
       {/* ── Selected work ──────────────────────────────────────────────── */}
       <section className="py-24 sm:py-28">

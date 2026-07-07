@@ -4,10 +4,10 @@
 
 export const fallbackProfile = {
   name: 'Hamza Munawar',
-  role: 'Full-Stack JavaScript Engineer',
+  role: 'Full-Stack & AI Engineer',
   headline:
-    'I build scalable enterprise ERP modules, real-time apps, and high-performance frontends — in Angular, React, and Node.',
-  bio: 'Performance-driven full-stack JavaScript developer with 3+ years shipping enterprise ERP modules, real-time platforms, and fast frontend architectures. I work across Angular (v13–v20), React/Next.js, and Node/Express inside Nx monorepos — turning legacy monoliths into measurable wins on speed, bundle size, and developer workflow.',
+    'I build scalable ERP modules, real-time apps, and high-performance frontends in Angular, React, and Node — and ship AI into production: RAG pipelines, LLM-powered features, and tool-calling agents.',
+  bio: 'Performance-driven full-stack engineer with 3+ years shipping enterprise ERP modules, real-time platforms, and fast frontend architectures. I work across Angular (v13–v20), React/Next.js, and Node/Express inside Nx monorepos — turning legacy monoliths into measurable wins on speed, bundle size, and developer workflow. On the AI side I build production LLM features end to end: retrieval-augmented generation over private data with embeddings and vector search, tool-calling agents that automate real workflows, and assistants wired into OpenAI and Claude APIs — with grounded, cited answers rather than demos.',
   location: 'Islamabad, Pakistan',
   email: 'hamzamunawar.webdev@gmail.com',
   phone: '+92 344-2971754',
@@ -96,6 +96,7 @@ export const fallbackExperience = [
 ];
 
 export const fallbackSkills = [
+  { group: 'AI Engineering', items: ['OpenAI & Claude APIs', 'RAG + embeddings', 'Vector DBs (pgvector, Pinecone)', 'LangChain / LlamaIndex', 'Tool-calling agents', 'Prompt engineering'] },
   { group: 'Frontend', items: ['Angular 17–20', 'React 18 + Next.js', 'TypeScript (strict)', 'Vue + Nuxt 2'] },
   { group: 'State & Reactive', items: ['RxJS', 'NgRx', 'Redux Toolkit', 'Zustand'] },
   { group: 'UI & Styling', items: ['Tailwind CSS', 'SCSS', 'Angular Material', 'Framer Motion'] },
@@ -111,6 +112,20 @@ export const fallbackEducation = [
 ];
 
 export const fallbackProjects = [
+  {
+    _id: 'ai-knowledge-assistant',
+    title: 'AI Knowledge Assistant',
+    slug: 'ai-knowledge-assistant',
+    description:
+      'Retrieval-augmented assistant that answers over private documents — embeddings and vector search feed an LLM for grounded, cited responses.',
+    content:
+      'A production RAG pipeline: documents are chunked and embedded into a vector store, semantically retrieved at query time, and passed to an LLM (OpenAI / Claude) with source citations. A tool-calling agent layer handles actions beyond plain Q&A, and answers stream token-by-token into a React UI.',
+    tags: ['RAG', 'OpenAI', 'Claude', 'pgvector', 'LangChain', 'React'],
+    coverImage: { url: '' },
+    liveUrl: '',
+    repoUrl: 'https://github.com/iamhamzabaig',
+    featured: true
+  },
   {
     _id: 'oreius-voting',
     title: 'Oreius Voting App',
@@ -180,6 +195,86 @@ export const fallbackProjects = [
     liveUrl: '',
     repoUrl: '',
     featured: false
+  }
+];
+
+// ── "How I engineer" section ──────────────────────────────────────────────
+// Drives the animated architecture diagram + principles on the home page. The
+// pipeline is the real shape of the RAG system in fallbackProjects[0]; keep the
+// two in sync. `kind` tags a node so the diagram can accent the store/model.
+export const engineeringApproach = {
+  pipeline: [
+    { id: 'ingest', label: 'Ingest', sub: 'chunk + clean', kind: 'io' },
+    { id: 'embed', label: 'Embed', sub: 'OpenAI vectors', kind: 'compute' },
+    { id: 'store', label: 'pgvector', sub: 'HNSW index', kind: 'store' },
+    { id: 'retrieve', label: 'Retrieve', sub: 'top-k + rerank', kind: 'compute' },
+    { id: 'llm', label: 'LLM', sub: 'cite-or-refuse', kind: 'model' },
+    { id: 'ui', label: 'React UI', sub: 'streamed tokens', kind: 'io' }
+  ],
+  principles: [
+    {
+      title: 'Measure before optimizing',
+      text: 'Profile first, then cut. Every performance claim on this site traces to a before/after number, not a vibe.'
+    },
+    {
+      title: 'Typed contracts, end to end',
+      text: 'Strict TypeScript and validated schemas from the API boundary to the component props — the compiler catches the class of bug I never have to debug.'
+    },
+    {
+      title: 'Grounded AI, not demos',
+      text: 'Retrieval with citations and a cite-or-refuse prompt. The model answers from your data or admits it does not know.'
+    },
+    {
+      title: 'Ship to production',
+      text: 'CI, containerized deploys, and observability from the first commit. Done means running in production, not running on my machine.'
+    }
+  ]
+};
+
+// ── Client-side retrieval demo corpus ─────────────────────────────────────
+// Powers the in-browser semantic-search demo on the AI Knowledge Assistant
+// project page. Ranking is real TF cosine (see SemanticSearchDemo) over these
+// snippets — a stand-in for a private knowledge base, no backend or LLM call.
+export const aiAssistantCorpus = [
+  {
+    id: 'onboarding',
+    title: 'Onboarding a new workspace',
+    text: 'To set up a new workspace, invite teammates by email, then upload the documents you want the assistant to answer over. Ingestion chunks and embeds each file automatically; large PDFs may take a few minutes to index.'
+  },
+  {
+    id: 'billing',
+    title: 'Billing & subscription plans',
+    text: 'Plans are billed monthly per seat. You can upgrade, downgrade, or cancel anytime from the billing settings. Usage above the plan quota is charged at the metered embedding and generation rate.'
+  },
+  {
+    id: 'security',
+    title: 'Data security & privacy',
+    text: 'Documents are encrypted at rest and in transit. Embeddings live in an isolated per-tenant vector store, and your data is never used to train third-party models. Access is scoped by role-based permissions.'
+  },
+  {
+    id: 'citations',
+    title: 'How answers are grounded',
+    text: 'Every answer is retrieved from your own documents and returned with source citations. The system prompt forces the model to cite a passage or say it does not know, which is how hallucinations are kept out.'
+  },
+  {
+    id: 'rate-limits',
+    title: 'API rate limits',
+    text: 'The REST API allows a fixed number of requests per minute per key. Exceeding the limit returns HTTP 429 with a Retry-After header. Batch embedding endpoints have a separate, higher quota for bulk ingestion.'
+  },
+  {
+    id: 'vector-search',
+    title: 'How semantic search works',
+    text: 'Queries are embedded into the same vector space as your documents, then matched by approximate nearest-neighbor search over an HNSW index. Top results are re-ranked for relevance before being passed to the language model.'
+  },
+  {
+    id: 'deployment',
+    title: 'Self-hosted deployment',
+    text: 'The assistant ships as containers and runs on your own infrastructure with Docker. Postgres with the pgvector extension stores embeddings, so there is no separate vector database to operate or keep in sync.'
+  },
+  {
+    id: 'agents',
+    title: 'Tool-calling agents',
+    text: 'Beyond plain question answering, an agent layer can call tools to look up records, trigger workflows, and take actions. Tool calls are validated against a schema so the model cannot invoke them with malformed arguments.'
   }
 ];
 

@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom';
+import { CommandPaletteProvider } from '../components/ui/CommandPalette.jsx';
 import { ErrorBoundary } from '../components/ui/ErrorBoundary.jsx';
 import { PageTransition } from '../components/ui/PageTransition.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
@@ -7,6 +8,7 @@ import { Navbar } from '../components/layout/Navbar.jsx';
 export function PublicLayout() {
   const location = useLocation();
   return (
+    <CommandPaletteProvider>
     <div className="flex min-h-screen flex-col">
       {/* Skip link — first tab stop, hidden until focused, lands keyboard users
           past the nav and straight on the page content. */}
@@ -27,5 +29,6 @@ export function PublicLayout() {
       </main>
       <Footer />
     </div>
+    </CommandPaletteProvider>
   );
 }

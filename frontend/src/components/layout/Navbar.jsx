@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, Search, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Container } from './Container.jsx';
 import { ThemeToggle } from './ThemeToggle.jsx';
+import { useCommandPalette } from '../ui/CommandPalette.jsx';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
 
 const links = [
@@ -37,6 +38,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { data: profile } = useProfile();
+  const { open: openPalette } = useCommandPalette();
   const resumeUrl = profile?.resumeUrl;
 
   // Close the mobile menu on route change.
@@ -109,6 +111,29 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* ⌘K command palette trigger — a search pill on desktop, an icon on
+              mobile. The palette itself is bound to ⌘K/Ctrl+K globally. */}
+          <button
+            type="button"
+            onClick={openPalette}
+            aria-label="Open command palette"
+            aria-keyshortcuts="Meta+K Control+K"
+            className="hidden items-center gap-2 rounded-full border border-border/70 bg-surface/60 py-1.5 pl-3 pr-2 text-caption text-muted transition duration-300 ease-apple hover:border-border hover:text-ink sm:inline-flex"
+          >
+            <Search aria-hidden="true" size={14} />
+            <span>Search</span>
+            <kbd className="rounded border border-border bg-panel px-1.5 py-0.5 font-mono text-[11px] leading-none text-muted">
+              ⌘K
+            </kbd>
+          </button>
+          <button
+            type="button"
+            onClick={openPalette}
+            aria-label="Open command palette"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink/70 transition duration-300 ease-apple hover:bg-surface active:scale-[0.92] sm:hidden"
+          >
+            <Search aria-hidden="true" size={18} />
+          </button>
           <ThemeToggle />
           {resumeUrl ? (
             <a

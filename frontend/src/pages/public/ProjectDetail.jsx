@@ -6,6 +6,7 @@ import { Chip } from '../../components/ui/Chip.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { useProject } from '../../features/projects/api/projects.queries.js';
 import { MediaGallery } from '../../features/projects/components/MediaGallery.jsx';
+import { SemanticSearchDemo } from '../../features/projects/components/SemanticSearchDemo.jsx';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -90,6 +91,10 @@ export default function ProjectDetail() {
           <p>{project.content || project.description}</p>
         </div>
       </Container>
+
+      {/* Live, client-side retrieval demo — only on the AI assistant project,
+          where it makes the "semantic search" claim tangible. */}
+      {project.slug === 'ai-knowledge-assistant' && <SemanticSearchDemo />}
     </article>
   );
 }
