@@ -36,6 +36,7 @@ export function ProjectFeature({ project, index = 0 }) {
               className="flex h-full w-full items-center justify-center transition duration-700 ease-apple group-hover:scale-[1.04]"
               style={{ backgroundImage: cover }}
             >
+              {/* type-exempt: decorative monogram, sized to fill the media */}
               <span className="font-display text-7xl font-semibold text-white/90">{monogram(project.title)}</span>
             </div>
           )}
@@ -57,15 +58,20 @@ export function ProjectFeature({ project, index = 0 }) {
       {/* Details */}
       <div className={`order-2 ${reversed ? 'lg:order-1' : 'lg:order-2'}`}>
         <Link to={to} className="group/title inline-block">
-          <h3 className="font-display text-3xl font-semibold tracking-tight text-ink transition-colors duration-300 group-hover/title:text-accent sm:text-4xl">
+          <h3 className="font-display text-fluid-h2 font-semibold text-ink transition-colors duration-300 group-hover/title:text-accent">
             {project.title}
           </h3>
         </Link>
         <p className="mt-4 max-w-xl text-body-lg text-muted">{project.description}</p>
         {project.tags?.length > 0 && (
           <div className="mt-5 flex flex-wrap gap-2">
-            {project.tags.slice(0, 5).map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
+            {project.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center rounded-control bg-surface px-2.5 py-1 text-caption font-medium text-muted ring-1 ring-border/60"
+              >
+                {tag}
+              </span>
             ))}
           </div>
         )}

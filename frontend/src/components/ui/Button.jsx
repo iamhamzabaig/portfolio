@@ -18,8 +18,8 @@ const variants = {
 };
 
 const sizeText = { sm: 'text-caption', md: 'text-body-sm', lg: 'text-body' };
-const sizePad = { sm: 'min-h-9 px-4', md: 'min-h-11 px-6', lg: 'min-h-12 px-7' };
-const sizeIcon = { sm: 'min-h-9 w-9', md: 'min-h-11 w-11', lg: 'min-h-12 w-12' };
+const sizePad = { sm: 'min-h-8 px-3', md: 'min-h-10 px-4', lg: 'min-h-11 px-5' };
+const sizeIcon = { sm: 'min-h-8 w-8', md: 'min-h-10 w-10', lg: 'min-h-11 w-11' };
 
 export function Button({
   as: Component = 'button',

@@ -1,15 +1,9 @@
 import { Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from './Container.jsx';
+import { navLinks } from './navLinks.js';
 import { TelemetryStrip } from '../ui/TelemetryStrip.jsx';
 import { fallbackProfile } from '../../utils/fallbackData.js';
-
-const nav = [
-  { to: '/', label: 'Home' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' }
-];
 
 const expertise = [
   'RAG & LLM apps',
@@ -49,9 +43,9 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted/70">Explore</p>
+            <p className="text-micro font-semibold uppercase tracking-[0.14em] text-muted/70">Explore</p>
             <nav aria-label="Footer" className="mt-4 flex flex-col gap-2.5">
-              {nav.map((item) => (
+              {navLinks.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
@@ -64,7 +58,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted/70">Expertise</p>
+            <p className="text-micro font-semibold uppercase tracking-[0.14em] text-muted/70">Expertise</p>
             <ul className="mt-4 flex flex-col gap-2.5">
               {expertise.map((item) => (
                 <li key={item} className="text-caption text-muted">
@@ -75,7 +69,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted/70">Get in touch</p>
+            <p className="text-micro font-semibold uppercase tracking-[0.14em] text-muted/70">Get in touch</p>
             <ul className="mt-4 flex flex-col gap-3">
               <li>
                 <a href={`mailto:${email}`} className="group flex items-center gap-2.5 text-caption text-muted transition-colors hover:text-ink">
@@ -106,7 +100,7 @@ export function Footer() {
           <TelemetryStrip />
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-3 text-[12px] text-muted sm:flex-row">
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 text-caption text-muted sm:flex-row">
           <p>
             Copyright © {new Date().getFullYear()} Hamza Munawar. Built with React &amp; Supabase.{' '}
             <Link to="/styleguide" className="transition hover:text-ink">

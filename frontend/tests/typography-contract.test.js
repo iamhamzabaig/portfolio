@@ -26,16 +26,7 @@ const BANNED = [
 ];
 
 // Out of scope: admin/internal pages and the admin-only project editor form.
-// TEMP: Navbar/Footer/ProjectFeature are migrated in the working tree but their
-// edits are entangled with a separate in-progress nav/PWA changeset, so they land
-// with that branch. Remove these three entries once that work is committed.
-const ALLOWLIST = [
-  /[\\/]pages[\\/]admin[\\/]/,
-  /ProjectForm\.jsx$/,
-  /[\\/]layout[\\/]Navbar\.jsx$/,
-  /[\\/]layout[\\/]Footer\.jsx$/,
-  /ProjectFeature\.jsx$/
-];
+const ALLOWLIST = [/[\\/]pages[\\/]admin[\\/]/, /ProjectForm\.jsx$/];
 
 function walk(dir) {
   const files = [];

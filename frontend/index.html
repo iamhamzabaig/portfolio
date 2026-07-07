@@ -3,7 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover lets content extend under the notch/home indicator so
+         the safe-area-inset env() vars become meaningful. Pinch-zoom stays
+         enabled (no user-scalable=no) for accessibility. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <!-- Installed-app chrome. theme-color tints the status bar and tracks the
+         active theme (matches the no-flash script below). Apple standalone tags
+         make an added-to-home-screen launch run fullscreen. -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Hamza" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <script>
       // Set theme before first paint: a stored choice wins, otherwise default to
       // light (white). System preference is intentionally ignored so first-time

@@ -43,13 +43,31 @@ html {
 }
 
 body {
-  @apply min-h-screen bg-bg text-ink font-sans antialiased;
+  /* 100dvh (dynamic viewport) instead of 100vh so the layout doesn't jump when
+     mobile browser bars show/hide. overscroll-behavior kills the rubber-band /
+     pull-to-refresh so an installed launch feels like a native app. */
+  @apply min-h-[100dvh] bg-bg text-ink font-sans antialiased;
+  overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: 'kern', 'liga', 'cv11';
   /* Theme tokens cross-fade for any surface not covered by the circular
      reveal (e.g. images loading in). Kept short so it never feels laggy. */
   transition: background-color 0.45s ease, color 0.45s ease;
+}
+
+/* Native-feel touch tuning. touch-action: manipulation drops the 300ms tap
+   delay and double-tap zoom on controls. UI chrome is non-selectable so a long
+   press feels like a button, not text — but article/prose content stays
+   selectable (only elements opting in via these roles are covered). */
+a,
+button,
+[role='button'],
+label,
+nav {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Apple headlines are set tight and heavy. Kept in @layer base so the fluid

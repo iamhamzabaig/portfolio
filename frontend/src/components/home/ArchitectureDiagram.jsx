@@ -26,13 +26,13 @@ export function ArchitectureDiagram() {
   const reduce = useReducedMotion();
   const nodes = engineeringApproach.pipeline;
   const width = PAD * 2 + nodes.length * NODE_W + (nodes.length - 1) * GAP;
-  const height = 132;
+  const height = 84;
   const cy = height / 2;
 
   return (
     <section className="py-24 sm:py-28">
       <Container>
-        <RevealScope className="mx-auto mb-14 max-w-2xl text-center">
+        <RevealScope className="mx-auto max-w-2xl text-center">
           <Eyebrow data-fade>How I engineer</Eyebrow>
           <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
             Systems, not scripts.
@@ -154,7 +154,7 @@ export function ArchitectureDiagram() {
           {engineeringApproach.principles.map((p, i) => (
             <RevealItem
               key={p.title}
-              className="rounded-card border border-border/70 bg-panel p-6 shadow-soft"
+              className="rounded-card border border-border/70 bg-panel bg-gradient-to-br from-accent/[0.05] to-transparent p-6 shadow-soft"
             >
               <p className="font-mono text-caption text-accent">{String(i + 1).padStart(2, '0')}</p>
               <h3 className="mt-3 font-display text-body font-semibold tracking-tight text-ink">{p.title}</h3>
