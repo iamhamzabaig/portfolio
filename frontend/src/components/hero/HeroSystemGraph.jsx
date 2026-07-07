@@ -116,12 +116,23 @@ export default function HeroSystemGraph({ pointer }) {
     <div
       ref={containerRef}
       aria-hidden="true"
+      // Radial mask fades the graph out through the center — where the headline
+      // sits — so lines never fight the type. Strongest at the edges, gone
+      // behind the text.
+      style={{
+        maskImage:
+          'radial-gradient(ellipse 45% 40% at 50% 45%, transparent 0%, transparent 18%, black 60%)',
+        WebkitMaskImage:
+          'radial-gradient(ellipse 45% 40% at 50% 45%, transparent 0%, transparent 18%, black 60%)'
+      }}
       className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center overflow-hidden"
     >
       <motion.svg
         viewBox="0 0 560 460"
         style={{ x: driftX, y: driftY }}
-        className="h-[34rem] w-[34rem] max-w-none opacity-70 sm:h-[40rem] sm:w-[40rem]"
+        // Lighter in light mode — accent lines have less contrast headroom on a
+        // white canvas, so they read heavier behind text than on the dark theme.
+        className="h-[34rem] w-[34rem] max-w-none opacity-70 dark:opacity-70 sm:h-[40rem] sm:w-[40rem]"
         fill="none"
       >
         {/* Edges — hairline, using the theme border token. */}
