@@ -5,7 +5,7 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d0d12,100:7c3aed&height=200&section=header&text=Portfolio&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=React%20SPA%20·%20Supabase%20backend&descSize=18&descAlignY=60&animation=fadeIn" width="100%" alt="Portfolio" />
 
 <a href="https://readme-typing-svg.demolab.com">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&pause=1000&color=A855F7&center=true&vCenter=true&width=620&lines=Public+site+%2B+private+admin.;Row+Level+Security+is+the+boundary.;Zero+backend+servers+to+run.;Near-black+canvas%2C+purple+accent." alt="Typing tagline" />
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&pause=1000&color=A855F7&center=true&vCenter=true&width=620&lines=Public+site+%2B+private+admin.;Row+Level+Security+is+the+boundary.;Zero+backend+servers+to+run.;Apple-style+UI%2C+installable+PWA." alt="Typing tagline" />
 </a>
 
 <br/><br/>
@@ -63,8 +63,8 @@ Content revolves around three things — **Projects**, an editable **Profile**, 
 <tr>
 <td width="50%" valign="top">
 
-#### 🎨 Distinct visual identity
-Spatial dark theme, purple accent, mono labels and oversized display numerals, with a light/dark toggle.
+#### 🎨 Apple-style design system
+Neutral canvas with a single blue accent and Inter Variable, on a fluid type scale built from semantic tokens — catalogued in a live `/styleguide` and enforced by a typography-contract test. Light/dark toggle with a spatial theme transition.
 
 </td>
 <td width="50%" valign="top">
@@ -99,6 +99,20 @@ Every table, trigger, policy, and storage bucket lives in SQL migrations applied
 
 #### ✅ Tested access control
 An automated RLS smoke test provisions an admin and asserts the **entire** permission matrix end-to-end.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+#### 📲 Installable PWA
+Offline-ready via a service worker with runtime caching for fonts, images, and API reads. Installs to the home screen with a full icon set and a standalone, native-feel launch.
+
+</td>
+<td width="50%" valign="top">
+
+#### 🧭 Native-feel navigation
+A ⌘K command palette, a bottom tab bar on phones, and Apple-style page transitions — with `prefers-reduced-motion` honored throughout.
 
 </td>
 </tr>
@@ -145,7 +159,8 @@ An automated RLS smoke test provisions an admin and asserts the **entire** permi
 | --- | --- |
 | **Frontend** | React 18 · Vite 6 · Tailwind CSS 3 · React Router 6 |
 | **Data / state** | TanStack Query 5 · React Hook Form · Zod |
-| **Motion / UI** | Framer Motion · Lucide icons |
+| **Motion / 3D** | Motion (`motion/react`) · Three.js · React Three Fiber + Drei · Lucide icons |
+| **PWA / assets** | vite-plugin-pwa (Workbox) · self-hosted Inter Variable (`@fontsource`) |
 | **Backend** | Supabase — PostgreSQL · Row Level Security · Supabase Auth · Supabase Storage |
 | **Schema** | Supabase CLI migrations (SQL) |
 | **Testing** | Vitest (frontend) · `node --test` + supabase-js (RLS smoke test) |
@@ -258,8 +273,9 @@ The RLS suite provisions an admin, then asserts the full matrix: anonymous reads
 
 - [x] Supabase schema, RLS policies, storage, seed
 - [x] Automated RLS smoke test
-- [x] Project README + license
-- [ ] Frontend wired to `supabase-js`
+- [x] Frontend wired to `supabase-js` (projects, profile, contact, admin)
+- [x] Apple-style design system + live styleguide + typography-contract test
+- [x] Installable PWA + mobile navigation
 - [ ] Production deploy (Vercel + hosted Supabase)
 
 <br/>
