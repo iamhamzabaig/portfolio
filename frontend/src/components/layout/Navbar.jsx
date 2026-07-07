@@ -142,7 +142,7 @@ export function Navbar() {
               rel="noreferrer"
               className="hidden min-h-9 items-center rounded-full bg-accent px-4 py-2 text-caption font-medium text-white transition duration-300 ease-apple hover:brightness-110 active:scale-[0.97] sm:inline-flex"
             >
-              R'
+              Résumé
             </a>
           ) : null}
           <button
@@ -193,7 +193,7 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="mt-1 rounded-full bg-accent px-4 py-3 text-center text-body-sm font-medium text-white transition duration-300 ease-apple hover:brightness-110 active:scale-[0.97] sm:hidden"
                 >
-                  Resume
+                  Résumé
                 </a>
               ) : null}
             </Container>

@@ -13,7 +13,7 @@ describe('Navbar', () => {
   it('shows a Resume link and no public Admin link', async () => {
     renderWithProviders(<ThemeProvider><Navbar /></ThemeProvider>);
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: /resume/i })).toHaveAttribute('href', 'https://cdn/resume.pdf')
+      expect(screen.getByRole('link', { name: /résumé/i })).toHaveAttribute('href', 'https://cdn/resume.pdf')
     );
     expect(screen.queryByRole('link', { name: /^admin$/i })).toBeNull();
   });
