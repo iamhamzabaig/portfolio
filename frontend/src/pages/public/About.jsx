@@ -48,7 +48,7 @@ export default function About() {
               className="grid gap-5 border-t border-border py-9 md:grid-cols-[0.9fr_1.6fr]"
             >
               <div>
-                <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{job.company}</h3>
+                <h3 className="font-display text-fluid-h3 font-semibold text-ink">{job.company}</h3>
                 <p className="mt-1 text-body-sm text-accent">{job.role}</p>
                 <p className="mt-2 text-caption text-muted">
                   {job.period} · {job.location}

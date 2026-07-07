@@ -286,7 +286,7 @@ function CommandPalette({ isOpen, onClose }) {
                 aria-label="Search commands"
                 className="h-14 w-full bg-transparent text-body text-ink outline-none placeholder:text-muted/70"
               />
-              <kbd className="hidden shrink-0 rounded border border-border px-1.5 py-0.5 font-mono text-[11px] text-muted sm:block">
+              <kbd className="hidden shrink-0 rounded border border-border px-1.5 py-0.5 font-mono text-micro text-muted sm:block">
                 esc
               </kbd>
             </div>
@@ -312,7 +312,7 @@ function CommandPalette({ isOpen, onClose }) {
                     >
                       <Icon aria-hidden="true" size={16} className={isActive ? 'text-accent' : 'text-muted'} />
                       <span className="flex-1 truncate text-body-sm">{item.label}</span>
-                      <span className="shrink-0 font-mono text-[11px] uppercase tracking-wide text-muted/70">
+                      <span className="shrink-0 font-mono text-micro uppercase text-muted/70">
                         {item.section}
                       </span>
                       {isActive && <CornerDownLeft aria-hidden="true" size={14} className="shrink-0 text-muted" />}
@@ -323,7 +323,7 @@ function CommandPalette({ isOpen, onClose }) {
             </div>
 
             {/* Footer legend */}
-            <div className="flex items-center gap-4 border-t border-border px-4 py-2.5 font-mono text-[11px] text-muted">
+            <div className="flex items-center gap-4 border-t border-border px-4 py-2.5 font-mono text-micro text-muted">
               <span className="flex items-center gap-1">
                 <kbd className="rounded border border-border px-1">↑</kbd>
                 <kbd className="rounded border border-border px-1">↓</kbd>

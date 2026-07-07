@@ -32,6 +32,7 @@ export function ProjectCard({ project }) {
               className="flex h-full w-full items-center justify-center transition duration-700 ease-apple group-hover:scale-[1.04]"
               style={{ backgroundImage: cover }}
             >
+              {/* type-exempt: decorative monogram, sized to fill the media */}
               <span className="font-display text-6xl font-semibold text-white/90">{monogram(project.title)}</span>
             </div>
           )}
@@ -50,7 +51,7 @@ export function ProjectCard({ project }) {
         </div>
 
         <div className="flex flex-1 flex-col gap-3 p-6">
-          <h3 className="font-display text-xl font-semibold leading-tight tracking-tight text-ink">
+          <h3 className="font-display text-fluid-h3 font-semibold text-ink">
             {project.title}
           </h3>
           <p className="line-clamp-2 text-body-sm text-muted">{project.description}</p>

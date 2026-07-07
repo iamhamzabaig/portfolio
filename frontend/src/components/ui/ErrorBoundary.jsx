@@ -30,14 +30,14 @@ export class ErrorBoundary extends Component {
     return (
       <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-6 text-center">
         <Eyebrow>Something broke</Eyebrow>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+        <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           This page hit an error.
         </h1>
         <p className="mt-3 text-muted">
           It&apos;s been logged. Try again, or head back home.
         </p>
         {import.meta.env.DEV && (
-          <pre className="mt-5 max-w-full overflow-auto rounded-xl border border-border bg-panel p-4 text-left text-xs text-danger">
+          <pre className="mt-5 max-w-full overflow-auto rounded-xl border border-border bg-panel p-4 text-left text-caption text-danger">
             {String(error?.stack || error?.message || error)}
           </pre>
         )}

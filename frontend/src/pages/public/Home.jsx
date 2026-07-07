@@ -137,7 +137,7 @@ export default function Home() {
               I build software that <span className="text-accent">scales.</span>
             </h1>
 
-            <p data-split className="mt-7 max-w-2xl text-body-lg text-muted sm:text-xl">{profile.headline}</p>
+            <p data-split className="mt-7 max-w-2xl text-body-lg text-muted">{profile.headline}</p>
 
             <div data-fade className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
               <Button as={Link} to="/projects">
@@ -191,10 +191,11 @@ export default function Home() {
               return (
                 <RevealItem key={stat.label} className={`flex flex-col items-center px-6 py-8 text-center ${dividers}`}>
                   {stat.eyebrow && (
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.07em] text-muted">{stat.eyebrow}</p>
+                    <p className="text-micro font-semibold uppercase text-muted">{stat.eyebrow}</p>
                   )}
                   <p className="mt-3 flex items-start justify-center font-display text-fluid-stat font-semibold text-ink">
                     {Number.isFinite(numeric) ? <CountUp value={numeric} /> : stat.value}
+                    {/* type-exempt: suffix glyph optically sized to the stat numeral */}
                     {stat.suffix && <span className="ml-0.5 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
                   </p>
                   <p className="mt-4 text-body-sm font-semibold text-ink">{stat.label}</p>
@@ -265,7 +266,7 @@ export default function Home() {
                     className="text-accent transition-transform duration-500 ease-apple group-hover:scale-110"
                   />
                   <div className="mt-6 flex items-center gap-2">
-                    <h3 className="font-display text-xl font-semibold tracking-tight text-ink">{item.title}</h3>
+                    <h3 className="font-display text-fluid-h3 font-semibold text-ink">{item.title}</h3>
                     {item.featured && (
                       <Badge tone="accent" size="xs">
                         New

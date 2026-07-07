@@ -39,7 +39,8 @@ export function MediaGallery({ video, screenshots = [], coverImage, title }) {
         className="flex aspect-[16/10] w-full items-center justify-center rounded-media border border-border"
         style={{ backgroundImage: coverGradient({ title }) }}
       >
-        <span className="font-display text-6xl font-bold text-white/90">{monogram(title)}</span>
+        {/* type-exempt: decorative monogram, sized to fill the media */}
+        <span className="font-display text-6xl font-semibold text-white/90">{monogram(title)}</span>
       </div>
     );
   }

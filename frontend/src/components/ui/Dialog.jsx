@@ -50,7 +50,7 @@ export function Dialog({ open, onClose, title, description, children }) {
             className="relative w-full max-w-sm rounded-card border border-border bg-panel p-6 shadow-overlay outline-none"
           >
             {title && (
-              <h2 id="dialog-title" className="font-display text-xl font-semibold tracking-tight text-ink">
+              <h2 id="dialog-title" className="font-display text-fluid-h3 font-semibold text-ink">
                 {title}
               </h2>
             )}

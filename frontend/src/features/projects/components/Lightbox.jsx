@@ -75,7 +75,7 @@ export function Lightbox({ images, index, onClose, onIndex }) {
           >
             <ChevronRight aria-hidden="true" size={22} />
           </button>
-          <p className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm text-white">
+          <p className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-caption text-white">
             {index + 1} / {count}
           </p>
         </>

@@ -41,7 +41,7 @@ export function TelemetryStrip() {
   return (
     <div
       ref={ref}
-      className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] text-muted"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-micro text-muted"
     >
       <span className="inline-flex items-center gap-1.5" title="Live render rate">
         <Dot />

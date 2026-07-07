@@ -138,7 +138,7 @@ export function SemanticSearchDemo() {
                 >
                   <div className="flex items-baseline justify-between gap-3">
                     <h3 className="font-display text-body font-semibold tracking-tight text-ink">{doc.title}</h3>
-                    <span className="shrink-0 font-mono text-[11px] text-muted">{score.toFixed(3)}</span>
+                    <span className="shrink-0 font-mono text-micro text-muted">{score.toFixed(3)}</span>
                   </div>
                   {/* Relevance bar — score relative to the top hit. */}
                   <div className="mt-2 h-1 overflow-hidden rounded-full bg-surface">
@@ -151,7 +151,7 @@ export function SemanticSearchDemo() {
                     <Highlight text={doc.text} terms={queryTerms} />
                   </p>
                   {i === 0 && (
-                    <p className="mt-2 font-mono text-[11px] text-accent">top match · rank #1</p>
+                    <p className="mt-2 font-mono text-micro text-accent">top match · rank #1</p>
                   )}
                 </article>
               ))
