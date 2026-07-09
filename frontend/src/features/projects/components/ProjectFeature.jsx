@@ -1,7 +1,6 @@
 import { ArrowRight, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../../../components/ui/Badge.jsx';
-import { RevealItem } from '../../../components/ui/Reveal.jsx';
 import { coverGradient, monogram } from '../cover.js';
 
 // Editorial feature row — large project media on one side, details on the other,
@@ -14,7 +13,7 @@ export function ProjectFeature({ project, index = 0 }) {
   const reversed = index % 2 === 1;
 
   return (
-    <RevealItem className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
       {/* Media — the hero of the row. */}
       <Link
         to={to}
@@ -88,6 +87,6 @@ export function ProjectFeature({ project, index = 0 }) {
           />
         </Link>
       </div>
-    </RevealItem>
+    </div>
   );
 }

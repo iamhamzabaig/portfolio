@@ -132,6 +132,7 @@ function CommandPalette({ isOpen, onClose }) {
     const pages = [
       { id: 'home', label: 'Home', section: 'Go to', icon: HomeIcon, keywords: ['start'], run: () => go('/') },
       { id: 'projects', label: 'Projects', section: 'Go to', icon: FolderGit2, keywords: ['work', 'portfolio'], run: () => go('/projects') },
+      { id: 'blog', label: 'Blog', section: 'Go to', icon: FileText, keywords: ['writing', 'articles', 'notes'], run: () => go('/blog') },
       { id: 'about', label: 'About', section: 'Go to', icon: User, keywords: ['experience', 'skills', 'resume'], run: () => go('/about') },
       { id: 'contact', label: 'Contact', section: 'Go to', icon: Send, keywords: ['hire', 'email', 'message'], run: () => go('/contact') }
     ];

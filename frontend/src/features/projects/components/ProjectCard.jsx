@@ -1,8 +1,6 @@
 import { ArrowRight, Play } from 'lucide-react';
-import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../../../components/ui/Badge.jsx';
-import { revealRise } from '../../../components/ui/Reveal.jsx';
 import { coverGradient, monogram } from '../cover.js';
 
 // Apple product-tile: generous rounding, quiet gray surface, image lifts and the
@@ -12,7 +10,7 @@ export function ProjectCard({ project }) {
   const cover = coverGradient(project);
 
   return (
-    <motion.div variants={revealRise}>
+    <div>
       <Link
         to={`/projects/${project.slug}`}
         className={`group flex h-full flex-col overflow-hidden rounded-card bg-panel shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
@@ -65,6 +63,6 @@ export function ProjectCard({ project }) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

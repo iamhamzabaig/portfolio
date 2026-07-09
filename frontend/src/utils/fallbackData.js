@@ -279,3 +279,61 @@ export const aiAssistantCorpus = [
 ];
 
 export const getProjectBySlug = (slug) => fallbackProjects.find((project) => project.slug === slug);
+
+// Sample posts — render source before the API has any, so /blog is never empty
+// on a fresh deploy. `content` is markdown. All are `published` so they show
+// publicly; real posts from the admin override these.
+export const fallbackPosts = [
+  {
+    _id: 'shipping-rag-to-production',
+    title: 'Shipping RAG to production, not just a demo',
+    slug: 'shipping-rag-to-production',
+    excerpt:
+      'Retrieval-augmented generation is easy to demo and hard to trust. Here is the pipeline I use to get grounded, cited answers over private data.',
+    tags: ['AI', 'RAG', 'Postgres'],
+    coverImage: { url: '' },
+    published: true,
+    publishedAt: '2026-06-20T09:00:00Z',
+    createdAt: '2026-06-20T09:00:00Z',
+    content: `Most RAG demos fall apart the moment a user asks something the corpus does not answer well. The fix is not a bigger model — it is a disciplined pipeline.
+
+## The pipeline
+
+1. **Chunk with intent.** Split on semantic boundaries, not fixed token counts.
+2. **Embed and store** in \`pgvector\` with metadata for filtering.
+3. **Retrieve, then rerank.** Vector search casts a wide net; a reranker tightens it.
+4. **Ground the answer.** Force the model to cite the chunks it used, or say it doesn't know.
+
+## Why citations matter
+
+Grounded answers with sources are auditable. When the model cannot support a claim from context, it should decline — that single rule removes most hallucinations.
+
+> Retrieval quality is the ceiling on answer quality. Fix retrieval first.`
+  },
+  {
+    _id: 'angular-to-lighthouse-88',
+    title: 'From Lighthouse 65 to 88 on a legacy Angular app',
+    slug: 'angular-to-lighthouse-88',
+    excerpt:
+      'A migration from Angular 13 to 20 that cut the bundle by 30% and moved the needle on real Core Web Vitals — the changes that actually mattered.',
+    tags: ['Performance', 'Angular'],
+    coverImage: { url: '' },
+    published: true,
+    publishedAt: '2026-05-11T09:00:00Z',
+    createdAt: '2026-05-11T09:00:00Z',
+    content: `Performance work on a large app is mostly about finding the 20% of changes that move 80% of the metric.
+
+## What moved the needle
+
+- **Standalone components + lazy routes** shrank the initial bundle.
+- **\`@defer\` blocks** pushed below-the-fold work off the critical path.
+- **Image budgets** — right-sized, modern formats, explicit dimensions.
+- **Killing render-blocking CSS** with critical inlining.
+
+## What didn't
+
+Micro-optimizing change detection before fixing the bundle was wasted effort. Measure, fix the biggest thing, measure again.`
+  }
+];
+
+export const getPostBySlug = (slug) => fallbackPosts.find((post) => post.slug === slug);

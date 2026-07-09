@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Container } from '../layout/Container.jsx';
 import { Eyebrow } from '../ui/Eyebrow.jsx';
-import { RevealStagger, RevealItem } from '../ui/Reveal.jsx';
 import { engineeringApproach } from '../../utils/fallbackData.js';
 
 // "How I engineer" — turns the RAG claim into a visible architecture. The SVG
@@ -149,18 +148,18 @@ export function ArchitectureDiagram() {
         </div>
 
         {/* Principles — the operating rules behind the pipeline. */}
-        <RevealStagger className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {engineeringApproach.principles.map((p, i) => (
-            <RevealItem
+            <div
               key={p.title}
               className="rounded-card border border-border/70 bg-panel bg-gradient-to-br from-accent/[0.05] to-transparent p-6 shadow-soft"
             >
               <p className="font-mono text-caption text-accent">{String(i + 1).padStart(2, '0')}</p>
               <h3 className="mt-3 font-display text-body font-semibold tracking-tight text-ink">{p.title}</h3>
               <p className="mt-2 text-body-sm text-muted">{p.text}</p>
-            </RevealItem>
+            </div>
           ))}
-        </RevealStagger>
+        </div>
       </Container>
     </section>
   );

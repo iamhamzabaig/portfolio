@@ -1,4 +1,4 @@
-import { Home, FolderGit2, User, Mail } from 'lucide-react';
+import { Home, FolderGit2, PenLine, User, Mail } from 'lucide-react';
 
 // Single source of truth for the primary public navigation. Consumed by the
 // desktop Navbar, the mobile BottomTabBar, and the Footer so all three stay in
@@ -8,6 +8,7 @@ import { Home, FolderGit2, User, Mail } from 'lucide-react';
 export const navLinks = [
   { to: '/', label: 'Home', end: true, icon: Home },
   { to: '/projects', label: 'Projects', icon: FolderGit2 },
+  { to: '/blog', label: 'Blog', icon: PenLine },
   { to: '/about', label: 'About', icon: User },
   { to: '/contact', label: 'Contact', icon: Mail }
 ];
