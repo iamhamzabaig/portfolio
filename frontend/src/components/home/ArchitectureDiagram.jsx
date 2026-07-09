@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Container } from '../layout/Container.jsx';
 import { Eyebrow } from '../ui/Eyebrow.jsx';
-import { RevealScope } from '../ui/RevealScope.jsx';
 import { RevealStagger, RevealItem } from '../ui/Reveal.jsx';
 import { engineeringApproach } from '../../utils/fallbackData.js';
 
@@ -32,16 +31,16 @@ export function ArchitectureDiagram() {
   return (
     <section className="py-24 sm:py-28">
       <Container>
-        <RevealScope className="mx-auto max-w-2xl text-center">
-          <Eyebrow data-fade>How I engineer</Eyebrow>
-          <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
+        <div className="mx-auto max-w-2xl text-center">
+          <Eyebrow>How I engineer</Eyebrow>
+          <h2 className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
             Systems, not scripts.
           </h2>
-          <p data-split className="mt-4 text-body-lg text-muted">
+          <p className="mt-4 text-body text-muted">
             A production retrieval pipeline — every stage typed, measured, and grounded. This is the
             shape of the AI Knowledge Assistant, drawn from ingest to answer.
           </p>
-        </RevealScope>
+        </div>
 
         {/* Diagram scrolls horizontally on narrow screens rather than shrinking to
             illegible text. */}

@@ -35,7 +35,7 @@ export default function About() {
         <p data-fade className="mt-4 text-body text-muted">
           {fallbackProfile.role} · {fallbackProfile.location}
         </p>
-        <p data-split className="mt-8 text-body-lg text-muted">{profile.bio || fallbackProfile.bio}</p>
+        <p data-split className="mt-8 text-body text-muted">{profile.bio || fallbackProfile.bio}</p>
       </RevealScope>
 
       {/* Experience */}

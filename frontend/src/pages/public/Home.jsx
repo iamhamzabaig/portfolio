@@ -1,9 +1,8 @@
 import { useRef } from 'react';
 import { Activity, ArrowRight, Cloud, Code2, Gauge, Server, Sparkles } from 'lucide-react';
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
-import HeroSystemGraph from '../../components/hero/HeroSystemGraph.jsx';
 import { ArchitectureDiagram } from '../../components/home/ArchitectureDiagram.jsx';
 import { Badge } from '../../components/ui/Badge.jsx';
 import { Button } from '../../components/ui/Button.jsx';
@@ -77,23 +76,6 @@ export default function Home() {
     .filter((project) => project.featured)
     .slice(0, 3);
 
-  // Gentle pointer depth: the ambient glow trails the cursor, the headline drifts
-  // the opposite way at a smaller magnitude — two planes, kept subtle and calm.
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const glowX = useSpring(px, { stiffness: 50, damping: 20 });
-  const glowY = useSpring(py, { stiffness: 50, damping: 20 });
-
-  const handlePointer = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    px.set(((event.clientX - rect.left) / rect.width - 0.5) * 60);
-    py.set(((event.clientY - rect.top) / rect.height - 0.5) * 60);
-  };
-  const resetPointer = () => {
-    px.set(0);
-    py.set(0);
-  };
-
   // Scroll-scrubbed hero exit — Apple ties motion to scroll position rather than
   // firing it once. As the hero scrolls away, its content drifts up, recedes,
   // and fades. Disabled under reduced-motion (style falls back to static).
@@ -110,20 +92,13 @@ export default function Home() {
       {/* ── Hero ───────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        onPointerMove={handlePointer}
-        onPointerLeave={resetPointer}
         className="relative overflow-hidden"
       >
-        {/* Ambient wash — kept faint and single-focal so the drama comes from the
-            type, not the glow. Apple's heroes are near-bare canvases. */}
-        <motion.div
+        {/* Static dot-grid backdrop — quiet engineered texture, no motion. */}
+        <div
           aria-hidden="true"
-          style={{ x: glowX, y: glowY }}
-          className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-[40rem] w-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/[0.08] blur-[120px]"
+          className="absolute inset-0 -z-10 h-full w-full bg-bg bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[length:16px_16px] dark:bg-[radial-gradient(#27272a_1px,transparent_1px)]"
         />
-        {/* Engineered backdrop — thin network graph with data pulses, drifting
-            with the cursor a plane behind the headline. */}
-        <HeroSystemGraph pointer={{ glowX, glowY }} />
         <Container className="relative flex min-h-[calc(100vh-3rem)] flex-col items-center justify-center py-24 text-center">
           <motion.div style={heroScrub} className="flex flex-col items-center">
           <RevealScope immediate deps={[profile.headline]} className="flex flex-col items-center">
@@ -168,16 +143,14 @@ export default function Home() {
       {/* ── By the numbers ─────────────────────────────────────────────── */}
       <section className="bg-surface py-24 sm:py-28">
         <Container>
-          <RevealScope className="mx-auto mb-16 max-w-2xl text-center">
-            <Eyebrow data-fade>By the numbers</Eyebrow>
-            <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <Eyebrow>By the numbers</Eyebrow>
+            <h2 className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
               Three years, measured in outcomes.
             </h2>
-          </RevealScope>
-          {/* Number bar — a rounded panel holding the figures, with hairline rules
-              separating them: vertical between columns, horizontal between the
-              stacked rows, all collapsing to a single row on large screens. */}
-          <RevealStagger className="grid grid-cols-2 overflow-hidden rounded-card border border-border bg-panel shadow-soft lg:grid-cols-4">
+          </div>
+          {/* Number row — figures separated by hairline rules only, no card. */}
+          <RevealStagger className="grid grid-cols-2 lg:grid-cols-4">
             {stats.slice(0, 4).map((stat, i) => {
               const numeric = Number(stat.value);
               // Per-cell divider borders, recomputed at the lg breakpoint where the
@@ -245,7 +218,7 @@ export default function Home() {
             <h2 data-split className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
               What I can build for you.
             </h2>
-            <p data-split className="mt-4 text-body-lg text-muted">
+            <p data-split className="mt-4 text-body text-muted">
               End-to-end product engineering — from the frontend and APIs to performance, real-time, and AI.
             </p>
           </RevealScope>
@@ -294,7 +267,7 @@ export default function Home() {
               Let&apos;s build something
               <br className="hidden sm:block" /> <span className="text-accent">great together.</span>
             </h2>
-            <p data-split className="mx-auto mt-6 max-w-xl text-body-lg text-muted">
+            <p data-split className="mx-auto mt-6 max-w-xl text-body text-muted">
               Tell me what you&apos;re building and where it stands today. I reply within a day.
             </p>
             <div data-fade className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">

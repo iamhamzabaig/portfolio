@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { Container } from '../../components/layout/Container.jsx';
 import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
-import { RevealScope } from '../../components/ui/RevealScope.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
@@ -53,15 +52,15 @@ export default function Projects() {
 
   return (
     <Container className="py-20 sm:py-24">
-      <RevealScope immediate className="mx-auto max-w-2xl text-center">
-        <Eyebrow data-fade>Projects</Eyebrow>
-        <h1 data-split className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
+      <div className="mx-auto max-w-2xl text-center">
+        <Eyebrow>Projects</Eyebrow>
+        <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           Selected work
         </h1>
-        <p data-split className="mt-5 text-body-lg text-muted">
+        <p className="mt-5 text-body text-muted">
           Real-time platforms, enterprise ERP, and high-performance frontends across React, Angular, Vue, and Node.
         </p>
-      </RevealScope>
+      </div>
 
       {/* Tag filter — a single dropdown menu. Scales to any number of tags,
           no horizontal scroll. Single-select; "All" resets. */}

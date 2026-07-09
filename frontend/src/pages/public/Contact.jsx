@@ -20,7 +20,7 @@ export default function Contact() {
             Let&apos;s build
             <br /> something.
           </h1>
-          <p data-split className="mt-6 text-body-lg text-muted">
+          <p data-split className="mt-6 text-body text-muted">
             Tell me what you&apos;re building, what exists today, and your timeline. I reply within a day.
           </p>
 

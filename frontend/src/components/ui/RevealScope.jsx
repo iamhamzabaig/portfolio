@@ -67,7 +67,15 @@ export function RevealScope({
       });
     }, scope);
 
-    return () => ctx.revert();
+    // SPA navigation: triggers get built against stale layout from the prior
+    // route, so a below-fold group can stay stuck at autoAlpha:0. Recompute
+    // once the new route's layout has painted.
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ctx.revert();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediate, start, ...deps]);
 
