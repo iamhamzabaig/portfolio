@@ -10,6 +10,7 @@ import { CountUp } from '../../components/ui/CountUp.jsx';
 import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
+import { TechMarquee } from '../../components/ui/TechMarquee.jsx';
 import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
 import { PostCard } from '../../features/blog/components/PostCard.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
@@ -139,6 +140,14 @@ export default function Home() {
             </div>
           </motion.div>
         </Container>
+      </section>
+
+      {/* ── Tech stack marquee ─────────────────────────────────────────── */}
+      <section className="py-16 sm:py-20">
+        <p className="mb-10 text-center text-micro font-semibold uppercase tracking-[0.14em] text-muted/70">
+          Technologies I work with
+        </p>
+        <TechMarquee />
       </section>
 
       {/* ── By the numbers ─────────────────────────────────────────────── */}

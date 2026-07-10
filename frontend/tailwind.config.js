@@ -91,6 +91,17 @@ export default {
       transitionTimingFunction: {
         // Apple's signature ease — a soft, confident deceleration.
         apple: 'cubic-bezier(0.16, 1, 0.3, 1)'
+      },
+      // Seamless marquee: the track holds two identical copies, so shifting it
+      // exactly one copy width (-50%) loops with no visible seam.
+      keyframes: {
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' }
+        }
+      },
+      animation: {
+        marquee: 'marquee 30s linear infinite'
       }
     }
   },
