@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { createNavMotion } from '../../lib/scrollMotion.js';
 import { Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -28,19 +29,11 @@ function Monogram() {
 
 export function Navbar() {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
+  const header = useRef(null);
+  useLayoutEffect(() => createNavMotion(header.current), []);
   const { data: profile } = useProfile();
   const { open: openPalette } = useCommandPalette();
   const resumeUrl = profile?.resumeUrl;
-
-  // The nav hairline + frost deepen once the page scrolls, so it floats cleanly
-  // over the hero at the top — Apple's global-nav behavior.
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   // Secret admin gateway: Ctrl+Shift+A (the Admin link is intentionally not shown
   // in the public nav). Auth still gates /admin regardless.
@@ -56,13 +49,7 @@ export function Navbar() {
   }, [navigate]);
 
   return (
-    <header
-      className={`sticky top-0 z-40 backdrop-blur-2xl backdrop-saturate-[180%] transition-colors duration-300 ease-apple ${
-        scrolled
-          ? 'border-b border-border/70 bg-bg/70'
-          : 'border-b border-transparent bg-bg/50'
-      }`}
-    >
+    <header ref={header} className="scroll-navbar sticky top-0 z-40 bg-bg/90 backdrop-blur-xl">
       <Container className="flex h-12 items-center justify-between gap-4">
         <Link to="/" className="inline-flex items-center gap-2">
           <Monogram />

@@ -17,7 +17,7 @@ export default function ProjectDetail() {
   if (!project) {
     return (
       <Container className="py-32 text-center">
-        <h1 className="font-display text-fluid-h1 font-semibold text-ink">Project not found</h1>
+        <h1 data-motion="heading" className="font-display text-fluid-h1 font-semibold text-ink">Project not found</h1>
         <Link to="/projects" className="mt-5 inline-block text-body font-medium text-accent hover:underline underline-offset-4">
           Back to projects ›
         </Link>
@@ -44,7 +44,7 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        <h1 className="mx-auto mt-6 max-w-3xl font-display text-fluid-h1 font-semibold text-ink">
+        <h1 data-motion="heading" className="mx-auto mt-6 max-w-3xl font-display text-fluid-h1 font-semibold text-ink">
           {project.title}
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-body-lg text-muted">{project.description}</p>

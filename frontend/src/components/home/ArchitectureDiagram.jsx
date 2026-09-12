@@ -1,12 +1,8 @@
-import { motion, useReducedMotion } from 'motion/react';
 import { Container } from '../layout/Container.jsx';
 import { Eyebrow } from '../ui/Eyebrow.jsx';
 import { engineeringApproach } from '../../utils/fallbackData.js';
 
-// "How I engineer" — turns the RAG claim into a visible architecture. The SVG
-// pipeline draws its own connectors on scroll (SVG pathLength 0→1), and the
-// principles stagger in beside it. Everything is token-colored and theme-aware;
-// under reduced motion the diagram renders already-drawn.
+// A scroll-linked desktop pipeline; static and natively scrollable on touch.
 
 const NODE_W = 120;
 const NODE_H = 66;
@@ -14,25 +10,22 @@ const GAP = 40;
 const PAD = 12;
 const STEP = NODE_W + GAP;
 
-const appleEase = [0.16, 1, 0.3, 1];
-const viewport = { once: true, margin: '-60px' };
 
 // Store + model nodes get an accent outline; the rest are neutral panels.
 const ACCENTED = new Set(['store', 'llm']);
 
 export function ArchitectureDiagram() {
-  const reduce = useReducedMotion();
   const nodes = engineeringApproach.pipeline;
   const width = PAD * 2 + nodes.length * NODE_W + (nodes.length - 1) * GAP;
   const height = 84;
   const cy = height / 2;
 
   return (
-    <section className="py-24 sm:py-28">
+    <section data-motion="pipeline" className="py-24 sm:py-28">
       <Container>
         <div className="mx-auto max-w-2xl text-center">
           <Eyebrow>How I engineer</Eyebrow>
-          <h2 className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
+          <h2 data-motion="heading" className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
             Systems, not scripts.
           </h2>
           <p className="mt-4 text-body text-muted">
@@ -43,16 +36,13 @@ export function ArchitectureDiagram() {
 
         {/* Diagram scrolls horizontally on narrow screens rather than shrinking to
             illegible text. */}
-        <div className="overflow-x-auto pb-2">
-          <motion.svg
+        <div tabIndex={0} role="region" aria-label="Engineering pipeline" className="overflow-x-auto pb-2">
+          <svg
             viewBox={`0 0 ${width} ${height}`}
             role="img"
             aria-label="Retrieval pipeline: Ingest, Embed, pgvector, Retrieve, LLM, React UI"
             className="mx-auto block h-auto w-full min-w-[680px] max-w-4xl"
             fill="none"
-            initial="hidden"
-            whileInView="show"
-            viewport={viewport}
           >
             <defs>
               <marker id="arch-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -65,7 +55,7 @@ export function ArchitectureDiagram() {
               const x1 = PAD + i * STEP + NODE_W;
               const x2 = PAD + (i + 1) * STEP;
               return (
-                <motion.line
+                <line
                   key={`edge-${node.id}`}
                   x1={x1}
                   y1={cy}
@@ -75,19 +65,7 @@ export function ArchitectureDiagram() {
                   strokeWidth="1.5"
                   strokeOpacity="0.55"
                   markerEnd="url(#arch-arrow)"
-                  initial={reduce ? false : 'hidden'}
-                  variants={
-                    reduce
-                      ? undefined
-                      : {
-                          hidden: { pathLength: 0, opacity: 0 },
-                          show: {
-                            pathLength: 1,
-                            opacity: 1,
-                            transition: { duration: 0.5, ease: appleEase, delay: 0.15 + i * 0.18 }
-                          }
-                        }
-                  }
+                  data-pipeline-edge
                 />
               );
             })}
@@ -97,17 +75,9 @@ export function ArchitectureDiagram() {
               const x = PAD + i * STEP;
               const accent = ACCENTED.has(node.id);
               return (
-                <motion.g
+                <g
                   key={node.id}
-                  initial={reduce ? false : 'hidden'}
-                  variants={
-                    reduce
-                      ? undefined
-                      : {
-                          hidden: { opacity: 0, y: 8 },
-                          show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: appleEase, delay: i * 0.18 } }
-                        }
-                  }
+                  data-pipeline-node
                 >
                   <rect
                     x={x}
@@ -141,10 +111,10 @@ export function ArchitectureDiagram() {
                   >
                     {node.sub}
                   </text>
-                </motion.g>
+                </g>
               );
             })}
-          </motion.svg>
+          </svg>
         </div>
 
         {/* Principles — the operating rules behind the pipeline. */}
@@ -152,6 +122,7 @@ export function ArchitectureDiagram() {
           {engineeringApproach.principles.map((p, i) => (
             <div
               key={p.title}
+              data-motion="card"
               className="rounded-card border border-border/70 bg-panel bg-gradient-to-br from-accent/[0.05] to-transparent p-6 shadow-soft"
             >
               <p className="font-mono text-caption text-accent">{String(i + 1).padStart(2, '0')}</p>

@@ -15,7 +15,7 @@ export default function Contact() {
       <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
         <div>
           <Eyebrow>Contact</Eyebrow>
-          <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
+          <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
             Let&apos;s build
             <br /> something.
           </h1>

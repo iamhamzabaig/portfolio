@@ -16,7 +16,7 @@ export default function BlogPost() {
   if (!post) {
     return (
       <Container className="py-32 text-center">
-        <h1 className="font-display text-fluid-h1 font-semibold text-ink">Post not found</h1>
+        <h1 data-motion="heading" className="font-display text-fluid-h1 font-semibold text-ink">Post not found</h1>
         <Link
           to="/blog"
           className="mt-5 inline-block text-body font-medium text-accent hover:underline underline-offset-4"
@@ -48,7 +48,7 @@ export default function BlogPost() {
           </div>
         )}
 
-        <h1 className="mx-auto mt-6 max-w-3xl font-display text-fluid-h1 font-semibold text-ink">
+        <h1 data-motion="heading" className="mx-auto mt-6 max-w-3xl font-display text-fluid-h1 font-semibold text-ink">
           {post.title}
         </h1>
         {date && <p className="mt-5 text-caption text-muted">{date}</p>}

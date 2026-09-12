@@ -37,7 +37,7 @@ export default function Blog() {
     <Container className="py-20 sm:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>Writing</Eyebrow>
-        <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">Notes & articles</h1>
+        <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">Notes & articles</h1>
         <p className="mt-5 text-body text-muted">
           Engineering write-ups on performance, real-time systems, AI integration, and shipping production frontends.
         </p>

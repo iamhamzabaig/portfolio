@@ -1,17 +1,13 @@
-import { useRef } from 'react';
 import { Activity, ArrowRight, Cloud, Code2, Gauge, Server, Sparkles } from 'lucide-react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
 import { ArchitectureDiagram } from '../../components/home/ArchitectureDiagram.jsx';
 import { Badge } from '../../components/ui/Badge.jsx';
 import { Button } from '../../components/ui/Button.jsx';
-import { CountUp } from '../../components/ui/CountUp.jsx';
 import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { Sparkline } from '../../components/ui/Sparkline.jsx';
-import { Spinner } from '../../components/ui/Spinner.jsx';
 import { TechMarquee } from '../../components/ui/TechMarquee.jsx';
-import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
+import { EngineeringStatement, ProjectShowcase, SystemVisual } from '../../components/home/ScrollScenes.jsx';
 import { PostCard } from '../../features/blog/components/PostCard.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { usePosts } from '../../features/blog/api/blog.queries.js';
@@ -82,31 +78,15 @@ export default function Home() {
     .filter((post) => post.published !== false)
     .slice(0, 3);
 
-  // Scroll-scrubbed hero exit — Apple ties motion to scroll position rather than
-  // firing it once. As the hero scrolls away, its content drifts up, recedes,
-  // and fades. Disabled under reduced-motion (style falls back to static).
-  const heroRef = useRef(null);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
-  const heroScrub = reduceMotion ? undefined : { opacity: heroOpacity, y: heroY, scale: heroScale };
-
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
       <section
-        ref={heroRef}
-        className="relative overflow-hidden"
+        data-scene="hero"
+        className="hero-scene relative"
       >
-        {/* Static dot-grid backdrop — quiet engineered texture, no motion. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 h-full w-full bg-bg bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[length:16px_16px] dark:bg-[radial-gradient(#27272a_1px,transparent_1px)]"
-        />
-        <Container className="relative flex min-h-[calc(100vh-3rem)] flex-col items-center justify-center py-24 text-center">
-          <motion.div style={heroScrub} className="flex flex-col items-center">
+        <Container className="hero-stage relative flex flex-col items-center justify-center text-center">
+          <div data-hero-content className="hero-copy flex flex-col items-center">
             {/* Role eyebrow — answers "what kind of engineer" before the headline. */}
             <Eyebrow className="mb-4 sm:mb-5">
               {profile.role}
@@ -138,7 +118,8 @@ export default function Home() {
                 </span>
               ))}
             </div>
-          </motion.div>
+          </div>
+          <SystemVisual />
         </Container>
       </section>
 
@@ -155,14 +136,13 @@ export default function Home() {
         <Container>
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <Eyebrow>By the numbers</Eyebrow>
-            <h2 className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
+            <h2 data-motion="heading" className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
               Three years, measured in outcomes.
             </h2>
           </div>
           {/* Number row — figures separated by hairline rules only, no card. */}
           <div className="grid grid-cols-2 lg:grid-cols-4">
             {stats.slice(0, 4).map((stat, i) => {
-              const numeric = Number(stat.value);
               // Per-cell divider borders, recomputed at the lg breakpoint where the
               // 2×2 grid becomes a single 1×4 row.
               const dividers = [
@@ -177,7 +157,7 @@ export default function Home() {
                     <p className="text-micro font-semibold uppercase text-muted">{stat.eyebrow}</p>
                   )}
                   <p className="mt-3 flex items-start justify-center font-display text-fluid-stat font-semibold text-ink">
-                    {Number.isFinite(numeric) ? <CountUp value={numeric} /> : stat.value}
+                    {stat.value}
                     {/* type-exempt: suffix glyph optically sized to the stat numeral */}
                     {stat.suffix && <span className="ml-0.5 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
                   </p>
@@ -192,52 +172,32 @@ export default function Home() {
       </section>
 
       {/* ── How I engineer ─────────────────────────────────────────────── */}
+      <EngineeringStatement />
       <ArchitectureDiagram />
 
       {/* ── Selected work ──────────────────────────────────────────────── */}
-      <section className="py-24 sm:py-28">
-        <Container>
-          <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <Eyebrow>Selected work</Eyebrow>
-              <h2 className="mt-3 max-w-xl font-display text-fluid-h2 font-semibold text-ink">
-                Designed, shipped, and measured.
-              </h2>
-            </div>
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
-            >
-              All projects <span aria-hidden="true">›</span>
-            </Link>
-          </div>
-          {projectsQuery.isLoading && !projectsQuery.data ? (
-            <Spinner label="Loading projects" />
-          ) : (
-            <ProjectGrid projects={featured} />
-          )}
-        </Container>
-      </section>
+      <ProjectShowcase projects={featured} />
 
       {/* ── Services ───────────────────────────────────────────────────── */}
-      <section className="bg-surface py-24 sm:py-28">
+      <section data-scene="services" className="services-scene bg-surface py-24 sm:py-28">
         <Container>
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <Eyebrow>Services</Eyebrow>
-            <h2 className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
+            <h2 data-motion="heading" className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
               What I can build for you.
             </h2>
             <p className="mt-4 text-body text-muted">
               End-to-end product engineering — from the frontend and APIs to performance, real-time, and AI.
             </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div data-services-track className="services-track grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {services.map((item) => {
               const Icon = item.icon;
               return (
                 <div
                   key={item.title}
-                  className={`group flex flex-col rounded-card bg-panel p-8 shadow-soft transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift ${
+                  data-service-card
+                  className={`group flex flex-col rounded-card bg-panel p-8 shadow-soft transition-shadow duration-500 ease-apple hover:shadow-lift ${
                     item.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
                   }`}
                 >
@@ -275,7 +235,7 @@ export default function Home() {
             <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <Eyebrow>Writing</Eyebrow>
-                <h2 className="mt-3 max-w-xl font-display text-fluid-h2 font-semibold text-ink">
+                <h2 data-motion="heading" className="mt-3 max-w-xl font-display text-fluid-h2 font-semibold text-ink">
                   Notes from the work.
                 </h2>
               </div>
@@ -298,7 +258,7 @@ export default function Home() {
       {/* ── Closing CTA ────────────────────────────────────────────────── */}
       <section className="py-28 sm:py-36">
         <Container>
-          <div className="mx-auto max-w-3xl text-center">
+          <div data-motion="closing" className="mx-auto max-w-3xl text-center">
             <h2 className="font-display text-fluid-cta font-semibold text-ink">
               Let&apos;s build something
               <br className="hidden sm:block" /> <span className="text-accent">great together.</span>

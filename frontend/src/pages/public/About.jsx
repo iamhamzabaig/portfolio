@@ -13,7 +13,7 @@ function SectionLabel({ index, label }) {
   return (
     <div className="mb-10 flex items-baseline gap-4">
       <Eyebrow as="span">{index}</Eyebrow>
-      <h2 className="font-display text-fluid-h3 font-semibold text-ink">{label}</h2>
+      <h2 data-motion="heading" className="font-display text-fluid-h3 font-semibold text-ink">{label}</h2>
       <span className="h-px flex-1 translate-y-[-2px] bg-border" />
     </div>
   );
@@ -28,7 +28,7 @@ export default function About() {
       {/* Intro */}
       <div className="max-w-3xl">
         <Eyebrow>About</Eyebrow>
-        <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
+        <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           {profile.name}
         </h1>
         <p className="mt-4 text-body text-muted">
@@ -76,7 +76,7 @@ export default function About() {
         <SectionLabel index="02" label="Stack & competencies" />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {fallbackSkills.map((col) => (
-            <div key={col.group} className="rounded-card bg-surface p-6">
+            <div data-motion="card" key={col.group} className="rounded-card bg-surface p-6">
               <h3 className="text-caption font-semibold uppercase tracking-[0.08em] text-muted">{col.group}</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {col.items.map((item) => (

@@ -13,21 +13,22 @@ export function ProjectFeature({ project, index = 0 }) {
   const reversed = index % 2 === 1;
 
   return (
-    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+    <div data-motion="feature" data-reverse={reversed} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
       {/* Media — the hero of the row. */}
       <Link
         to={to}
         aria-label={project.title}
-        className={`group relative order-1 block overflow-hidden rounded-media bg-surface shadow-soft transition duration-500 ease-apple hover:shadow-lift ${
+        className={`group relative order-1 block overflow-hidden rounded-media bg-surface shadow-soft transition-shadow duration-500 ease-apple hover:shadow-lift ${
           reversed ? 'lg:order-2' : 'lg:order-1'
         }`}
       >
         <div className="relative aspect-[16/10] overflow-hidden">
           {hasImage ? (
             <img
+              data-parallax
               src={project.coverImage.url}
               alt=""
-              className="h-full w-full object-cover transition duration-700 ease-apple group-hover:scale-[1.04]"
+              className="h-full w-full object-cover"
               loading="lazy"
             />
           ) : (

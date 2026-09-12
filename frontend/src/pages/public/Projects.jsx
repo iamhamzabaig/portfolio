@@ -54,7 +54,7 @@ export default function Projects() {
     <Container className="py-20 sm:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>Projects</Eyebrow>
-        <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
+        <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
           Selected work
         </h1>
         <p className="mt-5 text-body text-muted">

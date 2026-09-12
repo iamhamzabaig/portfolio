@@ -17,7 +17,7 @@ export function PostCard({ post }) {
   const date = formatDate(post.publishedAt || post.createdAt);
 
   return (
-    <div>
+    <div data-motion="card">
       <Link
         to={`/blog/${post.slug}`}
         className="group flex h-full flex-col overflow-hidden rounded-card bg-panel shadow-soft ring-1 ring-border/70 transition duration-500 ease-apple hover:-translate-y-1.5 hover:shadow-lift"

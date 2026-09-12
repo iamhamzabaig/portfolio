@@ -18,12 +18,7 @@ import {
   SiAnthropic
 } from 'react-icons/si';
 
-// Infinite, seamless marquee of the tech stack as monochrome brand marks. The
-// track holds two identical copies; the `marquee` keyframe (tailwind.config.js)
-// shifts it one copy (-50%) for a seamless loop. Icons inherit currentColor, so
-// they read as a quiet grayscale logo cloud that lifts to full-ink on hover.
-// Edges fade via a mask (theme-independent); motion pauses on hover and is
-// halted entirely by the global prefers-reduced-motion CSS.
+// Two copies wrap as scroll displacement changes. No autoplay animation.
 
 const TECH = [
   { label: 'TypeScript', Icon: SiTypescript },
@@ -60,11 +55,12 @@ function Lockup({ label, Icon, aria = true }) {
 export function TechMarquee({ className = '' }) {
   return (
     <div
-      className={`group relative w-full overflow-hidden
+      data-scene="ticker"
+      className={`tech-ticker group relative w-full overflow-hidden
         [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]
         [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] ${className}`}
     >
-      <div className="flex w-max animate-marquee group-hover:[animation-play-state:paused]">
+      <div data-ticker-track className="flex w-max">
         <ul className="flex shrink-0 items-center gap-x-12 pr-12">
           {TECH.map((t) => (
             <Lockup key={t.label} {...t} />
