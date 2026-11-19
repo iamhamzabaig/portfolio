@@ -1,4 +1,5 @@
 import { supabase } from '../../../lib/supabaseClient.js';
+import { getProjectBySlug } from '../../../utils/fallbackData.js';
 
 const BUCKET = 'project-images';
 const BUCKET_VIDEO = 'project-videos';
@@ -103,9 +104,10 @@ export async function fetchProjects(params = {}) {
 }
 
 export async function fetchProject(slug) {
-  const { data, error } = await supabase.from('projects').select('*').eq('slug', slug).single();
+  const { data, error } = await supabase.from('projects').select('*').eq('slug', slug).maybeSingle();
   if (error) throw error;
-  return toProject(data);
+  // Showcase projects that are not in the database yet still get a page.
+  return data ? toProject(data) : getProjectBySlug(slug) || null;
 }
 
 export async function createProject({ values, file, videoFile, screenshotFiles }) {

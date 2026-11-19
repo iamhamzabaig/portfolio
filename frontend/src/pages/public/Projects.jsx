@@ -5,14 +5,14 @@ import { Container } from '../../components/layout/Container.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectCase } from '../../features/projects/components/ProjectCase.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
-import { fallbackProjects } from '../../utils/fallbackData.js';
+import { withShowcase } from '../../features/projects/fleet.js';
 
 const ALL = 'All';
 
 export default function Projects() {
   const [active, setActive] = useState(ALL);
   const projectsQuery = useProjects();
-  const projects = projectsQuery.data?.length ? projectsQuery.data : fallbackProjects;
+  const projects = withShowcase(projectsQuery.data);
 
   // Filter pills, derived from the projects' own tags (most-used first) so they
   // stay in sync as work is added from the admin — no hardcoded categories.

@@ -3,9 +3,10 @@ import { ArrowDown, ArrowUpRight, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
 import { TechMarquee } from '../../components/ui/TechMarquee.jsx';
+import { CircuitField } from '../../components/ui/CircuitField.jsx';
 import { ProjectCase } from '../../features/projects/components/ProjectCase.jsx';
 import { AssistantArt, DukaanArt, PulseArt } from '../../features/projects/components/ProjectArt.jsx';
-import { getFleetMeta } from '../../features/projects/fleet.js';
+import { getFleetMeta, withShowcase } from '../../features/projects/fleet.js';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { usePosts } from '../../features/blog/api/blog.queries.js';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
@@ -14,7 +15,6 @@ import {
   engineeringApproach,
   fallbackPosts,
   fallbackProfile,
-  fallbackProjects,
   fallbackSkills
 } from '../../utils/fallbackData.js';
 
@@ -94,11 +94,11 @@ export default function Home() {
   const projectsQuery = useProjects({ featured: true });
   const profile = profileQuery.data || fallbackProfile;
   const time = useIslamabadTime();
-  const fleet = (projectsQuery.data?.length ? projectsQuery.data : fallbackProjects)
+  const fleet = withShowcase(projectsQuery.data)
     .filter((project) => project.featured)
     // Projects still in progress go to the end.
     .sort((a, b) => (getFleetMeta(a).status === 'In progress') - (getFleetMeta(b).status === 'In progress'))
-    .slice(0, 5);
+    .slice(0, 8);
 
   const postsQuery = usePosts();
   const latestPosts = (postsQuery.data?.length ? postsQuery.data : fallbackPosts)
@@ -111,7 +111,8 @@ export default function Home() {
     <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
-        <Container className="flex min-h-[calc(100svh-4rem)] flex-col justify-between gap-12 pb-10 pt-12 sm:pt-16">
+        <CircuitField />
+        <Container className="relative flex min-h-[calc(100svh-4rem)] flex-col justify-between gap-12 pb-10 pt-12 sm:pt-16">
           <div className="fade-up flex flex-wrap items-center gap-3" style={{ '--d': '0s' }}>
             <span className="chip">
               <span aria-hidden="true" className="dot dot-live" />
@@ -183,8 +184,9 @@ export default function Home() {
       </section>
 
       {/* ── AI ─────────────────────────────────────────────────────────── */}
-      <section className="ai-band py-24 sm:py-32">
-        <Container>
+      <section className="ai-band relative overflow-hidden py-24 sm:py-32">
+        <CircuitField fade="edges" density={0.06} seed={21} />
+        <Container className="relative">
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] lg:col-span-7">AI engineering</h2>
             <p className="max-w-[52ch] text-body-lg text-muted lg:col-span-5">

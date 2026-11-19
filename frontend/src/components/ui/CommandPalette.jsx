@@ -21,7 +21,8 @@ import { useTheme } from '../../context/ThemeContext.jsx';
 import { useToast } from './Toast.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
-import { fallbackProfile, fallbackProjects } from '../../utils/fallbackData.js';
+import { fallbackProfile } from '../../utils/fallbackData.js';
+import { withShowcase } from '../../features/projects/fleet.js';
 
 // ⌘K command palette. `CommandPaletteProvider` owns the open state, binds the
 // global ⌘K / Ctrl+K shortcut, renders the overlay, and hands `open()` to
@@ -98,7 +99,7 @@ function CommandPalette({ isOpen, onClose }) {
   const { data: profileData } = useProfile();
 
   const profile = profileData || fallbackProfile;
-  const projects = projectsData?.length ? projectsData : fallbackProjects;
+  const projects = withShowcase(projectsData);
 
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);

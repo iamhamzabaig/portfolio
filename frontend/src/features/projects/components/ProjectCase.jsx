@@ -9,6 +9,10 @@ export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
   const meta = getFleetMeta(project);
   const Heading = headingLevel;
   const live = meta.status === 'Live';
+  // Real uploads win over the drawn illustration: video first, then cover image.
+  const image = project.coverImage?.url || project.screenshots?.[0]?.url || '';
+  const video = project.video?.url || '';
+  const media = video || image ? { video, image } : null;
 
   const spotlight = (e) => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -36,7 +40,31 @@ export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
           )}
         </div>
         <div className="art-stage" aria-hidden="true">
-          <ProjectArt slug={project.slug} />
+          {media ? (
+            <div className="art-window w-[min(30rem,62vw)]">
+              <div className="flex items-center gap-1.5 border-b border-border px-3.5 py-2.5">
+                <span className="h-2 w-2 rounded-full bg-border" />
+                <span className="h-2 w-2 rounded-full bg-border" />
+                <span className="h-2 w-2 rounded-full bg-border" />
+              </div>
+              {media.video ? (
+                <video
+                  src={media.video}
+                  poster={media.image || undefined}
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                  preload="metadata"
+                  className="aspect-video w-full object-cover"
+                />
+              ) : (
+                <img src={media.image} alt="" loading="lazy" className="aspect-video w-full object-cover" />
+              )}
+            </div>
+          ) : (
+            <ProjectArt slug={project.slug} />
+          )}
         </div>
         <div className="cover-title relative z-10 max-w-[52%]">
           <p className="display text-[clamp(2rem,4.2vw,3.75rem)] text-ink">{project.title}</p>

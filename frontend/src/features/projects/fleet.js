@@ -1,3 +1,5 @@
+import { fallbackProjects } from '../../utils/fallbackData.js';
+
 // Presentation meta for project case studies (status, route, commit count, tint).
 // Keyed by slug so projects from Supabase pick it up too; unknown slugs get a
 // plain steel panel. Numbers are real counts from each repo, not estimates.
@@ -49,4 +51,12 @@ const fallback = { status: 'Shipped', paint: 'steel' };
 
 export function getFleetMeta(project) {
   return { ...fallback, ...(fleetMeta[project?.slug] || {}) };
+}
+
+// Showcase projects live in code until they are added from the admin: list them
+// first, then the database ones, skipping any slug the database already has.
+export function withShowcase(projects) {
+  if (!projects?.length) return fallbackProjects;
+  const have = new Set(projects.map((p) => p.slug));
+  return [...fallbackProjects.filter((p) => fleetMeta[p.slug] && !have.has(p.slug)), ...projects];
 }

@@ -1,0 +1,35 @@
+# Keeps the free-plan Supabase project from pausing after a week without
+# activity: a tiny read of the public profile row every 3 days.
+# The publishable key is public (it ships in the site bundle), so no secrets.
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: '17 6 */3 * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read one row through the REST API
+        env:
+          SUPABASE_URL: https://sxylngrjmcwymycpsybt.supabase.co
+          SUPABASE_ANON_KEY: sb_publishable_d9U0FOxzL4HikRCK9q9FNA_S2F0HBcA
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::SUPABASE_URL and SUPABASE_ANON_KEY must be set."
+            exit 1
+          fi
+          status=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 --retry 3 --retry-delay 10 \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "${SUPABASE_URL%/}/rest/v1/profile?select=id&limit=1")
+          echo "Supabase responded HTTP $status"
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "::error::Supabase did not answer (HTTP $status). If the project is paused, restore it in the dashboard."
+            exit 1
+          fi
