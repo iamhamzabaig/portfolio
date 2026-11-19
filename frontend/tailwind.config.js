@@ -28,23 +28,9 @@ export default {
       fontFamily: {
         // Self-hosted Inter Variable is the primary typeface (loaded in main.jsx);
         // the system stack stays as a fallback until the font is ready.
-        sans: [
-          '"Inter Variable"',
-          'Inter',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'system-ui',
-          'sans-serif'
-        ],
-        display: [
-          '"Inter Variable"',
-          'Inter',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'system-ui',
-          'sans-serif'
-        ],
-        mono: ['ui-monospace', 'SFMono-Regular', '"SF Mono"', 'Menlo', 'monospace']
+        sans: ['var(--font-sans)'],
+        display: ['var(--font-display)'],
+        mono: ['var(--font-mono)'],
       },
       letterSpacing: {
         eyebrow: '0.02em'
@@ -69,6 +55,7 @@ export default {
         'body-sm': ['0.9375rem', { lineHeight: '1.6' }], // 15px — controls, card copy, secondary
         caption: ['0.8125rem', { lineHeight: '1.5' }], // 13px — labels, meta, footnotes
         micro: ['0.6875rem', { lineHeight: '1.4', letterSpacing: '0.06em' }], // 11px — uppercase eyebrows/tags
+        'title': ['1.375rem', { lineHeight: '1.3', letterSpacing: '-0.015em' }], // card and row titles
         eyebrow: ['0.9375rem', { lineHeight: '1.4', letterSpacing: '0.01em' }] // 15px — colored section label
       },
       // Radius roles — a semantic name per surface type so corners stay consistent

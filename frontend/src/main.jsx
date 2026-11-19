@@ -8,7 +8,11 @@ import { createQueryClient } from './app/queryClient.js';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 import '@fontsource-variable/inter';
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import './styles/index.css';
+import './styles/world.css';
 
 const queryClient = createQueryClient();
 

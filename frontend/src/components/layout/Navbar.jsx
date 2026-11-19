@@ -1,7 +1,5 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
-import { createNavMotion } from '../../lib/scrollMotion.js';
+import { useEffect } from 'react';
 import { Search } from 'lucide-react';
-import { motion } from 'motion/react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Container } from './Container.jsx';
 import { ThemeToggle } from './ThemeToggle.jsx';
@@ -9,28 +7,8 @@ import { navLinks } from './navLinks.js';
 import { useCommandPalette } from '../ui/CommandPalette.jsx';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
 
-// Minimal Apple-style mark: a clean "< >" code glyph inside a softly-rounded
-// app-icon tile. Monochrome, scales crisply.
-function Monogram() {
-  return (
-    <span className="inline-flex h-6 w-6 items-center justify-center rounded-[7px] bg-ink text-bg">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-        <path
-          d="M9.5 8L6 12L9.5 16M14.5 8L18 12L14.5 16"
-          stroke="currentColor"
-          strokeWidth="2.1"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </span>
-  );
-}
-
 export function Navbar() {
   const navigate = useNavigate();
-  const header = useRef(null);
-  useLayoutEffect(() => createNavMotion(header.current), []);
   const { data: profile } = useProfile();
   const { open: openPalette } = useCommandPalette();
   const resumeUrl = profile?.resumeUrl;
@@ -49,78 +27,46 @@ export function Navbar() {
   }, [navigate]);
 
   return (
-    <header ref={header} className="scroll-navbar sticky top-0 z-40 bg-bg/90 backdrop-blur-xl">
-      <Container className="flex h-12 items-center justify-between gap-4">
-        <Link to="/" className="inline-flex items-center gap-2">
-          <Monogram />
-          <span className="font-display text-body-sm font-semibold tracking-tight text-ink">Hamza Munawar</span>
+    <header className="sticky top-0 z-40 bg-bg/75 backdrop-blur-xl">
+      <Container className="flex h-16 items-center justify-between gap-4">
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="grid h-8 w-8 place-items-center rounded-full bg-ink font-display text-body-sm font-semibold text-bg">
+            H
+          </span>
+          <span className="font-display text-body font-semibold tracking-tight text-ink">Hamza Munawar</span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-1 rounded-full bg-panel/80 p-1 ring-1 ring-border md:flex">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `relative rounded-full px-3 py-1.5 text-caption transition-colors duration-200 ${
-                  isActive ? 'font-semibold text-ink' : 'text-ink/60 hover:text-ink'
+                `rounded-full px-4 py-1.5 text-body-sm transition-colors duration-200 ${
+                  isActive ? 'bg-ink text-bg' : 'text-muted hover:text-ink'
                 }`
               }
             >
-              {({ isActive }) => (
-                <>
-                  <span className="relative z-10">{link.label}</span>
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-ink/[0.06] dark:bg-ink/[0.09]"
-                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                    />
-                  )}
-                </>
-              )}
+              {link.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          {/* ⌘K command palette trigger — a search pill on desktop, an icon on
-              mobile. The palette itself is bound to ⌘K/Ctrl+K globally. */}
-          <motion.button
+        <div className="flex items-center gap-1.5">
+          <button
             type="button"
             onClick={openPalette}
             aria-label="Open command palette"
             aria-keyshortcuts="Meta+K Control+K"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 26 }}
-            className="hidden items-center gap-2 rounded-full border border-border/70 bg-surface/60 py-1 pl-2.5 pr-1.5 text-caption text-muted transition-colors duration-300 ease-apple hover:border-border hover:bg-surface hover:text-ink sm:inline-flex"
+            className="inline-flex h-9 items-center gap-2 rounded-full px-3 text-body-sm text-muted transition-colors hover:text-ink"
           >
-            <Search aria-hidden="true" size={14} />
-            <span>Search</span>
-            <kbd className="rounded border border-border bg-panel px-1.5 py-0.5 font-mono text-micro leading-none text-muted">
-              ⌘K
-            </kbd>
-          </motion.button>
-          <motion.button
-            type="button"
-            onClick={openPalette}
-            aria-label="Open command palette"
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 26 }}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink/70 transition-colors duration-300 ease-apple hover:bg-surface sm:hidden"
-          >
-            <Search aria-hidden="true" size={18} />
-          </motion.button>
+            <Search aria-hidden="true" size={16} />
+            <kbd className="mono hidden rounded-md px-1.5 py-0.5 text-micro ring-1 ring-border sm:inline">⌘K</kbd>
+          </button>
           <ThemeToggle />
           {resumeUrl ? (
-            <a
-              href={resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-8 items-center rounded-full bg-accent px-3.5 py-1.5 text-caption font-medium text-white transition duration-300 ease-apple hover:brightness-110 active:scale-[0.97]"
-            >
+            <a href={resumeUrl} target="_blank" rel="noreferrer" className="btn btn-primary btn-sm btn-plain">
               Résumé
             </a>
           ) : null}

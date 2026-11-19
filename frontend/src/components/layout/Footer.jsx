@@ -6,11 +6,11 @@ import { TelemetryStrip } from '../ui/TelemetryStrip.jsx';
 import { fallbackProfile } from '../../utils/fallbackData.js';
 
 const expertise = [
-  'RAG & LLM apps',
-  'AI agents',
-  'Angular 17–20',
-  'React + Next.js',
-  'Node & Express'
+  'Products, end to end',
+  'LLM & RAG features',
+  'Offline-first desktop apps',
+  'Payments & bookings',
+  'Monitoring & real-time'
 ];
 
 export function Footer() {
@@ -20,14 +20,13 @@ export function Footer() {
   const telHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
 
   return (
-    <footer className="bg-surface">
+    <footer className="border-t border-border bg-surface">
       <Container className="py-14">
         <div className="grid grid-cols-1 gap-10 border-b border-border pb-10 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
           <div className="max-w-sm">
             <p className="font-display text-body-sm font-semibold tracking-tight text-ink">Hamza Munawar</p>
             <p className="mt-3 text-caption text-muted">
-              Full-Stack &amp; AI Engineer building scalable ERP modules, real-time apps, and
-              production AI features — RAG, agents, and LLM apps.
+              Full-Stack &amp; AI Engineer. I build products that run: pharmacy platforms, monitoring systems, offline shop tills, and the LLM features inside them.
             </p>
             <div className="-ml-2.5 mt-4 flex items-center gap-1">
               <a href={`mailto:${email}`} aria-label="Email" className="inline-flex h-11 w-11 items-center justify-center rounded-full text-muted transition-colors hover:bg-panel hover:text-ink">
@@ -90,7 +89,7 @@ export function Footer() {
             </ul>
             <p className="mt-4 inline-flex items-center gap-2 text-caption text-muted">
               <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Open to full-stack &amp; frontend roles
+              Open to client builds and full-stack + AI roles
             </p>
           </div>
         </div>

@@ -1,282 +1,342 @@
-import { Activity, ArrowRight, Cloud, Code2, Gauge, Server, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowDown, ArrowUpRight, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
-import { ArchitectureDiagram } from '../../components/home/ArchitectureDiagram.jsx';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
-import { Sparkline } from '../../components/ui/Sparkline.jsx';
 import { TechMarquee } from '../../components/ui/TechMarquee.jsx';
-import { EngineeringStatement, ProjectShowcase, SystemVisual } from '../../components/home/ScrollScenes.jsx';
-import { PostCard } from '../../features/blog/components/PostCard.jsx';
+import { ProjectCase } from '../../features/projects/components/ProjectCase.jsx';
+import { AssistantArt, DukaanArt, PulseArt } from '../../features/projects/components/ProjectArt.jsx';
+import { getFleetMeta } from '../../features/projects/fleet.js';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { usePosts } from '../../features/blog/api/blog.queries.js';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
-import { fallbackProjects, fallbackPosts, fallbackProfile } from '../../utils/fallbackData.js';
+import { formatDate } from '../../utils/formatDate.js';
+import {
+  engineeringApproach,
+  fallbackPosts,
+  fallbackProfile,
+  fallbackProjects,
+  fallbackSkills
+} from '../../utils/fallbackData.js';
 
-// Trust strip under the hero CTAs — proof over soft facts (what/where/how long).
-const trustPoints = [
-  '3+ years shipping',
-  'Enterprise ERP & real-time',
-  'Angular · React · Node',
-  'Currently @ Code Agrius'
+// Build rules: each one is something a real build here enforces.
+const rules = [
+  { rule: 'Money is counted in paisa, never in floats.', from: 'Asaan Dukaan' },
+  { rule: 'The shop keeps selling when the internet drops.', from: 'Asaan Dukaan' },
+  { rule: 'Two patients can’t book one slot. A test keeps trying.', from: 'Drop In' },
+  { rule: 'Every tenant wall has a test standing behind it.', from: 'Agrius Pulse' },
+  { rule: '“Supported” means it ran on real equipment first.', from: 'Agrius Pulse' },
+  { rule: 'Done means deployed.', from: 'Every build' }
 ];
 
-// Services offered — the client-facing menu. The AI card is flagged `featured`
-// so it reads as the differentiator, not an afterthought.
-const services = [
-  {
-    title: 'Web & App Development',
-    icon: Code2,
-    text: 'Production frontends in Angular, React, and Next.js — typed component libraries, design systems, and Nx monorepos built to scale.',
-    tools: ['Angular', 'React', 'Next.js', 'TypeScript']
-  },
-  {
-    title: 'Backend & APIs',
-    icon: Server,
-    text: 'REST, GraphQL, and WebSocket services on Node/Express with JWT auth, RBAC, and clean, documented contracts.',
-    tools: ['Node', 'Express', 'GraphQL', 'PostgreSQL']
-  },
-  {
-    title: 'AI Integration',
-    icon: Sparkles,
-    text: 'LLM-powered features that ship: chatbots, RAG pipelines, semantic search, and workflow automation wired to the Claude and OpenAI APIs.',
-    tools: ['Claude API', 'OpenAI', 'RAG', 'Embeddings'],
-    featured: true
-  },
-  {
-    title: 'Performance Engineering',
-    icon: Gauge,
-    text: 'Lighthouse gains, smaller bundles, and faster SSR — profiling and migrations that turn slow apps into measurable wins.',
-    tools: ['Lighthouse', 'SSR', 'Profiling', 'Core Web Vitals']
-  },
-  {
-    title: 'Real-time Systems',
-    icon: Activity,
-    text: 'Live dashboards and event-driven UIs with Socket.io and optimistic updates that stay snappy under load.',
-    tools: ['Socket.io', 'WebSockets', 'RxJS', 'ECharts']
-  },
-  {
-    title: 'Cloud & Deployment',
-    icon: Cloud,
-    text: 'CI/CD, containerized deploys, and edge hosting — from first commit to production, automated and observable.',
-    tools: ['Vercel', 'Docker', 'CI/CD', 'Supabase']
-  }
+// Services: what a client can hire for.
+const routes = [
+  { title: 'Products, end to end', text: 'From the first schema to the deploy script: web apps, desktop apps that work offline, and the admin that runs them.', tools: 'React · Angular · Electron · Node · Go' },
+  { title: 'LLM features that ship', text: 'Retrieval over your own documents, assistants that cite or refuse, tool-calling agents wired to the Claude and OpenAI APIs.', tools: 'RAG · Embeddings · pgvector · Agents', ai: true },
+  { title: 'Payments & bookings', text: 'Card holds, refunds and slot booking that survive two people clicking at once.', tools: 'Stripe · PostgreSQL · Prisma' },
+  { title: 'Monitoring & real-time', text: 'Live dashboards, incidents, on-call escalation, and data that streams instead of refreshing.', tools: 'WebSockets · VictoriaMetrics · Socket.IO' },
+  { title: 'Speed work', text: 'Profiling and migrations that turn slow apps into measured wins: Lighthouse 65 → 88, PDF invoices 8s → 1.2s.', tools: 'Lighthouse · SSR · Bundles' }
 ];
+
+// ~1,190 commits across these repos carry a Claude co-author trailer.
+const AGENT_COMMITS = '1,190';
+
+function useIslamabadTime() {
+  const fmt = () =>
+    new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Karachi' }).format(new Date());
+  const [time, setTime] = useState(fmt);
+  useEffect(() => {
+    const id = setInterval(() => setTime(fmt()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
+// Splits a line into words that rise out of their own clipped boxes.
+function Reveal({ text, start = 0 }) {
+  return text.split(' ').map((word, i) => (
+    <span key={`${word}-${i}`} className="reveal">
+      <span style={{ '--i': start + i }}>{word}&nbsp;</span>
+    </span>
+  ));
+}
+
+// Hero illustration: three slices of shipped products, layered and floating.
+// Pointer movement tilts the stack slightly (--px/--py).
+function HeroArt() {
+  const tilt = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+    e.currentTarget.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+  };
+  return (
+    <div
+      aria-hidden="true"
+      onPointerMove={tilt}
+      className="hero-art fade-up relative hidden h-[34rem] lg:col-span-5 lg:block"
+      style={{ '--d': '0.35s' }}
+    >
+      <div className="hero-glow" />
+      <div className="hero-card tint-red right-0 top-2" style={{ '--depth': 10, '--float': '0s' }}>
+        <PulseArt />
+      </div>
+      <div className="hero-card tint-yellow -left-10 top-[40%]" style={{ '--depth': 22, '--float': '-2.4s' }}>
+        <AssistantArt />
+      </div>
+      <div className="hero-card tint-green -bottom-6 -right-8" style={{ '--depth': 34, '--float': '-4.1s', zIndex: 2 }}>
+        <DukaanArt />
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const profileQuery = useProfile();
   const projectsQuery = useProjects({ featured: true });
   const profile = profileQuery.data || fallbackProfile;
-  const stats = profile.stats?.length ? profile.stats : fallbackProfile.stats;
-  const featured = (projectsQuery.data?.length ? projectsQuery.data : fallbackProjects)
+  const time = useIslamabadTime();
+  const fleet = (projectsQuery.data?.length ? projectsQuery.data : fallbackProjects)
     .filter((project) => project.featured)
-    .slice(0, 3);
+    // Projects still in progress go to the end.
+    .sort((a, b) => (getFleetMeta(a).status === 'In progress') - (getFleetMeta(b).status === 'In progress'))
+    .slice(0, 5);
 
   const postsQuery = usePosts();
   const latestPosts = (postsQuery.data?.length ? postsQuery.data : fallbackPosts)
     .filter((post) => post.published !== false)
     .slice(0, 3);
 
+  const aiSkills = fallbackSkills.find((s) => s.group === 'AI Engineering')?.items || [];
+
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section
-        data-scene="hero"
-        className="hero-scene relative"
-      >
-        <Container className="hero-stage relative flex flex-col items-center justify-center text-center">
-          <div data-hero-content className="hero-copy flex flex-col items-center">
-            {/* Role eyebrow — answers "what kind of engineer" before the headline. */}
-            <Eyebrow className="mb-4 sm:mb-5">
-              {profile.role}
-            </Eyebrow>
-            <h1 className="font-display text-fluid-hero font-semibold text-ink">
-              I build software that <span className="text-accent">scales.</span>
-            </h1>
+      <section className="relative overflow-hidden">
+        <Container className="flex min-h-[calc(100svh-4rem)] flex-col justify-between gap-12 pb-10 pt-12 sm:pt-16">
+          <div className="fade-up flex flex-wrap items-center gap-3" style={{ '--d': '0s' }}>
+            <span className="chip">
+              <span aria-hidden="true" className="dot dot-live" />
+              Open to client builds and full-stack + AI roles
+            </span>
+            <span className="mono text-caption text-muted">Islamabad · {time} PKT</span>
+          </div>
 
-            <p className="mt-7 max-w-2xl text-body-lg text-muted">{profile.headline}</p>
+          <div className="grid items-center gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <p className="mono fade-up mb-6 text-body-sm text-muted" style={{ '--d': '0.05s' }}>
+                <span>{profile.role || 'Full-Stack & AI Engineer'}</span> · {profile.name || 'Hamza Munawar'}
+              </p>
+              <h1 className="display text-[clamp(3.25rem,8.2vw,8rem)] text-ink">
+                <Reveal text="I build products" />
+                <br />
+                <span className="text-accent">
+                  <Reveal text="that run." start={3} />
+                </span>
+              </h1>
+            </div>
+            <HeroArt />
+          </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-              <Button as={Link} to="/projects">
-                View work
-                <ArrowRight aria-hidden="true" size={16} />
-              </Button>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
-              >
-                Get in touch <span aria-hidden="true">›</span>
+          <div className="grid gap-10 border-t border-border pt-8 md:grid-cols-12">
+            <p className="fade-up max-w-[56ch] text-body-lg text-muted md:col-span-7" style={{ '--d': '0.5s' }}>
+              {profile.headline}
+            </p>
+            <div className="fade-up flex flex-wrap items-start gap-3 md:col-span-5 md:justify-end" style={{ '--d': '0.7s' }}>
+              <a href="#fleet" className="btn btn-primary">
+                See my work
+                <span className="btn-arrow" aria-hidden="true"><ArrowDown size={16} /></span>
+              </a>
+              <Link to="/contact" className="btn btn-ghost btn-plain">
+                Start a conversation
               </Link>
             </div>
-
-            <div className="mt-16 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-caption text-muted">
-              {trustPoints.map((item, i) => (
-                <span key={item} className="inline-flex items-center gap-3">
-                  {i > 0 && <span aria-hidden="true" className="text-border">·</span>}
-                  {item}
-                </span>
-              ))}
-            </div>
           </div>
-          <SystemVisual />
         </Container>
       </section>
 
-      {/* ── Tech stack marquee ─────────────────────────────────────────── */}
-      <section className="py-16 sm:py-20">
-        <p className="mb-10 text-center text-micro font-semibold uppercase tracking-[0.14em] text-muted/70">
-          Technologies I work with
-        </p>
+      {/* ── Toolbox ────────────────────────────────────────────────────── */}
+      <section className="border-y border-border py-10">
+        <h2 className="sr-only">Technologies</h2>
         <TechMarquee />
       </section>
 
-      {/* ── By the numbers ─────────────────────────────────────────────── */}
-      <section className="bg-surface py-24 sm:py-28">
+      {/* ── Selected work ──────────────────────────────────────────────── */}
+      <section id="fleet" className="scroll-mt-20 py-24 sm:py-32">
         <Container>
-          <div className="mx-auto mb-16 max-w-2xl text-center">
-            <Eyebrow>By the numbers</Eyebrow>
-            <h2 data-motion="heading" className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
-              Three years, measured in outcomes.
-            </h2>
+          <div className="mb-16 flex flex-col gap-6 sm:mb-24 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">Selected work</h2>
+              <p className="mt-5 max-w-[52ch] text-body-lg text-muted">
+                Products in production, and one still in progress. The numbers are real commit counts.
+              </p>
+            </div>
+            <Link to="/projects" className="btn btn-ghost btn-sm self-start sm:self-auto">
+              All projects
+              <span className="btn-arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
+            </Link>
           </div>
-          {/* Number row — figures separated by hairline rules only, no card. */}
-          <div className="grid grid-cols-2 lg:grid-cols-4">
-            {stats.slice(0, 4).map((stat, i) => {
-              // Per-cell divider borders, recomputed at the lg breakpoint where the
-              // 2×2 grid becomes a single 1×4 row.
-              const dividers = [
-                '',
-                'border-l border-border',
-                'border-t border-border lg:border-t-0 lg:border-l',
-                'border-l border-t border-border lg:border-t-0'
-              ][i];
-              return (
-                <div key={stat.label} className={`flex flex-col items-center px-6 py-8 text-center ${dividers}`}>
-                  {stat.eyebrow && (
-                    <p className="text-micro font-semibold uppercase text-muted">{stat.eyebrow}</p>
-                  )}
-                  <p className="mt-3 flex items-start justify-center font-display text-fluid-stat font-semibold text-ink">
-                    {stat.value}
-                    {/* type-exempt: suffix glyph optically sized to the stat numeral */}
-                    {stat.suffix && <span className="ml-0.5 mt-1 text-2xl font-semibold text-accent">{stat.suffix}</span>}
-                  </p>
-                  <p className="mt-4 text-body-sm font-semibold text-ink">{stat.label}</p>
-                  <p className="mt-1 text-caption text-muted">{stat.description}</p>
-                  {stat.spark && <Sparkline points={stat.spark} className="mx-auto mt-4 text-accent/80" />}
-                </div>
-              );
-            })}
+          <div className="flex flex-col gap-24 lg:gap-32">
+            {fleet.map((project, i) => (
+              <ProjectCase key={project._id || project.slug} project={project} flip={i % 2 === 1} />
+            ))}
           </div>
         </Container>
       </section>
 
-      {/* ── How I engineer ─────────────────────────────────────────────── */}
-      <EngineeringStatement />
-      <ArchitectureDiagram />
-
-      {/* ── Selected work ──────────────────────────────────────────────── */}
-      <ProjectShowcase projects={featured} />
-
-      {/* ── Services ───────────────────────────────────────────────────── */}
-      <section data-scene="services" className="services-scene bg-surface py-24 sm:py-28">
+      {/* ── AI ─────────────────────────────────────────────────────────── */}
+      <section className="ai-band py-24 sm:py-32">
         <Container>
-          <div className="mx-auto mb-16 max-w-2xl text-center">
-            <Eyebrow>Services</Eyebrow>
-            <h2 data-motion="heading" className="mt-3 font-display text-fluid-h2 font-semibold text-ink">
-              What I can build for you.
-            </h2>
-            <p className="mt-4 text-body text-muted">
-              End-to-end product engineering — from the frontend and APIs to performance, real-time, and AI.
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+            <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] lg:col-span-7">AI engineering</h2>
+            <p className="max-w-[52ch] text-body-lg text-muted lg:col-span-5">
+              LLM features built like the rest of my work: grounded in your own data, measured, and shipped. This is
+              the path a question takes through the retrieval systems I build.
             </p>
           </div>
-          <div data-services-track className="services-track grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  data-service-card
-                  className={`group flex flex-col rounded-card bg-panel p-8 shadow-soft transition-shadow duration-500 ease-apple hover:shadow-lift ${
-                    item.featured ? 'ring-2 ring-accent/40' : 'ring-1 ring-border/70'
-                  }`}
-                >
-                  <Icon
-                    aria-hidden="true"
-                    size={28}
-                    strokeWidth={1.5}
-                    className="text-accent transition-transform duration-500 ease-apple group-hover:scale-110"
-                  />
-                  <div className="mt-6 flex items-center gap-2">
-                    <h3 className="font-display text-fluid-h3 font-semibold text-ink">{item.title}</h3>
-                    {item.featured && (
-                      <Badge tone="accent" size="xs">
-                        New
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="mt-2 text-body-sm text-muted">{item.text}</p>
-                  <div className="mt-5 flex flex-wrap gap-2 pt-1">
-                    {item.tools.map((tool) => (
-                      <Badge key={tool}>{tool}</Badge>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+
+          <ol className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
+            {engineeringApproach.pipeline.map((stop, i) => (
+              <li key={stop.id} className="flex flex-col gap-3">
+                <span className="mono text-caption text-muted">Step {i + 1}</span>
+                <div className="pipeline-line" aria-hidden="true" />
+                <strong className="text-title font-medium">{stop.label}</strong>
+                <span className="text-body-sm text-muted">{stop.sub}</span>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-20 grid gap-6 lg:grid-cols-12">
+            <div className="rounded-3xl p-8 ring-1 ring-border sm:p-10 lg:col-span-7">
+              <h3 className="text-title font-medium">What I bring to an AI build</h3>
+              <ul className="mt-6 flex flex-wrap gap-2.5">
+                {aiSkills.map((skill) => (
+                  <li key={skill} className="rounded-full px-4 py-2 text-body-sm ring-1 ring-border">
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+              <Link to="/projects/ai-knowledge-assistant" className="btn btn-accent mt-10">
+                Try the retrieval demo
+                <span className="btn-arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
+              </Link>
+            </div>
+            <div className="flex flex-col justify-between gap-10 rounded-3xl bg-surface p-8 sm:p-10 lg:col-span-5">
+              <p className="display text-[clamp(3.5rem,8vw,6rem)] text-accent">{AGENT_COMMITS}</p>
+              <div>
+                <h3 className="text-title font-medium">commits co-written with Claude</h3>
+                <p className="mt-3 text-body text-muted">
+                  Every build here is spec-first and agent-assisted: written plans, custom Claude skills and review
+                  agents, parallel worktrees, and a human signing off each change. It is how one engineer ships a
+                  monitoring platform and a POS in the same season.
+                </p>
+              </div>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* ── Latest writing ─────────────────────────────────────────────── */}
-      {latestPosts.length > 0 && (
-        <section className="bg-surface py-24 sm:py-28">
-          <Container>
-            <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <Eyebrow>Writing</Eyebrow>
-                <h2 data-motion="heading" className="mt-3 max-w-xl font-display text-fluid-h2 font-semibold text-ink">
-                  Notes from the work.
-                </h2>
-              </div>
-              <Link
-                to="/blog"
-                className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
+      {/* ── Rules ──────────────────────────────────────────────────────── */}
+      <section className="py-24 sm:py-32">
+        <Container className="grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">How I build</h2>
+            <p className="mt-5 max-w-[42ch] text-body-lg text-muted">
+              Rules every project here follows. Each one came from a real build.
+            </p>
+          </div>
+          <ul className="lg:col-span-7">
+            {rules.map((item) => (
+              <li
+                key={item.rule}
+                className="group flex flex-col gap-1 border-b border-border py-6 first:border-t sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
               >
-                All writing <span aria-hidden="true">›</span>
+                <span className="font-display text-fluid-h3 font-medium text-ink transition-colors duration-300 group-hover:text-accent">
+                  {item.rule}
+                </span>
+                <span className="mono shrink-0 text-caption text-muted">{item.from}</span>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* ── Services ───────────────────────────────────────────────────── */}
+      <section className="bg-surface py-24 sm:py-32">
+        <Container>
+          <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">Services</h2>
+          <p className="mt-5 max-w-[52ch] text-body-lg text-muted">
+            What you can hire me to build, from the first schema to the deploy.
+          </p>
+          <dl className="mt-14">
+            {routes.map((route) => (
+              <div key={route.title} className="grid gap-2 border-b border-border py-8 first:border-t md:grid-cols-12 md:gap-8">
+                <dt className="flex items-center gap-3 text-title font-medium text-ink md:col-span-4">
+                  {route.title}
+                  {route.ai && <span className="chip text-accent">AI</span>}
+                </dt>
+                <dd className="text-body text-muted md:col-span-5">{route.text}</dd>
+                <dd className="mono text-caption text-muted md:col-span-3 md:text-right">{route.tools}</dd>
+              </div>
+            ))}
+          </dl>
+        </Container>
+      </section>
+
+      {/* ── Writing ────────────────────────────────────────────────────── */}
+      {latestPosts.length > 0 && (
+        <section className="py-24 sm:py-32">
+          <Container>
+            <div className="mb-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">Writing</h2>
+              <Link to="/blog" className="btn btn-ghost btn-sm self-start sm:self-auto">
+                All writing
+                <span className="btn-arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
               </Link>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid gap-5 md:grid-cols-3">
               {latestPosts.map((post) => (
-                <PostCard key={post._id || post.slug} post={post} />
+                <li key={post._id || post.slug}>
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    className="group flex h-full flex-col rounded-3xl bg-panel p-8 ring-1 ring-border transition duration-500 ease-apple hover:-translate-y-1 hover:shadow-lift"
+                  >
+                    <span className="mono text-caption text-muted">{formatDate(post.publishedAt || post.createdAt)}</span>
+                    <span className="mt-4 font-display text-fluid-h3 font-medium text-ink">{post.title}</span>
+                    {post.excerpt && <span className="mt-3 text-body-sm text-muted">{post.excerpt}</span>}
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-8 text-body-sm font-medium text-ink">
+                      Read
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        size={16}
+                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </span>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </Container>
         </section>
       )}
 
-      {/* ── Closing CTA ────────────────────────────────────────────────── */}
-      <section className="py-28 sm:py-36">
+      {/* ── Closing ────────────────────────────────────────────────────── */}
+      <section className="border-t border-border py-24 sm:py-36">
         <Container>
-          <div data-motion="closing" className="mx-auto max-w-3xl text-center">
-            <h2 className="font-display text-fluid-cta font-semibold text-ink">
-              Let&apos;s build something
-              <br className="hidden sm:block" /> <span className="text-accent">great together.</span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-body text-muted">
-              Tell me what you&apos;re building and where it stands today. I reply within a day.
+          <h2 className="display text-[clamp(3.25rem,11vw,9rem)] text-ink">
+            Let’s build <span className="text-accent">something.</span>
+          </h2>
+          <div className="mt-12 grid gap-8 border-t border-border pt-8 md:grid-cols-12">
+            <p className="max-w-[44ch] text-body-lg text-muted md:col-span-6">
+              Tell me what you’re building and where it stands today. I reply within a day.
             </p>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-              <Button as={Link} to="/contact">
+            <div className="flex flex-wrap gap-3 md:col-span-6 md:justify-end">
+              <Link to="/contact" className="btn btn-primary">
                 Start a conversation
-                <ArrowRight aria-hidden="true" size={16} />
-              </Button>
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-1 text-body font-medium text-accent hover:underline underline-offset-4"
-              >
-                More about me <span aria-hidden="true">›</span>
+                <span className="btn-arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
               </Link>
+              <a href={`mailto:${profile.email || fallbackProfile.email}`} className="btn btn-ghost btn-plain">
+                <Mail aria-hidden="true" size={16} />
+                Email me
+              </a>
             </div>
           </div>
         </Container>

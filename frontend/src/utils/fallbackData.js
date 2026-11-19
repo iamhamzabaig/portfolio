@@ -6,7 +6,7 @@ export const fallbackProfile = {
   name: 'Hamza Munawar',
   role: 'Full-Stack & AI Engineer',
   headline:
-    'I build scalable ERP modules, real-time apps, and high-performance frontends in Angular, React, and Node — and ship AI into production: RAG pipelines, LLM-powered features, and tool-calling agents.',
+    'I build products that run in the real world: a UK pharmacy taking bookings, a monitoring system that pages engineers at 3am, a shop till that keeps working with the internet down. And the LLM features that make them smarter.',
   bio: 'Performance-driven full-stack engineer with 3+ years shipping enterprise ERP modules, real-time platforms, and fast frontend architectures. I work across Angular (v13–v20), React/Next.js, and Node/Express inside Nx monorepos — turning legacy monoliths into measurable wins on speed, bundle size, and developer workflow. On the AI side I build production LLM features end to end: retrieval-augmented generation over private data with embeddings and vector search, tool-calling agents that automate real workflows, and assistants wired into OpenAI and Claude APIs — with grounded, cited answers rather than demos.',
   location: 'Islamabad, Pakistan',
   email: 'hamzamunawar.webdev@gmail.com',
@@ -113,6 +113,62 @@ export const fallbackEducation = [
 
 export const fallbackProjects = [
   {
+    _id: 'drop-in',
+    title: 'Drop In',
+    slug: 'drop-in',
+    description:
+      'Online pharmacy for a UK chemist: shop, pharmacy and doctor booking, clinical consultations and prescriptions, with a staff CMS.',
+    content:
+      'A full pharmacy platform in production at drop-in.co.uk. Customers shop, book pharmacy services and doctor appointments against live slots, and complete clinical assessments that pharmacists review before a prescription is issued. Card payments are held with Stripe and captured or refunded as bookings settle, with a concurrency test proving two patients cannot take the same slot. Staff and customers sign in on separate realms whose tokens are rejected by the other. NestJS, Prisma and PostgreSQL behind a React 19 frontend, with CI on every push and a deploy script that keeps clinical files outside the release folder.',
+    tags: ['React 19', 'NestJS', 'Prisma', 'PostgreSQL', 'Stripe'],
+    coverImage: { url: '' },
+    liveUrl: 'https://drop-in.co.uk',
+    repoUrl: '',
+    featured: true
+  },
+  {
+    _id: 'agrius-pulse',
+    title: 'Agrius Pulse',
+    slug: 'agrius-pulse',
+    description:
+      'Multi-tenant infrastructure monitoring for managed service providers: servers, network gear, hypervisors and databases, with incidents and on-call.',
+    content:
+      'Built at Agrius IT. Agents and a per-site collector feed metrics from servers, switches, hypervisors (VMware, Hyper-V) and five database engines; hardware is read over SNMP, Redfish and IPMI. Alerts become deduplicated incidents with a flapping guard, maintenance windows, on-call escalation and email, SMS and webhook notifications, plus asset inventory, a status page and a TV wall mode. A Go modular monolith on PostgreSQL and VictoriaMetrics with Keycloak sign-in, a React 19 UI generated from an OpenAPI spec, and tenant isolation enforced by its own test suite.',
+    tags: ['Go', 'React 19', 'PostgreSQL', 'VictoriaMetrics', 'Keycloak'],
+    coverImage: { url: '' },
+    liveUrl: 'https://agriuspulse.com',
+    repoUrl: '',
+    featured: true
+  },
+  {
+    _id: 'asaan-dukaan',
+    title: 'Asaan Dukaan',
+    slug: 'asaan-dukaan',
+    description:
+      'Offline-first point of sale for small Pakistani shops, in English and Urdu: sales, IMEI stock, khata credit ledgers, repairs and buy-back.',
+    content:
+      'A desktop POS that keeps working when the internet does not. Twenty-five server modules cover sales, IMEI-tracked stock, customer credit ledgers (khata), purchases, repairs, buy-back, rate lists, stocktake and reports. Money is stored as whole paisa, never floats; finished sales are never edited; writes are idempotent and audited. Licences are Ed25519-signed by a companion offline app (Asaan Licensing) and sent to shops over WhatsApp, verified by a shared package so signer and shop can never drift apart. Electron, React 19, TypeScript and SQLite, with Playwright walkthroughs that record their own tutorials.',
+    tags: ['Electron', 'React 19', 'TypeScript', 'SQLite', 'Urdu RTL'],
+    coverImage: { url: '' },
+    liveUrl: '',
+    repoUrl: '',
+    featured: true
+  },
+  {
+    _id: 'medipoint',
+    title: 'MediPoint',
+    slug: 'medipoint',
+    description:
+      'Offline-first point of sale for pharmacies and distributors, designed architecture-first before a line of UI.',
+    content:
+      'In progress. A desktop POS for pharmacies and medicine distributors, planned around written architecture rules: clean layering, a locked-down preload API, and stock kept as a history of movements rather than one number. A test enforces the layer boundaries so the rules cannot quietly erode. Angular 21 and Electron.',
+    tags: ['Angular 21', 'Electron', 'TypeScript'],
+    coverImage: { url: '' },
+    liveUrl: '',
+    repoUrl: '',
+    featured: true
+  },
+  {
     _id: 'ai-knowledge-assistant',
     title: 'AI Knowledge Assistant',
     slug: 'ai-knowledge-assistant',
@@ -138,7 +194,7 @@ export const fallbackProjects = [
     coverImage: { url: '' },
     liveUrl: '',
     repoUrl: 'https://github.com/iamhamzabaig',
-    featured: true
+    featured: false
   },
   {
     _id: 'bitcyllionaire',
@@ -152,7 +208,7 @@ export const fallbackProjects = [
     coverImage: { url: '' },
     liveUrl: '',
     repoUrl: 'https://github.com/iamhamzabaig',
-    featured: true
+    featured: false
   },
   {
     _id: 'theabfoods',
@@ -166,7 +222,7 @@ export const fallbackProjects = [
     coverImage: { url: '' },
     liveUrl: '',
     repoUrl: 'https://github.com/iamhamzabaig',
-    featured: true
+    featured: false
   },
   {
     _id: 'bitcy-club',

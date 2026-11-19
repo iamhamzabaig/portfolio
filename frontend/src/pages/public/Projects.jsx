@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { Container } from '../../components/layout/Container.jsx';
-import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
-import { ProjectGrid } from '../../features/projects/components/ProjectGrid.jsx';
+import { ProjectCase } from '../../features/projects/components/ProjectCase.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { fallbackProjects } from '../../utils/fallbackData.js';
 
@@ -52,21 +51,20 @@ export default function Projects() {
 
   return (
     <Container className="py-20 sm:py-24">
-      <div className="mx-auto max-w-2xl text-center">
-        <Eyebrow>Projects</Eyebrow>
-        <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
-          Selected work
+      <div className="max-w-3xl">
+        <h1 className="display text-[clamp(3.25rem,9vw,7rem)] text-ink">
+          Projects
         </h1>
-        <p className="mt-5 text-body text-muted">
-          Real-time platforms, enterprise ERP, and high-performance frontends across React, Angular, Vue, and Node.
+        <p className="mt-6 max-w-[58ch] text-body-lg text-muted">
+          Everything I have built, from live products to earlier work. Filter by technology.
         </p>
       </div>
 
       {/* Tag filter — a single dropdown menu. Scales to any number of tags,
           no horizontal scroll. Single-select; "All" resets. */}
-      <div className="mt-10 flex justify-center">
+      <div className="mt-10 flex">
         <div ref={menuRef} className="relative">
-          <span className="mr-2 text-caption text-muted">Filter</span>
+          <span className="mono mr-3 text-caption uppercase text-muted">Stack</span>
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
@@ -91,7 +89,7 @@ export default function Projects() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -6, scale: 0.98 }}
                 transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute left-1/2 z-30 mt-2 max-h-56 w-44 -translate-x-1/2 overflow-y-auto overscroll-contain rounded-card bg-panel p-1 shadow-overlay ring-1 ring-border/70"
+                className="absolute left-0 z-30 mt-2 max-h-56 w-48 overflow-y-auto overscroll-contain rounded-card bg-panel p-1 shadow-overlay ring-1 ring-border/70"
               >
                 {filters.map((tag) => {
                   const isActive = tag === active;
@@ -119,11 +117,19 @@ export default function Projects() {
         </div>
       </div>
 
-      <div className="mt-12">
+      <div className="mt-16">
         {projectsQuery.isLoading && !projectsQuery.data ? (
           <Spinner label="Loading projects" />
         ) : (
-          <ProjectGrid projects={filtered} />
+          filtered.length ? (
+            <div className="flex flex-col gap-24 lg:gap-32">
+              {filtered.map((project, i) => (
+                <ProjectCase key={project._id || project.slug} project={project} headingLevel="h2" flip={i % 2 === 1} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-body text-muted">No projects use that technology yet.</p>
+          )
         )}
       </div>
     </Container>

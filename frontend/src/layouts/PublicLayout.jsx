@@ -10,12 +10,12 @@ export function PublicLayout() {
   const location = useLocation();
   return (
     <CommandPaletteProvider>
-    <div className="flex min-h-[100dvh] flex-col overflow-x-clip">
+    <div className="world flex min-h-[100dvh] flex-col overflow-x-clip pb-[calc(4.25rem+env(safe-area-inset-bottom))] md:pb-0">
       {/* Skip link — first tab stop, hidden until focused, lands keyboard users
           past the nav and straight on the page content. */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-body-sm focus:font-medium focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-body-sm focus:font-medium focus:text-on-accent"
       >
         Skip to content
       </a>
@@ -24,7 +24,7 @@ export function PublicLayout() {
           indicator); removed at md where the bar is hidden. */}
       <main
         id="main"
-        className="flex-1 pb-[calc(4.25rem+env(safe-area-inset-bottom))] md:pb-0"
+        className="flex-1"
       >
         {/* Route-local GSAP contexts clean up on navigation. */}
         <PageTransition key={location.pathname}>

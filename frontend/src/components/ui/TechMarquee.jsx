@@ -13,9 +13,14 @@ import {
   SiReactivex,
   SiTailwindcss,
   SiDocker,
-  SiVercel,
   SiGit,
-  SiAnthropic
+  SiAnthropic,
+  SiGo,
+  SiNestjs,
+  SiElectron,
+  SiPrisma,
+  SiSqlite,
+  SiCloudflare
 } from 'react-icons/si';
 
 // Two copies wrap as scroll displacement changes. No autoplay animation.
@@ -28,6 +33,11 @@ const TECH = [
   { label: 'Angular', Icon: SiAngular },
   { label: 'Node.js', Icon: SiNodedotjs },
   { label: 'Express', Icon: SiExpress },
+  { label: 'NestJS', Icon: SiNestjs },
+  { label: 'Go', Icon: SiGo },
+  { label: 'Electron', Icon: SiElectron },
+  { label: 'Prisma', Icon: SiPrisma },
+  { label: 'SQLite', Icon: SiSqlite },
   { label: 'GraphQL', Icon: SiGraphql },
   { label: 'PostgreSQL', Icon: SiPostgresql },
   { label: 'Supabase', Icon: SiSupabase },
@@ -35,7 +45,7 @@ const TECH = [
   { label: 'RxJS', Icon: SiReactivex },
   { label: 'Tailwind', Icon: SiTailwindcss },
   { label: 'Docker', Icon: SiDocker },
-  { label: 'Vercel', Icon: SiVercel },
+  { label: 'Cloudflare', Icon: SiCloudflare },
   { label: 'Git', Icon: SiGit },
   { label: 'Claude', Icon: SiAnthropic }
 ];
@@ -47,7 +57,7 @@ function Lockup({ label, Icon, aria = true }) {
       {...(aria ? {} : { 'aria-hidden': 'true' })}
     >
       <Icon size={22} aria-hidden="true" />
-      <span className="text-body-sm font-medium tracking-tight">{label}</span>
+      <span className="text-body font-medium tracking-tight">{label}</span>
     </li>
   );
 }
