@@ -11,26 +11,16 @@
     <!-- Installed-app chrome. theme-color tints the status bar and tracks the
          active theme (matches the no-flash script below). Apple standalone tags
          make an added-to-home-screen launch run fullscreen. -->
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#09090b" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Hamza" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
     <script>
-      // Set theme before first paint: a stored choice wins, otherwise default to
-      // light (white). System preference is intentionally ignored so first-time
-      // visitors always land on the light theme.
-      (function () {
-        try {
-          var theme = localStorage.getItem('theme') || 'light';
-          document.documentElement.classList.toggle('dark', theme === 'dark');
-          document.documentElement.style.colorScheme = theme;
-        } catch (e) {
-          document.documentElement.style.colorScheme = 'light';
-        }
-      })();
+      // Dark-only site: set before first paint so there is never a light flash.
+      document.documentElement.classList.add('dark');
+      document.documentElement.style.colorScheme = 'dark';
     </script>
     <meta
       name="description"

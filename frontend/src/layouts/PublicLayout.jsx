@@ -2,6 +2,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { CommandPaletteProvider } from '../components/ui/CommandPalette.jsx';
 import { ErrorBoundary } from '../components/ui/ErrorBoundary.jsx';
 import { PageTransition } from '../components/ui/PageTransition.jsx';
+import { CursorGlow } from '../components/ui/CursorGlow.jsx';
+import { BackToTop } from '../components/ui/BackToTop.jsx';
 import { BottomTabBar } from '../components/layout/BottomTabBar.jsx';
 import { Footer } from '../components/layout/Footer.jsx';
 import { Navbar } from '../components/layout/Navbar.jsx';
@@ -19,6 +21,7 @@ export function PublicLayout() {
       >
         Skip to content
       </a>
+      <CursorGlow />
       <Navbar />
       {/* Bottom padding on mobile clears the fixed tab bar (plus the home
           indicator); removed at md where the bar is hidden. */}
@@ -35,6 +38,7 @@ export function PublicLayout() {
       </main>
       <Footer />
       <BottomTabBar />
+      <BackToTop />
     </div>
     </CommandPaletteProvider>
   );

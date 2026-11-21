@@ -6,7 +6,7 @@
 // `as` swaps the element (e.g. Link) while keeping the styling. Keyboard focus is
 // handled globally by the :focus-visible ring in styles/index.css.
 const base =
-  'inline-flex items-center justify-center gap-1.5 rounded-full border font-medium leading-none transition duration-300 ease-apple active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50';
+  'inline-flex items-center justify-center gap-1.5 rounded-full border font-medium leading-none spring-press disabled:pointer-events-none disabled:opacity-50';
 
 const variants = {
   primary: 'border-transparent bg-accent text-on-accent hover:brightness-110 active:brightness-95',

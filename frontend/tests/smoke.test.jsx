@@ -22,17 +22,14 @@ vi.mock('../src/features/auth/api/auth.api.js', () => ({
 }));
 
 const { AuthProvider } = await import('../src/context/AuthContext.jsx');
-const { ThemeProvider } = await import('../src/context/ThemeContext.jsx');
 const App = (await import('../src/app/App.jsx')).default;
 
 describe('App', () => {
   it('renders the portfolio home route', async () => {
     renderWithProviders(
-      <ThemeProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     );
 
     await waitFor(() => expect(screen.getByText('Full-stack developer')).toBeInTheDocument());

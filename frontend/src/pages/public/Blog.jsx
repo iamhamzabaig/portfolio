@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Container } from '../../components/layout/Container.jsx';
 import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
@@ -52,13 +53,16 @@ export default function Blog() {
                 key={tag}
                 type="button"
                 onClick={() => setActive(tag)}
-                className={`rounded-full px-3.5 py-1.5 text-caption font-medium ring-1 transition duration-300 ease-apple ${
-                  isActive
-                    ? 'bg-accent text-on-accent ring-accent'
-                    : 'bg-panel text-muted ring-border/70 hover:text-ink hover:ring-border'
+                aria-pressed={isActive}
+                className={`spring-press relative rounded-full px-3.5 py-1.5 text-caption font-medium ring-1 ${
+                  isActive ? 'text-on-accent ring-transparent' : 'bg-panel text-muted ring-border/70 hover:text-ink hover:ring-border'
                 }`}
               >
-                {tag}
+                {isActive && (
+                  <motion.span layoutId="blog-chip" className="absolute inset-0 rounded-full bg-accent"
+                    transition={{ type: 'spring', stiffness: 380, damping: 32 }} />
+                )}
+                <span className="relative">{tag}</span>
               </button>
             );
           })}
@@ -70,9 +74,15 @@ export default function Blog() {
           <Spinner label="Loading posts" />
         ) : filtered.length ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((post) => (
-              <PostCard key={post._id || post.slug} post={post} />
-            ))}
+            <AnimatePresence mode="popLayout" initial={false}>
+              {filtered.map((post) => (
+                <motion.div key={post._id || post.slug} layout
+                  initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 34 }}>
+                  <PostCard post={post} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         ) : (
           <p className="text-center text-muted">No posts published yet.</p>

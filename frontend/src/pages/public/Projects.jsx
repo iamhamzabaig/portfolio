@@ -70,7 +70,7 @@ export default function Projects() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-haspopup="listbox"
             aria-expanded={menuOpen}
-            className="inline-flex items-center gap-1.5 rounded-control bg-panel px-3 py-1.5 text-caption font-medium text-ink ring-1 ring-border/70 transition duration-300 ease-apple hover:ring-border active:scale-[0.98]"
+            className="inline-flex items-center gap-1.5 rounded-control bg-panel px-3 py-1.5 text-caption font-medium text-ink ring-1 ring-border/70 hover:ring-border spring-press"
           >
             {active}
             <ChevronDown
@@ -85,10 +85,10 @@ export default function Projects() {
               <motion.ul
                 role="listbox"
                 aria-label="Filter projects by technology"
-                initial={{ opacity: 0, y: -6, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, y: -6, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 500, damping: 32 } }}
+                exit={{ opacity: 0, y: -4, scale: 0.97, transition: { duration: 0.12, ease: [0.23, 1, 0.32, 1] } }}
+                style={{ transformOrigin: 'top left' }}
                 className="absolute left-0 z-30 mt-2 max-h-56 w-48 overflow-y-auto overscroll-contain rounded-card bg-panel p-1 shadow-overlay ring-1 ring-border/70"
               >
                 {filters.map((tag) => {
@@ -123,9 +123,15 @@ export default function Projects() {
         ) : (
           filtered.length ? (
             <div className="flex flex-col gap-24 lg:gap-32">
-              {filtered.map((project, i) => (
-                <ProjectCase key={project._id || project.slug} project={project} headingLevel="h2" flip={i % 2 === 1} />
-              ))}
+              <AnimatePresence mode="popLayout" initial={false}>
+                {filtered.map((project, i) => (
+                  <motion.div key={project._id || project.slug} layout="position"
+                    initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 32 }}>
+                    <ProjectCase project={project} headingLevel="h2" flip={i % 2 === 1} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           ) : (
             <p className="text-body text-muted">No projects use that technology yet.</p>

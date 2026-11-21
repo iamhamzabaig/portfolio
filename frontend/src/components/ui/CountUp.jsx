@@ -3,6 +3,8 @@ import { animate, useInView, useMotionValue, useReducedMotion } from 'motion/rea
 
 // Counts an integer up from 0 to `value` once it scrolls into view. Under
 // reduced motion (or before it enters), it just shows the final number.
+const fmt = (n) => n.toLocaleString('en-US');
+
 export function CountUp({ value, duration = 1.4, className = '' }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
@@ -13,7 +15,7 @@ export function CountUp({ value, duration = 1.4, className = '' }) {
     if (!inView || !ref.current) return undefined;
 
     if (reduce) {
-      ref.current.textContent = String(value);
+      ref.current.textContent = fmt(value);
       return undefined;
     }
 
@@ -21,7 +23,7 @@ export function CountUp({ value, duration = 1.4, className = '' }) {
       duration,
       ease: [0.16, 1, 0.3, 1],
       onUpdate: (latest) => {
-        if (ref.current) ref.current.textContent = String(Math.round(latest));
+        if (ref.current) ref.current.textContent = fmt(Math.round(latest));
       }
     });
 
@@ -30,7 +32,7 @@ export function CountUp({ value, duration = 1.4, className = '' }) {
 
   return (
     <span ref={ref} className={className}>
-      {reduce ? value : 0}
+      {reduce ? fmt(value) : 0}
     </span>
   );
 }

@@ -22,16 +22,13 @@ vi.mock('../../src/features/auth/api/auth.api.js', () => ({
 }));
 
 const { AuthProvider } = await import('../../src/context/AuthContext.jsx');
-const { ThemeProvider } = await import('../../src/context/ThemeContext.jsx');
 const { AppRoutes } = await import('../../src/app/router.jsx');
 
 function Tree() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   );
 }
 

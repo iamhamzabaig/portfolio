@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { getFleetMeta } from '../fleet.js';
 import { ProjectArt } from './ProjectArt.jsx';
 
-// A case-study row: a typographic cover lit by the project's hue (spotlight
-// follows the pointer), and the facts beside it.
+// A case-study row: a media cover lit by the project's hue (spotlight follows
+// the pointer), and the title and facts beside it. The title lives outside the
+// cover so it can never collide with the screenshot window.
 export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
   const meta = getFleetMeta(project);
   const Heading = headingLevel;
@@ -18,6 +19,13 @@ export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
     const r = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
     e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+    // Tilt up to ±4deg toward the pointer; CSS springs it back on leave.
+    e.currentTarget.style.setProperty('--rx', `${((e.clientY - r.top) / r.height - 0.5) * -8}deg`);
+    e.currentTarget.style.setProperty('--ry', `${((e.clientX - r.left) / r.width - 0.5) * 8}deg`);
+  };
+  const settle = (e) => {
+    e.currentTarget.style.removeProperty('--rx');
+    e.currentTarget.style.removeProperty('--ry');
   };
 
   return (
@@ -25,6 +33,7 @@ export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
       <Link
         to={`/projects/${project.slug}`}
         onPointerMove={spotlight}
+        onPointerLeave={settle}
         aria-label={`${project.title} case study`}
         className={`cover flex aspect-[16/11] flex-col justify-between p-7 sm:p-10 lg:col-span-7 ${flip ? 'lg:order-2' : ''}`}
       >
@@ -34,7 +43,7 @@ export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
             {meta.status}
           </span>
           {meta.plate && (
-            <span className="mono text-caption text-muted">
+            <span className="mono text-caption text-muted max-sm:rounded-full max-sm:bg-panel/90 max-sm:px-3 max-sm:py-1 max-sm:ring-1 max-sm:ring-border max-sm:backdrop-blur">
               <span className="text-body font-medium text-ink">{meta.plate}</span> {meta.plateNote}
             </span>
           )}
@@ -66,14 +75,11 @@ export function ProjectCase({ project, headingLevel = 'h3', flip = false }) {
             <ProjectArt slug={project.slug} />
           )}
         </div>
-        <div className="cover-title relative z-10 max-w-[52%]">
-          <p className="display text-[clamp(2rem,4.2vw,3.75rem)] text-ink">{project.title}</p>
-        </div>
       </Link>
 
       <div className={`lg:col-span-5 ${flip ? 'lg:order-1' : ''}`}>
-        <Heading className="sr-only">{project.title}</Heading>
-        {meta.slogan && <p className="display text-fluid-h3 text-ink">{meta.slogan}</p>}
+        <Heading className="display text-[clamp(2rem,3.6vw,3.25rem)] text-ink">{project.title}</Heading>
+        {meta.slogan && <p className="mt-3 font-display text-fluid-h3 font-medium text-muted">{meta.slogan}</p>}
         <p className="mt-4 max-w-[52ch] text-body text-muted">{project.description}</p>
 
         <dl className="mt-7 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2.5 border-t border-border pt-6 text-body-sm">

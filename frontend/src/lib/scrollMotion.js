@@ -101,6 +101,41 @@ export function createScrollMotion(root) {
         element.addEventListener('focusin', focus);
         return () => { element.classList.remove('scene-enhanced'); element.removeEventListener('focusin', focus); };
       }
+      if (element.dataset.scene === 'reveal' && typeof IntersectionObserver !== 'undefined') {
+        // Hidden only here, after mount; context.revert() restores visibility.
+        // Late-arriving children (query data) skip this and simply render visible.
+        // IntersectionObserver, not ScrollTrigger: it needs no cached positions, so
+        // late layout shifts and jump scrolls can't leave anything stuck hidden.
+        const items = select('[data-reveal]');
+        const targets = items.length ? items : [...element.children];
+        gsap.set(targets, { autoAlpha: 0, y: 48 });
+        let queue = [];
+        const flush = () => {
+          gsap.to(queue, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09, overwrite: true });
+          queue = [];
+        };
+        // Huge top margin: anything above the viewport counts as seen, so a jump
+        // scroll (anchor, back-to-top) never leaves skipped items hidden.
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            io.unobserve(entry.target);
+            queue.push(entry.target);
+          });
+          if (queue.length) flush();
+        }, { rootMargin: '100000px 0px -8% 0px' });
+        targets.forEach((target) => io.observe(target));
+        return () => io.disconnect();
+      }
+      if (element.dataset.scene === 'progress') {
+        gsap.fromTo(element, { scaleX: 0 }, { scaleX: 1, ease: 'none',
+          scrollTrigger: { trigger: root, start: 0, end: 'max', scrub: 0.3 } });
+      }
+      if (element.dataset.scene === 'closing') {
+        gsap.fromTo(element.querySelector('h2'), { yPercent: 40, scale: 0.88, autoAlpha: 0.2 }, {
+          yPercent: 0, scale: 1, autoAlpha: 1, ease: 'none', transformOrigin: 'left bottom',
+          scrollTrigger: { trigger: element, start: 'top 95%', end: 'top 35%', scrub: 0.6 } });
+      }
       if (element.dataset.scene === 'ticker') {
         const track = element.querySelector('[data-ticker-track]');
         const position = { x: 0 };
@@ -143,11 +178,15 @@ export function createScrollMotion(root) {
     const mutations = new MutationObserver(scan);
     mutations.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-scene-key'] });
     root.addEventListener('load', refresh, true);
+    // Any height change (query data, media metadata) re-measures scrubbed scenes.
+    const resizes = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(refresh);
+    resizes?.observe(root);
     document.fonts?.ready.then(() => { if (!disposed) refresh(); });
     return () => {
       disposed = true;
       clearTimeout(timer);
       mutations.disconnect();
+      resizes?.disconnect();
       root.removeEventListener('load', refresh, true);
       [...owned.values()].reverse().forEach(entry => entry.context.revert());
       owned.clear();

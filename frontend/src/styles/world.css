@@ -19,6 +19,23 @@
   background: rgb(var(--bg));
   color: rgb(var(--ink));
 }
+/* Ambient backdrop pinned to the viewport: a faint dot grid and two soft
+   ember glows, so long stretches between sections never read as empty. A
+   fixed, composited layer (not background-attachment: fixed, which repaints
+   the whole page every scroll frame). Solid bands paint over it on purpose. */
+.world { position: relative; isolation: isolate; }
+.world::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 30rem at 100% 0%, rgb(var(--accent) / .07), transparent 70%),
+    radial-gradient(36rem 28rem at 0% 100%, rgb(var(--accent) / .05), transparent 70%),
+    radial-gradient(rgb(var(--ink) / .085) 1px, transparent 1.2px) 0 0 / 22px 22px;
+  will-change: transform;
+}
 .dark .world {
   --bg: 9 9 11;
   --panel: 20 20 23;
@@ -70,16 +87,20 @@ body:has(.world) { background: rgb(246 246 243); }
   border-radius: 999px;
   font-weight: 500;
   font-size: 1rem;
-  transition: transform 0.2s var(--ease-out), background-color 0.25s, color 0.25s, box-shadow 0.25s;
+  /* --mag-x/y come from lib/magnetic.js; release springs back. */
+  translate: var(--mag-x, 0px) var(--mag-y, 0px);
+  transition: transform var(--spring-dur) var(--spring), translate var(--spring-dur) var(--spring),
+    background-color 0.25s, color 0.25s, box-shadow 0.25s;
 }
-.btn:active { transform: scale(0.97); }
+/* Press in fast, spring back out on release. */
+.btn:active { transform: scale(0.96); transition: transform 0.12s var(--ease-out), translate var(--spring-dur) var(--spring); }
 .btn .btn-arrow {
   display: inline-grid;
   place-items: center;
   width: 2.2rem;
   height: 2.2rem;
   border-radius: 999px;
-  transition: transform 0.35s var(--ease-out);
+  transition: transform var(--spring-dur) var(--spring);
 }
 .btn:hover .btn-arrow { transform: rotate(-45deg); }
 .btn-primary { background: rgb(var(--ink)); color: rgb(var(--bg)); }
@@ -142,23 +163,10 @@ body:has(.world) { background: rgb(246 246 243); }
   background-size: 44px 44px;
   mask-image: radial-gradient(80% 80% at 50% 40%, black, transparent);
 }
-.cover-title { transition: transform 0.6s var(--ease-out); transform-origin: left bottom; }
-.case:hover .cover-title { transform: scale(1.035); }
 
-/* Pipeline: a pulse travels the line between stops. */
-.pipeline-line { position: relative; height: 1px; background: rgb(var(--border)); overflow: hidden; }
-.pipeline-line::after {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 22%;
-  background: linear-gradient(90deg, transparent, rgb(var(--accent)), transparent);
-  animation: travel 3.2s linear infinite;
-}
-@keyframes travel { from { transform: translateX(-100%); } to { transform: translateX(560%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal > span, .fade-up, .pipeline-line::after, .dot-live { animation: none; }
+  .reveal > span, .fade-up, .dot-live { animation: none; }
 }
 
 .btn-accent { background: rgb(var(--accent)); color: rgb(var(--on-accent)); }
@@ -233,5 +241,124 @@ body:has(.world) { background: rgb(246 246 243); }
 
 /* ── Circuit backdrop ───────────────────────────────────────────────────── */
 .circuit-field { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.circuit-fade-radial { mask-image: radial-gradient(70% 95% at 78% 45%, black 25%, transparent 88%); }
+.circuit-fade-radial { mask-image: radial-gradient(140% 120% at 70% 30%, black 45%, transparent 100%); }
 .circuit-fade-edges { mask-image: linear-gradient(180deg, transparent, black 20%, black 80%, transparent); }
+
+/* ══ Micro-interactions ════════════════════════════════════════════════════ */
+:root {
+  /* Damped spring (k=380, c=20, ~15% overshoot) sampled into linear(). */
+  --spring: linear(0, 0.16, 0.442, 0.743, 0.972, 1.104, 1.148, 1.137, 1.097, 1.053, 1.014, 0.989, 0.979, 0.978, 0.983, 0.99, 0.996, 1.001, 1.003, 1.003, 1.003, 1.002, 1.001, 1, 1);
+  --spring-dur: 0.7s;
+}
+/* Generic spring press for non-.btn controls (Button.jsx, chips, icons). */
+.spring-press { transition: transform var(--spring-dur) var(--spring), background-color .25s, color .25s, box-shadow .25s, filter .25s; }
+.spring-press:active { transform: scale(0.95); transition: transform 0.12s cubic-bezier(0.23, 1, 0.32, 1); }
+
+/* Case cover tilts toward the pointer (--rx/--ry from ProjectCase). */
+@media (hover: hover) and (pointer: fine) {
+  .cover {
+    transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform var(--spring-dur) var(--spring);
+  }
+  .cover:hover { transition-duration: 0.25s; transition-timing-function: var(--ease-out); }
+}
+
+/* Underline that draws in from the left. Prose links keep a faint resting
+   underline and draw a solid one over it. */
+.link-draw {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1px;
+  transition: background-size 0.3s var(--ease-out), color 0.25s;
+}
+.link-draw:hover { background-size: 100% 1px; }
+.world .prose a {
+  text-decoration: none;
+  background:
+    linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1px,
+    linear-gradient(rgb(var(--accent) / .4), rgb(var(--accent) / .4)) no-repeat 0 100% / 100% 1px;
+  transition: background-size 0.3s var(--ease-out);
+}
+.world .prose a:hover { background-size: 100% 1px, 100% 1px; }
+
+/* Form field shake on validation error. */
+@keyframes shake { 0%, 100% { translate: 0; } 20% { translate: -6px; } 40% { translate: 5px; } 60% { translate: -3px; } 80% { translate: 2px; } }
+.shake { animation: shake 0.4s var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn .btn-arrow, .spring-press, .cover { transition: none; translate: none; }
+  .cover { transform: none; }
+  .shake { animation: none; }
+}
+
+/* ── Cursor glow: ember light + brighter dots that trail the pointer ─────── */
+.cursor-glow {
+  --cx: -999px;
+  --cy: -999px;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+  background:
+    radial-gradient(rgb(var(--accent) / .75) 1.3px, transparent 1.8px) 0 0 / 22px 22px,
+    radial-gradient(260px circle at var(--cx) var(--cy), rgb(var(--accent) / .10), transparent 70%);
+  -webkit-mask-image: radial-gradient(200px circle at var(--cx) var(--cy), #000, transparent 75%);
+  mask-image: radial-gradient(200px circle at var(--cx) var(--cy), #000, transparent 75%);
+}
+.cursor-glow[data-on] { opacity: 1; }
+
+/* ── Project timeline rail (ProjectTimeline.jsx) ─────────────────────────── */
+.timeline-rail {
+  position: absolute; top: 0; bottom: 0; left: calc(0.625rem - 0.5px); width: 1px;
+  background: linear-gradient(transparent, rgb(var(--border)) 4%, rgb(var(--border)) 96%, transparent);
+  overflow: hidden;
+}
+.timeline-beam {
+  position: absolute; inset: 0 0 auto 0; width: 1px; border-radius: 999px;
+  background: linear-gradient(to bottom, transparent, rgb(var(--accent)) 12%, rgb(139 92 246) 100%);
+  box-shadow: 0 0 8px rgb(var(--accent) / .6);
+}
+.timeline-node {
+  position: relative; flex: none; width: 1.25rem; height: 1.25rem; border-radius: 999px;
+  background: rgb(var(--bg)); box-shadow: 0 0 0 1px rgb(var(--border));
+  display: grid; place-items: center;
+  transition: box-shadow .5s var(--ease-out);
+}
+.timeline-node::after {
+  content: ''; width: .5rem; height: .5rem; border-radius: 999px;
+  background: rgb(var(--border)); transition: background-color .4s, scale .7s var(--spring);
+}
+.timeline-node.is-lit { box-shadow: 0 0 0 1px rgb(var(--accent) / .5), 0 0 0 6px rgb(var(--accent) / .1); }
+.timeline-node.is-lit::after { background: rgb(var(--accent)); scale: 1.1; }
+.timeline-index { flex-direction: column; gap: .35rem; margin-top: -.3rem; min-width: 0; }
+.timeline-num { font-family: var(--font-display); font-size: 2.25rem; font-weight: 600; letter-spacing: -.04em; line-height: 1; color: rgb(var(--ink) / .14); transition: color .5s; }
+.timeline-node.is-lit + .timeline-index .timeline-num { color: rgb(var(--ink)); }
+.timeline-title { font-family: var(--font-mono); font-size: .6875rem; line-height: 1.35; color: rgb(var(--muted)); }
+
+/* ── Pipeline beam (PipelineBeam.jsx) ─────────────────────────────────── */
+.beam-base { fill: none; stroke: rgb(var(--ink) / .14); stroke-width: 1; }
+.beam-pulse {
+  fill: none; stroke: rgb(var(--accent)); stroke-width: 2; stroke-linecap: round;
+  stroke-dasharray: .28 2; stroke-dashoffset: .28;
+  filter: drop-shadow(0 0 4px rgb(var(--accent) / .9));
+  animation: beam-run var(--cycle) linear infinite;
+  animation-delay: calc(var(--k) * var(--hop));
+}
+/* One hop takes --hop of the --cycle; the rest of the cycle it waits. */
+@keyframes beam-run { 0% { stroke-dashoffset: .28; } 16% { stroke-dashoffset: -1; } 100% { stroke-dashoffset: -1; } }
+.beam-node {
+  position: relative; display: flex; align-items: center; gap: .85rem; width: 100%; max-width: 15rem;
+  padding: .85rem 1.1rem .85rem .85rem; border-radius: 1rem;
+  background: rgb(var(--panel)); box-shadow: 0 0 0 1px rgb(var(--border));
+  animation: beam-land var(--cycle) ease-out infinite;
+  animation-delay: calc(var(--k) * var(--hop));
+}
+.beam-icon {
+  display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: .75rem;
+  background: rgb(var(--accent) / .12); color: rgb(var(--accent));
+}
+@keyframes beam-land {
+  0% { box-shadow: 0 0 0 1px rgb(var(--accent) / .8), 0 0 28px -4px rgb(var(--accent) / .55); }
+  14%, 100% { box-shadow: 0 0 0 1px rgb(var(--border)); }
+}
+@media (prefers-reduced-motion: reduce) { .cursor-glow { display: none; } .beam-pulse, .beam-node { animation: none; } .beam-pulse { display: none; } }

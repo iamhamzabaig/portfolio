@@ -11,13 +11,11 @@ import {
   Linkedin,
   Lock,
   Mail,
-  Moon,
   Search,
   Send,
   User
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext.jsx';
 import { useToast } from './Toast.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
@@ -94,7 +92,6 @@ export function CommandPaletteProvider({ children }) {
 function CommandPalette({ isOpen, onClose }) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { theme, toggle } = useTheme();
   const { data: projectsData } = useProjects();
   const { data: profileData } = useProfile();
 
@@ -123,7 +120,7 @@ function CommandPalette({ isOpen, onClose }) {
     [onClose]
   );
 
-  // The full command set, rebuilt when data/theme changes.
+  // The full command set, rebuilt when data changes.
   const items = useMemo(() => {
     const github = profile.socials?.find((s) => s.platform === 'GitHub')?.url || 'https://github.com/iamhamzabaig';
     const linkedin =
@@ -148,15 +145,6 @@ function CommandPalette({ isOpen, onClose }) {
     }));
 
     const actions = [
-      {
-        id: 'theme',
-        label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-        section: 'Actions',
-        icon: Moon,
-        keywords: ['dark', 'light', 'appearance', 'mode'],
-        keepOpen: true,
-        run: () => toggle()
-      },
       {
         id: 'copy-email',
         label: 'Copy email address',
@@ -191,7 +179,7 @@ function CommandPalette({ isOpen, onClose }) {
     actions.push({ id: 'admin', label: 'Admin sign-in', section: 'Actions', icon: Lock, keywords: ['login', 'dashboard'], run: () => go('/admin/login') });
 
     return [...pages, ...projectItems, ...actions];
-  }, [projects, profile, theme, go, external, toggle, toast, onClose]);
+  }, [projects, profile, go, external, toast, onClose]);
 
   // Filter + rank. Empty query keeps the natural order.
   const results = useMemo(() => {

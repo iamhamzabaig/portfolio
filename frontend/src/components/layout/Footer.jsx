@@ -48,7 +48,7 @@ export function Footer() {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="text-caption text-muted transition-colors hover:text-ink"
+                  className="link-draw self-start text-caption text-muted hover:text-ink"
                 >
                   {item.label}
                 </Link>

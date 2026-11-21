@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { AdaptiveDpr, Float, PerformanceMonitor } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useTheme } from '../../context/ThemeContext.jsx';
 
 const RADIUS = 1.35;
 const DETAIL = 1;
@@ -122,8 +121,7 @@ function useInView() {
 }
 
 export default function HeroScene({ animate, pointer }) {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = true; // site is dark-only
   const accentColor = useMemo(() => readAccentColor(), [theme]);
   const [dpr, setDpr] = useState([1, 2]);
   const [containerRef, inView] = useInView();

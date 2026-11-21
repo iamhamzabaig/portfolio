@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from '../../src/test/renderWithProviders.jsx';
 import { Navbar } from '../../src/components/layout/Navbar.jsx';
-import { ThemeProvider } from '../../src/context/ThemeContext.jsx';
 
 vi.mock('../../src/features/profile/api/profile.api.js', () => ({
   fetchProfile: vi.fn().mockResolvedValue({ resumeUrl: 'https://cdn/resume.pdf' }),
@@ -11,7 +10,7 @@ vi.mock('../../src/features/profile/api/profile.api.js', () => ({
 
 describe('Navbar', () => {
   it('shows a Resume link and no public Admin link', async () => {
-    renderWithProviders(<ThemeProvider><Navbar /></ThemeProvider>);
+    renderWithProviders(<Navbar />);
     await waitFor(() =>
       expect(screen.getByRole('link', { name: /résumé/i })).toHaveAttribute('href', 'https://cdn/resume.pdf')
     );

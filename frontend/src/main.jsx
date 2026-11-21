@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './app/App.jsx';
 import { createQueryClient } from './app/queryClient.js';
 import { AuthProvider } from './context/AuthContext.jsx';
-import { ThemeProvider } from './context/ThemeContext.jsx';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/geist';
@@ -20,13 +19,11 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ThemeProvider>
           <AuthProvider>
             <MotionConfig reducedMotion="user">
               <App />
             </MotionConfig>
           </AuthProvider>
-        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>

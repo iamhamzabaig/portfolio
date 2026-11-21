@@ -3,7 +3,10 @@ import { ArrowDown, ArrowUpRight, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
 import { TechMarquee } from '../../components/ui/TechMarquee.jsx';
+import { CountUp } from '../../components/ui/CountUp.jsx';
 import { CircuitField } from '../../components/ui/CircuitField.jsx';
+import { ProjectTimeline, TimelineItem } from '../../features/projects/components/ProjectTimeline.jsx';
+import { PipelineBeam } from '../../components/ui/PipelineBeam.jsx';
 import { ProjectCase } from '../../features/projects/components/ProjectCase.jsx';
 import { AssistantArt, DukaanArt, PulseArt } from '../../features/projects/components/ProjectArt.jsx';
 import { getFleetMeta, withShowcase } from '../../features/projects/fleet.js';
@@ -38,7 +41,7 @@ const routes = [
 ];
 
 // ~1,190 commits across these repos carry a Claude co-author trailer.
-const AGENT_COMMITS = '1,190';
+const AGENT_COMMITS = 1190;
 
 function useIslamabadTime() {
   const fmt = () =>
@@ -110,9 +113,10 @@ export default function Home() {
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
+      {/* Pulled up under the sticky header so the board shows through its blur. */}
+      <section className="relative -mt-16 overflow-hidden">
         <CircuitField />
-        <Container className="relative flex min-h-[calc(100svh-4rem)] flex-col justify-between gap-12 pb-10 pt-12 sm:pt-16">
+        <Container className="relative flex min-h-[100svh] flex-col justify-between gap-12 pb-10 pt-28 sm:pt-32">
           <div className="fade-up flex flex-wrap items-center gap-3" style={{ '--d': '0s' }}>
             <span className="chip">
               <span aria-hidden="true" className="dot dot-live" />
@@ -163,7 +167,7 @@ export default function Home() {
       {/* ── Selected work ──────────────────────────────────────────────── */}
       <section id="fleet" className="scroll-mt-20 py-24 sm:py-32">
         <Container>
-          <div className="mb-16 flex flex-col gap-6 sm:mb-24 sm:flex-row sm:items-end sm:justify-between">
+          <div data-scene="reveal" className="mb-16 flex flex-col gap-6 sm:mb-24 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">Selected work</h2>
               <p className="mt-5 max-w-[52ch] text-body-lg text-muted">
@@ -175,19 +179,23 @@ export default function Home() {
               <span className="btn-arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
             </Link>
           </div>
-          <div className="flex flex-col gap-24 lg:gap-32">
-            {fleet.map((project, i) => (
-              <ProjectCase key={project._id || project.slug} project={project} flip={i % 2 === 1} />
-            ))}
-          </div>
+          {/* Timeline rail: a beam fills beside the projects as you scroll. */}
+          <ProjectTimeline>
+            <div data-scene="reveal" className="flex flex-col gap-24 lg:gap-32">
+              {fleet.map((project, i) => (
+                <TimelineItem key={project._id || project.slug} index={i} title={project.title}>
+                  <ProjectCase project={project} flip={i % 2 === 1} />
+                </TimelineItem>
+              ))}
+            </div>
+          </ProjectTimeline>
         </Container>
       </section>
 
       {/* ── AI ─────────────────────────────────────────────────────────── */}
       <section className="ai-band relative overflow-hidden py-24 sm:py-32">
-        <CircuitField fade="edges" density={0.06} seed={21} />
         <Container className="relative">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div data-scene="reveal" className="grid gap-8 lg:grid-cols-12 lg:items-end">
             <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] lg:col-span-7">AI engineering</h2>
             <p className="max-w-[52ch] text-body-lg text-muted lg:col-span-5">
               LLM features built like the rest of my work: grounded in your own data, measured, and shipped. This is
@@ -195,18 +203,11 @@ export default function Home() {
             </p>
           </div>
 
-          <ol className="mt-16 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-6">
-            {engineeringApproach.pipeline.map((stop, i) => (
-              <li key={stop.id} className="flex flex-col gap-3">
-                <span className="mono text-caption text-muted">Step {i + 1}</span>
-                <div className="pipeline-line" aria-hidden="true" />
-                <strong className="text-title font-medium">{stop.label}</strong>
-                <span className="text-body-sm text-muted">{stop.sub}</span>
-              </li>
-            ))}
-          </ol>
+          <div className="mt-16">
+            <PipelineBeam steps={engineeringApproach.pipeline} />
+          </div>
 
-          <div className="mt-20 grid gap-6 lg:grid-cols-12">
+          <div data-scene="reveal" className="mt-20 grid gap-6 lg:grid-cols-12">
             <div className="rounded-3xl p-8 ring-1 ring-border sm:p-10 lg:col-span-7">
               <h3 className="text-title font-medium">What I bring to an AI build</h3>
               <ul className="mt-6 flex flex-wrap gap-2.5">
@@ -222,7 +223,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-col justify-between gap-10 rounded-3xl bg-surface p-8 sm:p-10 lg:col-span-5">
-              <p className="display text-[clamp(3.5rem,8vw,6rem)] text-accent">{AGENT_COMMITS}</p>
+              <p className="display text-[clamp(3.5rem,8vw,6rem)] text-accent"><CountUp value={AGENT_COMMITS} /></p>
               <div>
                 <h3 className="text-title font-medium">commits co-written with Claude</h3>
                 <p className="mt-3 text-body text-muted">
@@ -239,13 +240,13 @@ export default function Home() {
       {/* ── Rules ──────────────────────────────────────────────────────── */}
       <section className="py-24 sm:py-32">
         <Container className="grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
+          <div data-scene="reveal" className="lg:col-span-5">
             <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">How I build</h2>
             <p className="mt-5 max-w-[42ch] text-body-lg text-muted">
               Rules every project here follows. Each one came from a real build.
             </p>
           </div>
-          <ul className="lg:col-span-7">
+          <ul data-scene="reveal" className="lg:col-span-7">
             {rules.map((item) => (
               <li
                 key={item.rule}
@@ -264,11 +265,13 @@ export default function Home() {
       {/* ── Services ───────────────────────────────────────────────────── */}
       <section className="bg-surface py-24 sm:py-32">
         <Container>
-          <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">Services</h2>
-          <p className="mt-5 max-w-[52ch] text-body-lg text-muted">
-            What you can hire me to build, from the first schema to the deploy.
-          </p>
-          <dl className="mt-14">
+          <div data-scene="reveal">
+            <h2 className="display text-[clamp(2.75rem,7vw,5.5rem)] text-ink">Services</h2>
+            <p className="mt-5 max-w-[52ch] text-body-lg text-muted">
+              What you can hire me to build, from the first schema to the deploy.
+            </p>
+          </div>
+          <dl data-scene="reveal" className="mt-14">
             {routes.map((route) => (
               <div key={route.title} className="grid gap-2 border-b border-border py-8 first:border-t md:grid-cols-12 md:gap-8">
                 <dt className="flex items-center gap-3 text-title font-medium text-ink md:col-span-4">
@@ -294,7 +297,7 @@ export default function Home() {
                 <span className="btn-arrow" aria-hidden="true"><ArrowUpRight size={16} /></span>
               </Link>
             </div>
-            <ul className="grid gap-5 md:grid-cols-3">
+            <ul data-scene="reveal" className="grid gap-5 md:grid-cols-3">
               {latestPosts.map((post) => (
                 <li key={post._id || post.slug}>
                   <Link
@@ -321,8 +324,9 @@ export default function Home() {
       )}
 
       {/* ── Closing ────────────────────────────────────────────────────── */}
-      <section className="border-t border-border py-24 sm:py-36">
-        <Container>
+      <section data-scene="closing" className="relative overflow-hidden border-t border-border py-24 sm:py-36">
+        <CircuitField fade="edges" density={0.05} seed={33} />
+        <Container className="relative">
           <h2 className="display text-[clamp(3.25rem,11vw,9rem)] text-ink">
             Let’s build <span className="text-accent">something.</span>
           </h2>

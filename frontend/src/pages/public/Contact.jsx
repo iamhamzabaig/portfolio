@@ -1,4 +1,6 @@
-import { Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Check, Copy, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { Container } from '../../components/layout/Container.jsx';
 import { Card } from '../../components/ui/Card.jsx';
 import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
@@ -9,6 +11,16 @@ export default function Contact() {
   const { email, phone, location, socials } = fallbackProfile;
   const github = socials.find((s) => s.platform === 'GitHub')?.url;
   const linkedin = socials.find((s) => s.platform === 'LinkedIn')?.url;
+  const [copied, setCopied] = useState(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* Clipboard blocked: the mailto link still works. */
+    }
+  };
 
   return (
     <Container className="py-20 sm:py-24">
@@ -24,10 +36,31 @@ export default function Contact() {
           </p>
 
           <div className="mt-10 grid gap-3 text-body-sm">
-            <a href={`mailto:${email}`} className="inline-flex items-center gap-3 text-muted transition hover:text-ink">
-              <Mail aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {email}
-            </a>
-            <a href={`tel:${phone.replace(/\s|-/g, '')}`} className="inline-flex items-center gap-3 text-muted transition hover:text-ink">
+            <div className="flex items-center gap-2">
+              <a href={`mailto:${email}`} className="link-draw inline-flex items-center gap-3 text-muted hover:text-ink">
+                <Mail aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {email}
+              </a>
+              <button
+                type="button"
+                onClick={copyEmail}
+                aria-label={copied ? 'Email copied' : 'Copy email'}
+                className="spring-press inline-grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-surface hover:text-ink"
+              >
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span
+                    key={copied ? 'done' : 'copy'}
+                    initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 24 }}
+                  >
+                    {copied ? <Check aria-hidden="true" size={15} className="text-accent" /> : <Copy aria-hidden="true" size={15} />}
+                  </motion.span>
+                </AnimatePresence>
+              </button>
+              <span role="status" className="sr-only">{copied ? 'Email copied to clipboard' : ''}</span>
+            </div>
+            <a href={`tel:${phone.replace(/\s|-/g, '')}`} className="link-draw inline-flex items-center gap-3 self-start text-muted hover:text-ink">
               <Phone aria-hidden="true" size={18} strokeWidth={1.5} className="text-accent" /> {phone}
             </a>
             <p className="inline-flex items-center gap-3 text-muted">
