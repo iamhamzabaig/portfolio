@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check, Copy, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-react';
 import { Container } from '../../components/layout/Container.jsx';
-import { Card } from '../../components/ui/Card.jsx';
-import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
+import { SectionTitle } from '../../components/ide/CodeBlock.jsx';
 import { ContactForm } from '../../features/contact/components/ContactForm.jsx';
 import { fallbackProfile } from '../../utils/fallbackData.js';
 
@@ -26,11 +25,7 @@ export default function Contact() {
     <Container className="py-20 sm:py-24">
       <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
         <div>
-          <Eyebrow>Contact</Eyebrow>
-          <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
-            Let&apos;s build
-            <br /> something.
-          </h1>
+          <SectionTitle as="h1" file="contact.sh">Let&apos;s build something.</SectionTitle>
           <p className="mt-6 text-body text-muted">
             Tell me what you&apos;re building, what exists today, and your timeline. I reply within a day.
           </p>
@@ -44,7 +39,7 @@ export default function Contact() {
                 type="button"
                 onClick={copyEmail}
                 aria-label={copied ? 'Email copied' : 'Copy email'}
-                className="spring-press inline-grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-surface hover:text-ink"
+                className="spring-press inline-grid h-8 w-8 place-items-center rounded-control text-muted hover:bg-surface hover:text-ink"
               >
                 <AnimatePresence mode="popLayout" initial={false}>
                   <motion.span
@@ -86,9 +81,22 @@ export default function Contact() {
           </div>
         </div>
 
-        <Card className="p-8">
-          <ContactForm />
-        </Card>
+        <div className="overflow-hidden rounded-card bg-panel font-mono shadow-overlay ring-1 ring-border">
+          <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 text-caption text-muted">
+            <span aria-hidden="true" className="flex gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#f7768e]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#e0af68]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#9ece6a]" />
+            </span>
+            <span className="ml-2">bash — contact.sh</span>
+          </div>
+          <div className="term-form p-6 sm:p-8">
+            <p className="mb-6 text-caption text-muted">
+              <span className="syn-keyword">$</span> ./contact.sh --interactive
+            </p>
+            <ContactForm />
+          </div>
+        </div>
       </div>
     </Container>
   );

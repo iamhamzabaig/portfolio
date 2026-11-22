@@ -5,7 +5,9 @@ import { Container } from '../../components/layout/Container.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
 import { ProjectCase } from '../../features/projects/components/ProjectCase.jsx';
 import { useProjects } from '../../features/projects/api/projects.queries.js';
-import { withShowcase } from '../../features/projects/fleet.js';
+import { getFleetMeta, withShowcase } from '../../features/projects/fleet.js';
+import { Link } from 'react-router-dom';
+import { SectionTitle } from '../../components/ide/CodeBlock.jsx';
 
 const ALL = 'All';
 
@@ -52,9 +54,7 @@ export default function Projects() {
   return (
     <Container className="py-20 sm:py-24">
       <div className="max-w-3xl">
-        <h1 className="display text-[clamp(3.25rem,9vw,7rem)] text-ink">
-          Projects
-        </h1>
+        <SectionTitle as="h1" file="ls -la ~/projects">Projects</SectionTitle>
         <p className="mt-6 max-w-[58ch] text-body-lg text-muted">
           Everything I have built, from live products to earlier work. Filter by technology.
         </p>
@@ -64,7 +64,7 @@ export default function Projects() {
           no horizontal scroll. Single-select; "All" resets. */}
       <div className="mt-10 flex">
         <div ref={menuRef} className="relative">
-          <span className="mono mr-3 text-caption uppercase text-muted">Stack</span>
+          <span className="mono mr-3 text-caption text-muted"><span className="syn-keyword">grep</span> --stack=</span>
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
@@ -116,6 +116,40 @@ export default function Projects() {
           </AnimatePresence>
         </div>
       </div>
+
+      {filtered.length > 0 && (
+        <div className="mt-8 overflow-x-auto rounded-card bg-panel ring-1 ring-border">
+          <table className="w-full font-mono text-caption">
+            <caption className="sr-only">Project listing</caption>
+            <thead className="text-left text-muted">
+              <tr className="border-b border-border">
+                <th scope="col" className="hidden px-4 py-2.5 font-normal md:table-cell">mode</th>
+                <th scope="col" className="hidden px-4 py-2.5 font-normal sm:table-cell">built</th>
+                <th scope="col" className="px-4 py-2.5 font-normal">status</th>
+                <th scope="col" className="px-4 py-2.5 font-normal">name</th>
+                <th scope="col" className="hidden px-4 py-2.5 font-normal lg:table-cell">stack</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((project) => {
+                const meta = getFleetMeta(project);
+                const live = meta.status === 'Live';
+                return (
+                  <tr key={project._id || project.slug} className="border-b border-border/60 last:border-b-0 hover:bg-surface">
+                    <td className="hidden px-4 py-2.5 text-muted md:table-cell">drwxr-xr-x</td>
+                    <td className="hidden px-4 py-2.5 syn-number sm:table-cell">{meta.built || '—'}</td>
+                    <td className={`whitespace-nowrap px-4 py-2.5 ${live ? 'syn-string' : 'syn-keyword'}`}>{meta.status}</td>
+                    <td className="px-4 py-2.5">
+                      <Link to={`/projects/${project.slug}`} className="syn-fn hover:underline">{project.slug}/</Link>
+                    </td>
+                    <td className="hidden px-4 py-2.5 syn-type lg:table-cell">{(project.tags || []).slice(0, 4).join(' · ')}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="mt-16">
         {projectsQuery.isLoading && !projectsQuery.data ? (

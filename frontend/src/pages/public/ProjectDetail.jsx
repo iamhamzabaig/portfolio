@@ -4,6 +4,7 @@ import { Container } from '../../components/layout/Container.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { Chip } from '../../components/ui/Chip.jsx';
 import { Spinner } from '../../components/ui/Spinner.jsx';
+import { SectionTitle } from '../../components/ide/CodeBlock.jsx';
 import { useProject } from '../../features/projects/api/projects.queries.js';
 import { MediaGallery } from '../../features/projects/components/MediaGallery.jsx';
 import { SemanticSearchDemo } from '../../features/projects/components/SemanticSearchDemo.jsx';
@@ -28,30 +29,31 @@ export default function ProjectDetail() {
   return (
     <article>
       {/* Centered product-intro header. */}
-      <Container className="py-16 text-center sm:py-20">
+      <Container className="py-16 sm:py-20">
         <Link
           to="/projects"
           className="inline-flex items-center gap-1.5 text-caption font-medium text-muted transition hover:text-ink"
         >
-          <ArrowLeft aria-hidden="true" size={15} /> All projects
+          <ArrowLeft aria-hidden="true" size={15} /> cd ../projects
         </Link>
 
+        <SectionTitle as="h1" file={`projects/${project.slug}/README.md`} className="mt-8 max-w-4xl">
+          {project.title}
+        </SectionTitle>
+
         {(project.tags || []).length > 0 && (
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <div className="mt-6 flex flex-wrap gap-2">
             {(project.tags || []).map((tag) => (
               <Chip key={tag}>{tag}</Chip>
             ))}
           </div>
         )}
 
-        <h1 data-motion="heading" className="mx-auto mt-6 max-w-3xl font-display text-fluid-h1 font-semibold text-ink">
-          {project.title}
-        </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-body-lg text-muted">{project.description}</p>
+        <p className="mt-6 max-w-2xl border-l-2 border-border pl-4 text-body-lg text-muted">{project.description}</p>
 
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-9 flex flex-wrap items-center gap-3">
           {project.isLivePrivate ? (
-            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-body-sm text-muted">
+            <p className="inline-flex items-center gap-2 rounded-control bg-surface px-4 py-2.5 font-mono text-body-sm syn-error">
               <Lock aria-hidden="true" size={15} /> Live demo under NDA
             </p>
           ) : project.liveUrl ? (
@@ -61,7 +63,7 @@ export default function ProjectDetail() {
             </Button>
           ) : null}
           {project.isRepoPrivate ? (
-            <p className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-body-sm text-muted">
+            <p className="inline-flex items-center gap-2 rounded-control bg-surface px-4 py-2.5 font-mono text-body-sm syn-error">
               <Lock aria-hidden="true" size={15} /> Source under NDA
             </p>
           ) : project.repoUrl ? (
@@ -87,7 +89,8 @@ export default function ProjectDetail() {
 
       {/* Readable write-up column. */}
       <Container className="py-20 sm:py-24">
-        <div className="mx-auto max-w-2xl text-body-lg text-muted">
+        <div className="max-w-2xl text-body-lg text-muted">
+          <h2 className="mb-5 font-display text-fluid-h3 font-semibold text-ink"><span aria-hidden="true" className="syn-keyword">## </span>Overview</h2>
           <p>{project.content || project.description}</p>
         </div>
       </Container>

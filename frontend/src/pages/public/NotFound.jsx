@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Container } from '../../components/layout/Container.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 
 export default function NotFound() {
   return (
-    <Container className="py-32 text-center">
-      <Eyebrow>404</Eyebrow>
-      <h1 className="mt-3 font-display text-fluid-h1 font-semibold text-ink">Page not found</h1>
-      <p className="mx-auto mt-4 max-w-md text-body-lg text-muted">The page does not exist or has moved.</p>
-      <Button as={Link} to="/" className="mt-9">Back home</Button>
+    <Container className="py-32 font-mono">
+      <p className="text-body-sm text-muted">
+        <span className="syn-keyword">$</span> cd {typeof window !== 'undefined' ? window.location.pathname : ''}
+      </p>
+      <h1 className="mt-3 text-fluid-h1 font-semibold syn-error">bash: page not found</h1>
+      <p className="mt-4 max-w-md text-body-lg text-muted">The page does not exist or has moved. Exit code 404.</p>
+      <Link to="/" className="btn btn-primary btn-plain mt-9">cd ~</Link>
     </Container>
   );
 }

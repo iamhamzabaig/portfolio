@@ -57,7 +57,7 @@ function Lockup({ label, Icon, aria = true }) {
       {...(aria ? {} : { 'aria-hidden': 'true' })}
     >
       <Icon size={22} aria-hidden="true" />
-      <span className="text-body font-medium tracking-tight">{label}</span>
+      <span className="font-mono text-body-sm">{label}</span>
     </li>
   );
 }

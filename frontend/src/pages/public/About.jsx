@@ -1,5 +1,5 @@
 import { Container } from '../../components/layout/Container.jsx';
-import { Chip } from '../../components/ui/Chip.jsx';
+import { CodeBlock, SectionTitle } from '../../components/ide/CodeBlock.jsx';
 import { Eyebrow } from '../../components/ui/Eyebrow.jsx';
 import { useProfile } from '../../features/profile/api/profile.queries.js';
 import {
@@ -13,10 +13,29 @@ function SectionLabel({ index, label }) {
   return (
     <div className="mb-10 flex items-baseline gap-4">
       <Eyebrow as="span">{index}</Eyebrow>
-      <h2 data-motion="heading" className="font-display text-fluid-h3 font-semibold text-ink">{label}</h2>
+      <h2 data-motion="heading" className="font-display text-fluid-h3 font-semibold text-ink"><span aria-hidden="true" className="syn-keyword">## </span>{label}</h2>
       <span className="h-px flex-1 translate-y-[-2px] bg-border" />
     </div>
   );
+}
+
+// Turns a plain object into JSON-looking token lines for CodeBlock.
+function jsonLines(name, obj) {
+  const value = (v) =>
+    typeof v === 'boolean' ? ['keyword', String(v)] : Array.isArray(v) ? null : ['string', JSON.stringify(v)];
+  const lines = [[['keyword', 'export const '], ['fn', name], ['plain', ' = {']]];
+  Object.entries(obj).forEach(([key, v]) => {
+    const k = /^[a-z]+$/i.test(key) ? key : JSON.stringify(key);
+    if (Array.isArray(v)) {
+      lines.push([['plain', `  ${k}: [`]]);
+      v.forEach((item) => lines.push([['plain', '    '], ['string', JSON.stringify(item)], ['plain', ',']]));
+      lines.push([['plain', '  ],']]);
+    } else {
+      lines.push([['plain', `  ${k}: `], value(v), ['plain', ',']]);
+    }
+  });
+  lines.push([['plain', '};']]);
+  return lines;
 }
 
 export default function About() {
@@ -27,14 +46,18 @@ export default function About() {
     <Container className="py-20 sm:py-24">
       {/* Intro */}
       <div className="max-w-3xl">
-        <Eyebrow>About</Eyebrow>
-        <h1 data-motion="heading" className="mt-3 font-display text-fluid-h1 font-semibold text-ink">
-          {profile.name}
-        </h1>
-        <p className="mt-4 text-body text-muted">
-          {fallbackProfile.role} · {fallbackProfile.location}
-        </p>
+        <SectionTitle as="h1" file="about.md">{profile.name}</SectionTitle>
         <p className="mt-8 text-body text-muted">{profile.bio || fallbackProfile.bio}</p>
+        <CodeBlock
+          className="mt-10"
+          file="profile.ts"
+          lines={jsonLines('profile', {
+            role: fallbackProfile.role,
+            location: fallbackProfile.location,
+            email: fallbackProfile.email,
+            openToWork: true
+          })}
+        />
       </div>
 
       {/* Experience */}
@@ -57,7 +80,7 @@ export default function About() {
                 {job.period} · {job.location}
               </p>
               <h3 className="mt-1 font-display text-fluid-h3 font-semibold text-ink">{job.company}</h3>
-              <p className="mt-1 text-body-sm text-accent">{job.role}</p>
+              <p className="mt-1 font-mono text-body-sm syn-type">{job.role}</p>
               <ul className="mt-4 space-y-3">
                 {job.points.map((point) => (
                   <li key={point} className="flex gap-3 text-caption text-muted">
@@ -74,20 +97,10 @@ export default function About() {
       {/* Skills */}
       <section className="mt-24">
         <SectionLabel index="02" label="Stack & competencies" />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {fallbackSkills.map((col) => (
-            <div data-motion="card" key={col.group} className="rounded-card bg-surface p-6">
-              <h3 className="text-caption font-semibold uppercase tracking-[0.08em] text-muted">{col.group}</h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {col.items.map((item) => (
-                  <Chip key={item} className="bg-panel">
-                    {item}
-                  </Chip>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        <CodeBlock
+          file="stack.ts"
+          lines={jsonLines('stack', Object.fromEntries(fallbackSkills.map((col) => [col.group, col.items])))}
+        />
       </section>
 
       {/* Education */}
@@ -103,7 +116,7 @@ export default function About() {
                 <p className="font-display text-body font-semibold tracking-tight text-ink">{item.title}</p>
                 <p className="text-body-sm text-muted">{item.org}</p>
               </div>
-              <p className="text-caption text-muted">{item.period}</p>
+              <p className="font-mono text-caption syn-number">{item.period}</p>
             </div>
           ))}
         </div>

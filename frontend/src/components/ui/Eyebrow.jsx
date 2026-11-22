@@ -1,9 +1,9 @@
-// The small blue section label above a headline (Apple's quiet colored eyebrow).
-// Previously redefined locally in Home and re-inlined on every other page; this is
-// now the one source of truth. Spreads props so callers can pass through extras.
+// The small section label above a headline, styled as a code comment
+// (`// label`) to match the editor theme. One source of truth for every page.
 export function Eyebrow({ as: Component = 'p', className = '', children, ...props }) {
   return (
-    <Component className={`text-eyebrow font-semibold text-accent ${className}`} {...props}>
+    <Component className={`font-mono text-eyebrow syn-comment ${className}`} {...props}>
+      <span aria-hidden="true">{'// '}</span>
       {children}
     </Component>
   );
